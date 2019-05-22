@@ -5,13 +5,13 @@
 [contenteditable] {
   -webkit-tap-highlight-color: transparent; }
 
-.cm-header1 {
+.cm-header2 {
   color: #37352f;
   caret-color: #37352f;
-  font-size: 1.875em;
+  font-size: 1.5em;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
   padding: 3px 2px; }
-  .cm-header1:focus {
+  .cm-header2:focus {
     outline: none; }

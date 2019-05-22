@@ -1,6 +1,6 @@
 import React from 'react'
 import ContentEditable from './ContentEditable'
-import '../styles/components/header1.css';
+import '../styles/components/heading.css';
 
 
 export class Header1 extends React.Component{
