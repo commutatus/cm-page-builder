@@ -1,0 +1,6 @@
+[contenteditable]:empty:before {
+  content: attr(placeholder);
+  display: block; }
+
+[contenteditable] {
+  -webkit-tap-highlight-color: transparent; }

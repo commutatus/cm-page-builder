@@ -18,6 +18,8 @@ class PageContainer extends React.Component {
 		return (
 			<div className="page-root-container">
 				{this._getPageComponent('Header1')}
+				{this._getPageComponent('Header2')}
+				{this._getPageComponent('Header3')}
 			</div>
 		)
 	}

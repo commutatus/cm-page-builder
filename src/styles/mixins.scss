@@ -1,0 +1,10 @@
+@import './variables.scss';
+
+@mixin heading-font($fontSize, $fontWeight) {
+  color: $primary-color;
+  caret-color: $primary-color;
+  font-size: $fontSize;
+  font-weight: $fontWeight;
+  line-height: 1.2;
+  letter-spacing: -0.002em;
+}

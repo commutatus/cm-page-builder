@@ -1,0 +1,28 @@
+@import '../global.scss';
+
+.cm-header1 {
+  @include heading-font($h1-text, $w6-text);
+  margin: 2px 0 1px;
+  padding: 3px 2px;
+  &:focus {
+    outline: none;
+  }
+}
+
+.cm-header2 {
+  @include heading-font($h2-text, $w6-text);
+  margin: 2px 0 1px;
+  padding: 3px 2px;
+  &:focus {
+    outline: none;
+  }
+}
+
+.cm-header3 {
+  @include heading-font($h3-text, $w6-text);
+  margin: 2px 0 1px;
+  padding: 3px 2px;
+  &:focus {
+    outline: none;
+  }
+}
