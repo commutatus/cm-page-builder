@@ -1,4 +1,23 @@
+@import '../variables.scss';
+
 .cm-header1 {
-    height: 50px;
-    width: 100%
+  font-size: $h1-text;
+  padding: 3px 2px;
+  color: rgb(55, 53, 47);
+  font-weight: $w6-text;
+  line-height: 1.2;
+  letter-spacing: -0.002em;
+  -webkit-text-fill-color: rgba(55, 53, 47, 0.2);
+  &:focus {
+    outline: none;
+  }
+}
+
+[contenteditable]:empty:before {
+  content: attr(placeholder);
+  display: block;
+}
+
+[contenteditable] {
+  -webkit-tap-highlight-color: transparent;
 }
