@@ -1,4 +1,4 @@
 import React from 'react'
 
-export const Header2 = (props) => 
-  <div contentEditable="true" placeholder="Heading2" />
+export const Header = (props) => 
+  <div contentEditable="true" placeholder="Heading1" />
