@@ -8,3 +8,15 @@
   line-height: 1.2;
   letter-spacing: -0.002em;
 }
+
+@mixin text-wrapping {
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@mixin chip-style {
+  padding: 5px;
+  background-color: $gray-bg;
+  border-radius: 1px;
+}

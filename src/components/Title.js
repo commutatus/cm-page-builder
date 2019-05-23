@@ -19,7 +19,7 @@ export class Title extends React.Component{
       <ContentEditable 
         html={this.state.html} 
         onChange={this.handleChange} 
-        placeholder="Title"
+        placeholder="Title of the page"
         className="cm-title"
       />
     )

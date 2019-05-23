@@ -10,7 +10,7 @@ export default class ContentEditable extends React.Component{
     let node = ReactDOM.findDOMNode(this)
     var html = node.innerHTML
     console.log(html)
-    node.style = `-webkit-text-fill-color: ${html ? 'black' : 'rgba(55, 53, 47, 0.2)'}`
+    node.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'}`
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
         target: {
