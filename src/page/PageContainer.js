@@ -23,12 +23,15 @@ class PageContainer extends React.Component {
 	render() {
         const { pageComponents } = this.state
 		return (
-			<div contentEditable="true" className="page-root-container">
+			<div className="page-root-container">
 				{
                     pageComponents.map((component, index) => {
                         return this._getPageComponent(component, index)
                     })
-                }
+				}
+				{
+					this._getPageComponent('Header1')
+				}
 			</div>
 		)
 	}
