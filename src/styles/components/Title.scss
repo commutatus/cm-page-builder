@@ -1,0 +1,16 @@
+@import '../imports.scss';
+
+.cm-title {
+  @include text-wrapping;
+  padding: 4px 2px;
+  color: $primary-color;
+  font-weight: $w6-text;
+  font-size: $title-text;
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  cursor: text;
+  &:focus {
+    outline: none;
+    background-color: transparent;
+  }
+}

@@ -1,4 +1,4 @@
-@import '../global.scss';
+@import '../imports.scss';
 
 .cm-header1 {
   @include heading-font($h1-text, $w6-text);
