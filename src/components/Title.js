@@ -2,7 +2,7 @@ import React from 'react'
 import ContentEditable from './ContentEditable'
 import '../styles/components/Title.css';
 
-export class Header3 extends React.Component{
+export class Title extends React.Component{
 
   state = {
     styles: {}
