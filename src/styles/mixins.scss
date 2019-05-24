@@ -2,7 +2,6 @@
 
 @mixin heading-font($fontSize, $fontWeight) {
   color: $primary-color;
-  caret-color: $primary-color;
   font-size: $fontSize;
   font-weight: $fontWeight;
   line-height: 1.2;
@@ -19,4 +18,13 @@
   padding: 5px;
   background-color: $gray-bg;
   border-radius: 1px;
+}
+
+@mixin editable-style {
+  caret-color: $primary-color;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4;
+  &:focus {
+    outline: none;
+  }
 }

@@ -4,6 +4,9 @@
   box-sizing: border-box;
   caret-color: $primary-color;
   font-family: 'Open Sans', sans-serif;
+  &::selection {
+    background-color: #B2D7FF;
+  }
 }
 
 body {

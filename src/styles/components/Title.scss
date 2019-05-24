@@ -8,9 +8,8 @@
   font-size: $title-text;
   background-color: $gray-bg;
   transition: background-color .3s linear;
-  cursor: text;
+  @include editable-style;
   &:focus {
-    outline: none;
     background-color: transparent;
   }
 }
