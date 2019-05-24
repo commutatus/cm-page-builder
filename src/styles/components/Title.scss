@@ -8,6 +8,7 @@
   font-size: $title-text;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  -webkit-text-fill-color: #9EA0A4;
   cursor: text;
   &:focus {
     outline: none;

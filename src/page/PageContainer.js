@@ -41,6 +41,9 @@ class PageContainer extends React.Component {
 						<div className="seprator-dot"></div>
 						<div class="date-updated">15 Jan, 2018</div>
 					</div>
+					{
+						['Text', 'Header1', 'Header2', 'Header3'].map(item => this._getPageComponent(item))
+					}
 				</div>
 			</div>
 		)

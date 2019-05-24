@@ -5,6 +5,7 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  -webkit-text-fill-color: #9EA0A4;
   margin: 2px 0 1px;
   padding: 3px 2px; }
   .cm-header1:focus {
@@ -17,6 +18,7 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  -webkit-text-fill-color: #9EA0A4;
   margin: 2px 0 1px;
   padding: 3px 2px; }
   .cm-header2:focus {
@@ -29,6 +31,7 @@
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  -webkit-text-fill-color: #9EA0A4;
   margin: 2px 0 1px;
   padding: 3px 2px; }
   .cm-header3:focus {
