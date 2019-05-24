@@ -2,27 +2,21 @@
 
 .cm-header1 {
   @include heading-font($h1-text, $w6-text);
-  margin: 2px 0 1px;
+  margin: 14px 0 1px;
   padding: 3px 2px;
-  &:focus {
-    outline: none;
-  }
+  @include editable-style;
 }
 
 .cm-header2 {
   @include heading-font($h2-text, $w6-text);
-  margin: 2px 0 1px;
+  margin: 16px 0 1px;
   padding: 3px 2px;
-  &:focus {
-    outline: none;
-  }
+  @include editable-style;
 }
 
 .cm-header3 {
   @include heading-font($h3-text, $w6-text);
-  margin: 2px 0 1px;
+  margin: 8px 0 1px;
   padding: 3px 2px;
-  &:focus {
-    outline: none;
-  }
+  @include editable-style;
 }

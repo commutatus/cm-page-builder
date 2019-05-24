@@ -1,0 +1,10 @@
+@import '../imports';
+
+.cm-text-block {
+  color: $primary-color;
+  font-size: $t6-text;
+  margin: 2px 0 1px;
+  padding: 3px 2px;
+  @include text-wrapping;
+  @include editable-style;  
+}

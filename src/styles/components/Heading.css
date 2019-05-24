@@ -1,38 +1,41 @@
 .cm-header1 {
   color: #1D2129;
-  caret-color: #1D2129;
   font-size: 1.875em;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  -webkit-text-fill-color: #9EA0A4;
-  margin: 2px 0 1px;
-  padding: 3px 2px; }
+  margin: 14px 0 1px;
+  padding: 3px 2px;
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
   .cm-header1:focus {
     outline: none; }
 
 .cm-header2 {
   color: #1D2129;
-  caret-color: #1D2129;
   font-size: 1.5em;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  -webkit-text-fill-color: #9EA0A4;
-  margin: 2px 0 1px;
-  padding: 3px 2px; }
+  margin: 16px 0 1px;
+  padding: 3px 2px;
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
   .cm-header2:focus {
     outline: none; }
 
 .cm-header3 {
   color: #1D2129;
-  caret-color: #1D2129;
   font-size: 1.25em;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  -webkit-text-fill-color: #9EA0A4;
-  margin: 2px 0 1px;
-  padding: 3px 2px; }
+  margin: 8px 0 1px;
+  padding: 3px 2px;
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
   .cm-header3:focus {
     outline: none; }

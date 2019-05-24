@@ -7,7 +7,7 @@
     .page-root-container .page-container .page-info {
       display: flex;
       align-items: center;
-      margin-top: 10px; }
+      margin: 10px 0 38px; }
       .page-root-container .page-container .page-info .current-user-detail {
         display: inline-flex;
         align-items: center;

@@ -8,8 +8,10 @@
   font-size: 2.375em;
   background-color: #F4F5F7;
   transition: background-color .3s linear;
-  -webkit-text-fill-color: #9EA0A4;
-  cursor: text; }
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
   .cm-title:focus {
-    outline: none;
+    outline: none; }
+  .cm-title:focus {
     background-color: transparent; }
