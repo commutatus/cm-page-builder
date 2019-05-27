@@ -28,7 +28,9 @@ export class AddComponent extends React.Component{
   render(){
     return(
       <div className="add-component-container">
-        {this._getPageComponent(this.state.pageType)}
+        <div className="typing-area">
+          {this._getPageComponent(this.state.pageType)}
+        </div>
         <div className="type-container">
           <div data-type="Header1" onClick={this.handleTypeSelect}>h1</div>
           <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
