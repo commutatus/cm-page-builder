@@ -1,6 +1,17 @@
-@import './variables.scss';
-@import './mixins.scss';
+@import './imports';
 
+* {
+  box-sizing: border-box;
+  caret-color: $primary-color;
+  font-family: 'Open Sans', sans-serif;
+  &::selection {
+    background-color: #B2D7FF;
+  }
+}
+
+body {
+  margin: 0;
+}
 
 //placeholder-style
 [contenteditable]:empty:before {

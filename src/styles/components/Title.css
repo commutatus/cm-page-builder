@@ -1,0 +1,17 @@
+.cm-title {
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 4px 2px;
+  color: #1D2129;
+  font-weight: 600;
+  font-size: 2.375em;
+  background-color: #F4F5F7;
+  transition: background-color .3s linear;
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
+  .cm-title:focus {
+    outline: none; }
+  .cm-title:focus {
+    background-color: transparent; }

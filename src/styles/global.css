@@ -1,3 +1,13 @@
+* {
+  box-sizing: border-box;
+  caret-color: #1D2129;
+  font-family: 'Open Sans', sans-serif; }
+  *::selection {
+    background-color: #B2D7FF; }
+
+body {
+  margin: 0; }
+
 [contenteditable]:empty:before {
   content: attr(placeholder);
   display: block; }

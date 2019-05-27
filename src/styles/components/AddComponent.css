@@ -1,0 +1,9 @@
+.add-component-container {
+  display: flex; }
+  .add-component-container .type-container {
+    display: flex; }
+    .add-component-container .type-container div {
+      padding: 0 10px;
+      margin-right: 10px;
+      border: 1px solid;
+      cursor: pointer; }

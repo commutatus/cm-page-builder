@@ -1,0 +1,13 @@
+
+.add-component-container {
+  display: flex;
+  .type-container{
+    display: flex;
+    div{
+      padding: 0 10px;
+      margin-right: 10px;
+      border: 1px solid;
+      cursor: pointer;
+    }
+  }
+}

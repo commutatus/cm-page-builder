@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import '../styles/components/Dropdown.css';
 
 export class Dropdown extends React.Component{
 
@@ -41,7 +42,7 @@ export class Dropdown extends React.Component{
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
       <div className="dropdown-container" ref={(node) => this.elem = node}>
-        <div className="dropdown-value" onClick={this.toggleDropdown}>
+        <div className={isDropdownOpen ? '' : 'dropdown-value' }  onClick={this.toggleDropdown}>
           {
             isDropdownOpen ?
             <input 
