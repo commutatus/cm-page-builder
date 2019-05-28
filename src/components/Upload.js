@@ -1,11 +1,12 @@
 import React from 'react'
+import '../styles/components/Upload.css';
 
 export class Upload extends React.Component{
 
-  render(){
+  render() {
     return(
-      <div className="upload-container">
-        Click to upload Image or Video.
+      <div className="cm-uploader">
+        Click to upload file
       </div>
     )
   }
