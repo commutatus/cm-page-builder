@@ -5,7 +5,7 @@ export class AddComponent extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      pageType: "Text"
+      pageComponentType: "Text"
     }
   }
 
@@ -15,20 +15,20 @@ export class AddComponent extends React.Component{
     })
   }
 
-  _getPageComponent = (type, index) => {
+  getPageComponent = (type, index) => {
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
 		return <Component key={`${type}-${index}`} />
   }
   
   handleTypeSelect = (e) => {
-    this.setState({pageType: e.target.dataset.type})
+    this.setState({pageComponentType: e.target.dataset.type})
   }
 
   render(){
     return(
       <div className="add-component-container">
-        {this._getPageComponent(this.state.pageType)}
+        {this.getPageComponent(this.state.pageComponentType)}
         <div className="type-container">
           <div data-type="Header1" onClick={this.handleTypeSelect}>h1</div>
           <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
