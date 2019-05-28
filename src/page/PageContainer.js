@@ -51,7 +51,7 @@ class PageContainer extends React.Component {
 						<div className="date-updated">15 Jan, 2018</div>
 					</div>
 					{ 
-						['Text', 'Header1', 'Header2', 'Header3', 'Add Component'].map(item => this._getPageComponent(item))
+						['Text', 'Header1', 'Header2', 'Header3', 'Embed', 'Upload', 'Add Component'].map(item => this._getPageComponent(item))
 					}
 				</div>
 			</div>

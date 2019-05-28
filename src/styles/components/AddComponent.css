@@ -1,7 +1,31 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
 .add-component-container {
-  display: flex; }
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  width: 100%; }
+  .add-component-container:hover .type-container {
+    display: flex;
+    opacity: 1; }
   .add-component-container .type-container {
-    display: flex; }
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    top: -20px;
+    right: 10px;
+    opacity: 0;
+    animation: fadeIn .3s ease-in; }
     .add-component-container .type-container div {
       padding: 0 10px;
       margin-right: 10px;
