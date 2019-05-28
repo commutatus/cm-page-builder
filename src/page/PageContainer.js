@@ -15,8 +15,17 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	componentWillMount(){
+		window.addEventListener('keypress', this.handleKeyPress)
+	}
+
+	handleKeyPress = (e) => {
+		// if(e.keyNae)
+	}
+
 	_getPageComponent = (type, index) => {
-		let Component = require(`../components/${type}`)[type]
+		let typeName = type.split(' ').join('')
+		let Component = require(`../components/${typeName}`)[typeName]
 		return <Component key={`${type}-${index}`} />
 	}
 
@@ -34,15 +43,15 @@ class PageContainer extends React.Component {
 					<div className="page-info">
 						<Dropdown options={dummy} handleOptionSelect={this.handleSelect} />
 						<div className="seprator-dot"></div>
-						<div class="current-user-detail">
+						<div className="current-user-detail">
 							<img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlJacZ5USjBsoEelTZ1n4xmielCl906rNl2csiRBwLHSDb1N9N"} />
 							<p className="user-name">Ktm Vivek</p>
 						</div>
 						<div className="seprator-dot"></div>
-						<div class="date-updated">15 Jan, 2018</div>
+						<div className="date-updated">15 Jan, 2018</div>
 					</div>
-					{
-						['Text', 'Header1', 'Header2', 'Header3'].map(item => this._getPageComponent(item))
+					{ 
+						['Text', 'Header1', 'Header2', 'Header3', 'Embed', 'Upload', 'Add Component'].map(item => this._getPageComponent(item))
 					}
 				</div>
 			</div>

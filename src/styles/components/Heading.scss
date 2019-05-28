@@ -5,6 +5,7 @@
   margin: 14px 0 1px;
   padding: 3px 2px;
   @include editable-style;
+  @include text-wrapping;
 }
 
 .cm-header2 {
@@ -12,6 +13,7 @@
   margin: 16px 0 1px;
   padding: 3px 2px;
   @include editable-style;
+  @include text-wrapping;
 }
 
 .cm-header3 {
@@ -19,4 +21,5 @@
   margin: 8px 0 1px;
   padding: 3px 2px;
   @include editable-style;
+  @include text-wrapping;
 }

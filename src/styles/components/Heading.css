@@ -1,14 +1,33 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
 .cm-header1 {
   color: #1D2129;
   font-size: 1.875em;
   font-weight: 600;
+  background-color: #F4F5F7;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  transition: background-color .3s linear;
   margin: 14px 0 1px;
   padding: 3px 2px;
   caret-color: #1D2129;
   cursor: text;
-  -webkit-text-fill-color: #9EA0A4; }
+  -webkit-text-fill-color: #9EA0A4;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word; }
+  .cm-header1:focus {
+    background-color: transparent; }
   .cm-header1:focus {
     outline: none; }
 
@@ -16,13 +35,20 @@
   color: #1D2129;
   font-size: 1.5em;
   font-weight: 600;
+  background-color: #F4F5F7;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  transition: background-color .3s linear;
   margin: 16px 0 1px;
   padding: 3px 2px;
   caret-color: #1D2129;
   cursor: text;
-  -webkit-text-fill-color: #9EA0A4; }
+  -webkit-text-fill-color: #9EA0A4;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word; }
+  .cm-header2:focus {
+    background-color: transparent; }
   .cm-header2:focus {
     outline: none; }
 
@@ -30,12 +56,19 @@
   color: #1D2129;
   font-size: 1.25em;
   font-weight: 600;
+  background-color: #F4F5F7;
   line-height: 1.2;
   letter-spacing: -0.002em;
+  transition: background-color .3s linear;
   margin: 8px 0 1px;
   padding: 3px 2px;
   caret-color: #1D2129;
   cursor: text;
-  -webkit-text-fill-color: #9EA0A4; }
+  -webkit-text-fill-color: #9EA0A4;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word; }
+  .cm-header3:focus {
+    background-color: transparent; }
   .cm-header3:focus {
     outline: none; }
