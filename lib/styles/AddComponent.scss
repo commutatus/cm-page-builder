@@ -5,20 +5,20 @@
   align-items: flex-start;
   position: relative;
   width: 100%;
-  &:hover {
-    .type-container {
-      display: flex;
-      opacity: 1;
-    }
-  }
+  // &:hover {
+  //   .type-container {
+  //     display: flex;
+  //     opacity: 1;
+  //   }
+  // }
   .type-container {
-    display: none;
-    position: absolute;
-    background-color: #ffffff;
-    top: -20px;
-    right: 10px;
-    opacity: 0;
-    animation: fadeIn .3s ease-in;
+    // display: none;
+    // position: absolute;
+    // background-color: #ffffff;
+    // top: -20px;
+    // right: 10px;
+    // opacity: 0;
+    // animation: fadeIn .3s ease-in;
     div {
       padding: 0 10px;
       margin-right: 10px;

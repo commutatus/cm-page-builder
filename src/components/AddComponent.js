@@ -34,8 +34,8 @@ export class AddComponent extends React.Component{
           <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
           <div data-type="Header3" onClick={this.handleTypeSelect}>h3</div>
           <div data-type="Header1" onClick={this.handleTypeSelect}>Li</div>
-          <div data-type="Header1" onClick={this.handleTypeSelect}>Img</div>
-          <div data-type="Header1" onClick={this.handleTypeSelect}>emb</div>
+          <div data-type="Upload" onClick={this.handleTypeSelect}>Img</div>
+          <div data-type="Embed" onClick={this.handleTypeSelect}>emb</div>
         </div>
       </div>
     )
