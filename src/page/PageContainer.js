@@ -3,6 +3,7 @@ import '../styles/page.css'
 import { Dropdown } from '../components/Dropdown';
 import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
+import { AddComponent } from '../components/AddComponent'
 import moment from 'moment'
 
 const dummy = [{ "id": "2670", "name": "Contract signed", "short_name": null, "position": 5, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2666", "name": "First Contact", "short_name": null, "position": 2, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2671", "name": "Follow up", "short_name": null, "position": 6, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2711", "name": "Lead", "short_name": null, "position": 1, "type_id": "employee_follow_up", "type_name": null, "parent_id": null }, { "id": "2668", "name": "Meeting scheduled", "short_name": null, "position": 4, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2667", "name": "Proposal sent", "short_name": null, "position": 3, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }]
@@ -18,12 +19,19 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount(){
-		window.addEventListener('keypress', this.handleKeyPress)
+		// window.addEventListener('keypress', this.handleKeyPress)
 	}
 
-	// handleKeyPress = (e) => {
-	// 	// if(e.keyNae)
-	// }
+	handleKeyPress = (e) => {
+		let referenceNode = document.activeElement
+		if(e.key === 'Enter' && referenceNode){
+			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+		}
+	}
+
+	emitUpdate = (data, type, id) => {
+		this.props.handleUpdate(data, type, id)
+	}
 
 	getPageComponent = (data, index) => {
 		let typeName = this.props.typeMapping[data.component_type]
@@ -32,6 +40,7 @@ class PageContainer extends React.Component {
 			<Component 
 				key={`${data.component_type}-${index}`} 
 				content={data.content}
+				handleUpdate={this.emitUpdate}
 			/>
 		)
 	}
@@ -42,12 +51,11 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta } = this.state
-		console.log(this.state)
 		return (
 			<div className="page-root-container">
 				<div className="page-container">
 					<EmojiIconContainer />
-					<Title content={meta.title} />
+					<Title content={meta.title} handleUpdate={this.emitUpdate} />
 					<div className="page-info">
 						<Dropdown options={dummy} handleOptionSelect={this.handleSelect} />
 						<div className="seprator-dot"></div>
@@ -61,6 +69,7 @@ class PageContainer extends React.Component {
 					{ 
 						pageComponents.map((component, index) => this.getPageComponent(component, index))
 					}
+					<AddComponent></AddComponent>
 				</div>
 			</div>
 		)

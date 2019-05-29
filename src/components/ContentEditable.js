@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 export default class ContentEditable extends React.Component{
   
   shouldComponentUpdate(nextProps){
-    return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML
+    return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
 
   onTextEdit = (e) => {
@@ -18,9 +18,8 @@ export default class ContentEditable extends React.Component{
   }
 
   emitChange = () => {
-    let node = ReactDOM.findDOMNode(this)
-    var html = node.innerHTML
-    node.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'}`
+    var html = this.elem.innerHTML
+    this.elem.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'}`
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
         target: {
@@ -36,7 +35,8 @@ export default class ContentEditable extends React.Component{
     const { placeholder, className, styles } = this.props
     return(
       <div>
-        <div 
+        <div
+          ref={node => this.elem = node}
           className={className}
           onInput={this.emitChange} 
           onBlur={this.emitChange}
