@@ -8,7 +8,7 @@ const htmlWebpackPlugin = new HtmlWebPackPlugin({
 module.exports = {
   entry: [
      'babel-polyfill',
-     './src'
+     './src/page'
   ],
   resolve: {
     extensions: [".js", ".json"]

@@ -6,8 +6,10 @@ import '../styles/components/Heading.css';
 export class Header1 extends React.Component{
 
   state = {
-    styles: {}
+    html: this.props.content
   }
+
+  
 
   handleChange = (e) => {
     this.setState({

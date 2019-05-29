@@ -6,7 +6,7 @@ import '../styles/components/Text.css';
 export class Text extends React.Component{
 
   state = {
-    styles: {}
+    html: this.props.content
   }
 
   handleChange = (e) => {

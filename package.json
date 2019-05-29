@@ -7,8 +7,13 @@
     "start": "node ./server.js",
     "start-dev-server": "webpack-dev-server --host localhost --mode development --content-base=www --inline --watch --hot --open",
     "dev": "npm-run-all -p watch-css start-dev-server",
-    "build": "webpack --mode production",
-    "watch-css": "node-sass-chokidar src/styles -o src/styles --watch --recursive"
+    "local": "npm-run-all -p watch-css watch-babel",
+    "build-babel": "babel src --out-dir lib",
+    "build": "npm-run-all clean build-css build-babel",
+    "clean": "rimraf lib",
+    "build-css": "node-sass-chokidar src/styles -o lib/styles",
+    "watch-css": "node-sass-chokidar src/styles -o src/styles --watch --recursive",
+    "watch-babel": "babel src --out-dir lib --watch --recursive"
   },
   "watch": {
     "build": "src/",
@@ -26,10 +31,15 @@
   "homepage": "https://github.com/Surendhar95/awesome-react-starter#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "cpy-cli": "^2.0.0",
     "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.0.6",
     "jest": "^22.4.2",
@@ -45,6 +55,7 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "express": "^4.16.2",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

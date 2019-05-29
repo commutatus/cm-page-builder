@@ -1,0 +1,44 @@
+@import './imports';
+
+.page-root-container {
+    max-width: 700px;
+    height: 100vh;
+    margin: 30px auto 0; 
+    .page-container {
+        width: 100%;
+        .page-info {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 38px;
+            .current-user-detail {
+                display: inline-flex;
+                align-items: center;
+                @include chip-style;
+                img {
+                    width: 20px;
+                    height: 20px;
+                    vertical-align: middle;
+                    border-radius: 50%;
+                }
+                .user-name {
+                    color: $primary-color;	
+                    font-size: $t4-text;
+                    margin: 0 0 0 4px;
+                }
+            }
+            .date-updated {
+                @include chip-style;
+                color: $primary-color;	
+                font-size: $t4-text;
+            }
+            .seprator-dot {
+                width: 4px;	
+                height: 4px;
+                opacity: 0.4;
+                background-color: $primary-color;
+                border-radius: 50%;
+                margin: 0 14px;
+            }
+        }
+    }
+}

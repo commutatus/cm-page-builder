@@ -1,0 +1,14 @@
+@import '../imports';
+
+.cm-embed {
+  margin: 8px 0 1px;
+  padding: 5px;
+  color: $light-text;
+  font-size: $t6-text;
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  cursor: pointer;
+  &:hover {
+    background-color: transparent;
+  }
+}

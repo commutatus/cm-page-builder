@@ -1,0 +1,25 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
+
+.cm-text-block {
+  color: #1D2129;
+  font-size: 16px;
+  margin: 2px 0 1px;
+  padding: 3px 2px;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  caret-color: #1D2129;
+  cursor: text;
+  -webkit-text-fill-color: #9EA0A4; }
+  .cm-text-block:focus {
+    outline: none; }

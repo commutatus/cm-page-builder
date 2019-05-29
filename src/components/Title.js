@@ -5,7 +5,7 @@ import '../styles/components/Title.css';
 export class Title extends React.Component{
 
   state = {
-    styles: {}
+    html: this.props.content
   }
 
   handleChange = (e) => {

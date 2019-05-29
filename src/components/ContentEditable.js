@@ -9,8 +9,11 @@ export default class ContentEditable extends React.Component{
   onTextEdit = (e) => {
     e.preventDefault()
     let selection = window.getSelection()
-    console.log(selection.anchorNode)
-    let type = e.target.dataset.name
+    if(selection.anchorNode.isSameNode(selection.focusNode)){
+      // console.log('selected text: ', selection.anchorNode)
+      let type = e.target.dataset.name
+
+    }
 
   }
 
@@ -42,11 +45,11 @@ export default class ContentEditable extends React.Component{
           dangerouslySetInnerHTML={{__html: this.props.html}}
           styles={styles}
         />
-        <div>
-          <div data-name="bold" onClick={this.onTextEdit}>Bold</div>
-          <div data-name="italics" onClick={this.onTextEdit}>Italics</div>
-          <div data-name="strike-through" onClick={this.onTextEdit}>Strike Through</div>
-        </div>
+        {/* <div>
+          <div data-name="bold" onMouseDown={this.onTextEdit}>Bold</div>
+          <div data-name="italics" onMouseDown={this.onTextEdit}>Italics</div>
+          <div data-name="strike-through" onMouseDown={this.onTextEdit}>Strike Through</div>
+        </div> */}
       </div>
     )
   }
