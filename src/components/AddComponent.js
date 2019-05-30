@@ -18,7 +18,7 @@ export class AddComponent extends React.Component{
   getPageComponent = (type, index) => {
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
-		return <Component key={`${type}-${index}`} />
+		return <Component key={`${type}-${index}`} content="" handleUpdate={() => {}}/>
   }
   
   handleTypeSelect = (e) => {
@@ -33,7 +33,7 @@ export class AddComponent extends React.Component{
           <div data-type="Header1" onClick={this.handleTypeSelect}>h1</div>
           <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
           <div data-type="Header3" onClick={this.handleTypeSelect}>h3</div>
-          <div data-type="Header1" onClick={this.handleTypeSelect}>Li</div>
+          {/* <div data-type="Header1" onClick={this.handleTypeSelect}>Li</div> */}
           <div data-type="Upload" onClick={this.handleTypeSelect}>Img</div>
           <div data-type="Embed" onClick={this.handleTypeSelect}>emb</div>
         </div>
