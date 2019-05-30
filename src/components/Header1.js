@@ -6,12 +6,15 @@ import '../styles/components/Heading.css';
 export class Header1 extends React.Component{
 
   state = {
-    styles: {}
+    html: this.props.content
   }
+
 
   handleChange = (e) => {
     this.setState({
-      value: [e.target.value], 
+      value: e.target.value, 
+    }, () => {
+      this.props.handleUpdate({content: this.state.html}, 'Title')
     })
   }
 

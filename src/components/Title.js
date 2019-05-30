@@ -5,12 +5,14 @@ import '../styles/components/Title.css';
 export class Title extends React.Component{
 
   state = {
-    styles: {}
+    html: this.props.content
   }
 
   handleChange = (e) => {
     this.setState({
-      value: [e.target.value], 
+      html: e.target.value, 
+    }, () => {
+      this.props.handleUpdate({content: this.state.html}, 'Title')
     })
   }
 
