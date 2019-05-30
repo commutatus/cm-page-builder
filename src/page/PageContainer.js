@@ -26,8 +26,6 @@ const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) =>
 			{ 
 				pageComponents.map((component, index) => getPageComponent(component, index))
 			}
-			<Embed />
-			<Upload />
 			<AddComponent handleUpdate={() => {}}></AddComponent>
 		</div>
 	</div>
@@ -36,7 +34,7 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || ['Header1', 'Header2', 'Text', ],
+			pageComponents: props.pageComponents || [],
 			meta: props.meta,
 		}
 	}
@@ -54,6 +52,7 @@ class PageContainer extends React.Component {
 				case 'Backspace':
 					break;
 				case 'Enter':
+					debugger
 					break;
 			}
 		}
@@ -73,6 +72,7 @@ class PageContainer extends React.Component {
 				key={`${data.component_type}-${index}`} 
 				content={data.content}
 				handleUpdate={this.emitUpdate}
+				id={index}
 			/>
 		)
 	}

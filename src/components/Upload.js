@@ -19,7 +19,6 @@ export class Upload extends React.Component{
       }
       reader.readAsDataURL(e.target.files[0]);
     }
-
   }
   
   render() {

@@ -12,7 +12,7 @@ export class Title extends React.Component{
     this.setState({
       html: e.target.value, 
     }, () => {
-      this.props.handleUpdate({content: this.state.html}, 'Title')
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
     })
   }
 
