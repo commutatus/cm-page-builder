@@ -2,22 +2,19 @@
 
 .add-component-container {
   display: flex;
-  align-items: flex-start;
   position: relative;
   width: 100%;
-  &:hover {
-    .type-container {
-      display: flex;
-      opacity: 1;
-    }
-  }
+  justify-content: space-between;
+  // &:hover {
+  //   .type-container {
+  //     display: flex;
+  //     opacity: 1;
+  //   }
+  // }
   .type-container {
-    display: none;
-    position: absolute;
+    display: flex;
+    align-items: flex-end;
     background-color: #ffffff;
-    top: -20px;
-    right: 10px;
-    opacity: 0;
     animation: fadeIn .3s ease-in;
     div {
       padding: 0 10px;
