@@ -53,7 +53,7 @@ export default class ContentEditable extends React.Component{
               <div
                 ref={node => this.elem = node}
                 className={className}
-                onInput={this.emitChange} 
+                // onInput={this.emitChange} 
                 onBlur={this.emitChange}
                 contentEditable
                 placeholder={placeholder}
