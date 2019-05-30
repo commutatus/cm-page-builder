@@ -15,10 +15,10 @@ export class AddComponent extends React.Component{
     })
   }
 
-  getPageComponent = (type, index) => {
+  getPageComponent = (type) => {
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
-		return <Component key={`${type}-${index}`} content="" handleUpdate={() => {}}/>
+		return <Component key={`${type}-${this.props.id}`} content="" id={this.props.id} handleUpdate={() => {}}/>
   }
   
   handleTypeSelect = (e) => {

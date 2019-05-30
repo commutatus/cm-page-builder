@@ -1,12 +1,8 @@
 import React from 'react'
 import '../styles/page.css'
-import { Dropdown } from '../components/Dropdown';
 import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
-import { AddComponent } from '../components/AddComponent'
 import moment from 'moment'
-import { Embed } from '../components/Embed';
-import { Upload } from '../components/Upload';
 import { PermissionContext } from '../contexts/permission-context';
 
 const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) => 
@@ -26,7 +22,6 @@ const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) =>
 			{ 
 				pageComponents.map((component, index) => getPageComponent(component, index))
 			}
-			<AddComponent handleUpdate={() => {}}></AddComponent>
 		</div>
 	</div>
 class PageContainer extends React.Component {
@@ -34,13 +29,13 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || [],
+			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent' }],
 			meta: props.meta,
 		}
 	}
 
 	componentWillMount(){
-		window.addEventListener('keydown', this.handleKeyPress)
+		// window.addEventListener('keydown', this.handleKeyPress)
 	}
 
 	handleKeyPress = (e) => {
@@ -65,7 +60,7 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let typeName = data || this.props.typeMapping[data.component_type]
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
 		let Component = require(`../components/${typeName}`)[typeName]
 		return (
 			<Component 
@@ -77,14 +72,37 @@ class PageContainer extends React.Component {
 		)
 	}
 
+	handleAction = (type, id, elem) => {
+		let {pageComponents} = this.state
+		switch(type){
+			case 'add-component':
+				let temp = []
+				let position = 1
+				for(let i in pageComponents){
+					if(id == i){ //can compare with the id also.
+						temp.push({...pageComponents[i], position})
+						temp.push({content: '', position: position+1, component_type: 'AddComponent' })
+						position += 2
+					}
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
+				}
+				this.setState({pageComponents: temp})
+				break
+		}
+	}
+
 	// handleSelect = () => {
 
 	// }
 
 	render() {
+		console.log(this.state)
 		const { pageComponents, meta } = this.state
 		return (
-			<PermissionContext.Provider value="Read"> 
+			<PermissionContext.Provider value={{status: 'Read', handleAction: this.handleAction}}> 
 				<PageDetails 
 					pageComponents={pageComponents}
 					emitUpdate={this.emitUpdate}

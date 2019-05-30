@@ -25,6 +25,7 @@ export class Header1 extends React.Component{
         onChange={this.handleChange} 
         placeholder="Header1"
         className="cm-header1"
+        id={this.props.id}
       />
     )
   }

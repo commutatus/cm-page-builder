@@ -25,6 +25,7 @@ export class Text extends React.Component{
         onChange={this.handleChange} 
         placeholder="Start typing or choose a component..."
         className="cm-text-block"
+        id={this.props.id}
       />
     )
   }

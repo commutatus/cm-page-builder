@@ -2,24 +2,28 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { PermissionContext } from '../contexts/permission-context';
 export default class ContentEditable extends React.Component{
-  
-  componentWillMount(){
-    // console.log(this)
-  }
 
   shouldComponentUpdate(nextProps){
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
 
   onTextEdit = (e) => {
-    e.preventDefault()
-    let selection = window.getSelection()
-    if(selection.anchorNode.isSameNode(selection.focusNode)){
-      // console.log('selected text: ', selection.anchorNode)
-      let type = e.target.dataset.name
+    // e.preventDefault()
+    // let selection = window.getSelection()
+    // if(selection.anchorNode.isSameNode(selection.focusNode)){
+    //   // console.log('selected text: ', selection.anchorNode)
+    //   let type = e.target.dataset.name
 
+    // }
+
+  }
+
+  handleKeyPress = (e, handleAction) => {
+    // console.log(e, handleAction)
+    if(e.key === 'Enter'){
+      e.preventDefault()
+      handleAction('add-component', this.props.id, this.elem)
     }
-
   }
 
   getClassName = (name) => {
@@ -59,6 +63,7 @@ export default class ContentEditable extends React.Component{
                 placeholder={placeholder}
                 dangerouslySetInnerHTML={{__html: this.props.html}}
                 styles={styles}
+                onKeyPress={(e) => this.handleKeyPress(e, value.handleAction)}
               />
               {/* <div>
                 <div data-name="bold" onMouseDown={this.onTextEdit}>Bold</div>
