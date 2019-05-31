@@ -20,6 +20,8 @@
   word-break: break-word;
   caret-color: #1D2129;
   cursor: text;
-  -webkit-text-fill-color: #9EA0A4; }
+  -webkit-text-fill-color: black; }
+  .cm-text-block:empty {
+    -webkit-text-fill-color: #9EA0A4; }
   .cm-text-block:focus {
     outline: none; }

@@ -4,6 +4,8 @@ import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
 import moment from 'moment'
 import { PermissionContext } from '../contexts/permission-context';
+import { Dropdown } from '../components/Dropdown';
+import '../styles/global.css'
 
 const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) => 
 	<div className="page-root-container">
@@ -11,6 +13,7 @@ const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) =>
 			<EmojiIconContainer />
 			<Title content={meta ? meta.title : ''} handleUpdate={emitUpdate} />
 			<div className="page-info">
+				<Dropdown handleOptionSelect={data => console.log(data)} optionSelected={{id: "11351", name: "Business Development"}} options={[{id: "11351", name: "Business Development"}]} />
 				<div className="seprator-dot"></div>
 				<div className="current-user-detail">
 					<img src={meta ? meta.creator.profile_photo : ''} />
@@ -34,8 +37,20 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	componentDidUpdate(){
+		// debugger
+		if(this.newElemPos){
+			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
+			this.newElemPos = null
+		}
+		// if(this.elemDelPos){
+		// 	let elemList = document.getElementsByClassName('page-container')
+		// 	elemList
+
+		// }
+	}
+
 	emitUpdate = (data, type) => {
-		console.log(data)
 		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate({data, type})
@@ -57,13 +72,17 @@ class PageContainer extends React.Component {
 
 	handleAction = (type, id, elem) => {
 		let {pageComponents} = this.state
-		let temp = [], position = 1
+		let temp = [], position = 1, componentIndex = id
+		if(id && id.includes('AddComponent')){
+			id = +(id.split('-')[1])
+		}
 		switch(type){
 			case 'add-component':
-				
 				for(let i in pageComponents){
-					if(id == pageComponents[i].id){ //can compare with the id also.
+					let componentId = componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					if(id == componentId){ //can compare with the id also.
 						temp.push({...pageComponents[i], position})
+						this.newElemPos = position
 						temp.push({content: '', position: position+1, component_type: 'AddComponent' })
 						position += 2
 					}
@@ -77,7 +96,9 @@ class PageContainer extends React.Component {
 			case 'remove-component':
 				if(pageComponents.length > 1){
 					for(let i in pageComponents){
-						if(id == pageComponents[i].id){ //can compare with the id also.
+						let componentId = componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+						if(id == componentId){ //can compare with the id also.
+							// this.elemDelPos = pos
 							continue
 						}
 						else{
@@ -91,6 +112,17 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handelKeyPress = (e) => {
+		// console.log(e.target)
+		switch(e.key){
+			case 'ArrowUp':
+
+				break;
+			case 'ArrowDown':
+					break;
+		}
+	}
+
 	// handleSelect = () => {
 
 	// }
@@ -98,14 +130,18 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta } = this.state
 		return (
-			<PermissionContext.Provider value={{status: 'Read', handleAction: this.handleAction}}> 
-				<PageDetails 
-					pageComponents={pageComponents}
-					emitUpdate={this.emitUpdate}
-					meta={meta}
-					getPageComponent={this.getPageComponent}
-				/>
-			</PermissionContext.Provider>
+			<div
+				onKeyUp={this.handelKeyPress}
+			>
+				<PermissionContext.Provider value={{status: 'Read', handleAction: this.handleAction}}> 
+					<PageDetails 
+						pageComponents={pageComponents}
+						emitUpdate={this.emitUpdate}
+						meta={meta}
+						getPageComponent={this.getPageComponent}
+					/>
+				</PermissionContext.Provider>
+			</div>
 		)
 	}
 }

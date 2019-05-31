@@ -1,6 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { PermissionContext } from '../contexts/permission-context';
+
+
+const urlify = (text) => {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+      return '<a href="' + url + '">' + url + '</a>';
+  })
+  // or alternatively
+  // return text.replace(urlRegex, '<a href="$1">$1</a>')
+}
 export default class ContentEditable extends React.Component{
 
   constructor(props){
@@ -11,6 +21,8 @@ export default class ContentEditable extends React.Component{
   shouldComponentUpdate(nextProps){
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
+
+  
 
   onTextEdit = (e) => {
     // e.preventDefault()
@@ -35,7 +47,6 @@ export default class ContentEditable extends React.Component{
 
   handleKeyUp = (e, handleAction) => {
     if(e.key === 'Backspace'){
-      console.log(this)
       if(!this.elem.innerHTML){
         handleAction('remove-component', this.props.id, this.elem)
       }
@@ -51,7 +62,8 @@ export default class ContentEditable extends React.Component{
 
   emitChange = () => {
     var html = this.elem.innerHTML
-    this.elem.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'}`
+    // html = urlify(html)
+    // this.elem.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'};`
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
         target: {
@@ -71,6 +83,7 @@ export default class ContentEditable extends React.Component{
           (value) => 
             <div style={{width:'100%'}}>
               <div
+                data-id={this.props.id}
                 ref={node => this.elem = node}
                 className={className}
                 onBlur={this.emitChange}
