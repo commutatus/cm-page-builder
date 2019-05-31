@@ -34,52 +34,35 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	componentWillMount(){
-		// window.addEventListener('keydown', this.handleKeyPress)
-	}
-
-	handleKeyPress = (e) => {
-		console.log(e)
-		e.preventDefault()
-		let referenceNode = document.activeElement
-		if(referenceNode){
-			switch(e.key){
-				case 'Backspace':
-					break;
-				case 'Enter':
-					debugger
-					break;
-			}
-		}
-	}
-
-	emitUpdate = (data, type, id) => {
+	emitUpdate = (data, type) => {
+		console.log(data)
 		let {handleUpdate} = this.props
 		if(handleUpdate)
-			handleUpdate(data, type, id)
+			handleUpdate({data, type})
 	}
 
 	getPageComponent = (data, index) => {
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		let Component = require(`../components/${typeName}`)[typeName]
 		return (
 			<Component 
-				key={`${data.component_type}-${index}`} 
+				key={dataId}
 				content={data.content}
 				handleUpdate={this.emitUpdate}
-				id={index}
+				id={dataId}
 			/>
 		)
 	}
 
 	handleAction = (type, id, elem) => {
 		let {pageComponents} = this.state
+		let temp = [], position = 1
 		switch(type){
 			case 'add-component':
-				let temp = []
-				let position = 1
+				
 				for(let i in pageComponents){
-					if(id == i){ //can compare with the id also.
+					if(id == pageComponents[i].id){ //can compare with the id also.
 						temp.push({...pageComponents[i], position})
 						temp.push({content: '', position: position+1, component_type: 'AddComponent' })
 						position += 2
@@ -91,6 +74,20 @@ class PageContainer extends React.Component {
 				}
 				this.setState({pageComponents: temp})
 				break
+			case 'remove-component':
+				if(pageComponents.length > 1){
+					for(let i in pageComponents){
+						if(id == pageComponents[i].id){ //can compare with the id also.
+							continue
+						}
+						else{
+							temp.push({...pageComponents[i], position})
+							position++
+						}
+					}
+					this.setState({pageComponents: temp})
+				}
+				break
 		}
 	}
 
@@ -99,7 +96,6 @@ class PageContainer extends React.Component {
 	// }
 
 	render() {
-		console.log(this.state)
 		const { pageComponents, meta } = this.state
 		return (
 			<PermissionContext.Provider value={{status: 'Read', handleAction: this.handleAction}}> 

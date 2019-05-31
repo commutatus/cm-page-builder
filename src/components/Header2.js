@@ -11,7 +11,7 @@ export class Header2 extends React.Component{
   
   handleChange = (e) => {
     this.setState({
-      value: e.target.value, 
+      html: e.target.value, 
     }, () => {
       this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
     })

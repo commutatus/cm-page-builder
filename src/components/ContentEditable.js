@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom'
 import { PermissionContext } from '../contexts/permission-context';
 export default class ContentEditable extends React.Component{
 
+  constructor(props){
+    super(props)
+    this.state = {}
+  }
+
   shouldComponentUpdate(nextProps){
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
@@ -19,10 +24,21 @@ export default class ContentEditable extends React.Component{
   }
 
   handleKeyPress = (e, handleAction) => {
-    // console.log(e, handleAction)
-    if(e.key === 'Enter'){
-      e.preventDefault()
-      handleAction('add-component', this.props.id, this.elem)
+    switch(e.key){
+      case 'Enter':
+        e.preventDefault()
+        handleAction('add-component', this.props.id, this.elem)
+        break
+      default:
+    }
+  }
+
+  handleKeyUp = (e, handleAction) => {
+    if(e.key === 'Backspace'){
+      console.log(this)
+      if(!this.elem.innerHTML){
+        handleAction('remove-component', this.props.id, this.elem)
+      }
     }
   }
 
@@ -57,19 +73,14 @@ export default class ContentEditable extends React.Component{
               <div
                 ref={node => this.elem = node}
                 className={className}
-                // onInput={this.emitChange} 
                 onBlur={this.emitChange}
                 contentEditable
                 placeholder={placeholder}
                 dangerouslySetInnerHTML={{__html: this.props.html}}
                 styles={styles}
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction)}
+                onKeyUp={(e) => this.handleKeyUp(e, value.handleAction)}
               />
-              {/* <div>
-                <div data-name="bold" onMouseDown={this.onTextEdit}>Bold</div>
-                <div data-name="italics" onMouseDown={this.onTextEdit}>Italics</div>
-                <div data-name="strike-through" onMouseDown={this.onTextEdit}>Strike Through</div>
-              </div> */}
           </div>
         }
       </PermissionContext.Consumer>
