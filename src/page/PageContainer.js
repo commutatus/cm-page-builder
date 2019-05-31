@@ -79,7 +79,7 @@ class PageContainer extends React.Component {
 		switch(type){
 			case 'add-component':
 				for(let i in pageComponents){
-					let componentId = componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
 					if(id == componentId){ //can compare with the id also.
 						temp.push({...pageComponents[i], position})
 						this.newElemPos = position
@@ -96,7 +96,7 @@ class PageContainer extends React.Component {
 			case 'remove-component':
 				if(pageComponents.length > 1){
 					for(let i in pageComponents){
-						let componentId = componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
 						if(id == componentId){ //can compare with the id also.
 							// this.elemDelPos = pos
 							continue
