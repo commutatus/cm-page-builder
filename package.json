@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Surendhar95/awesome-react-starter.git"
+    "url": "git+https://github.com/commutatus/cm-page-builder.git"
   },
   "author": "Surendhar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Surendhar95/awesome-react-starter/issues"
+    "url": "https://github.com/commutatus/cm-page-builder/issues"
   },
-  "homepage": "https://github.com/Surendhar95/awesome-react-starter#readme",
+  "homepage": "https://github.com/commutatus/cm-page-builder#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
