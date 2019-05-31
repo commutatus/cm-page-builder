@@ -12,7 +12,7 @@ export class Header1 extends React.Component{
 
   handleChange = (e) => {
     this.setState({
-      value: e.target.value, 
+      html: e.target.value, 
     }, () => {
       this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
     })
@@ -25,6 +25,7 @@ export class Header1 extends React.Component{
         onChange={this.handleChange} 
         placeholder="Header1"
         className="cm-header1"
+        id={this.props.id}
       />
     )
   }

@@ -11,14 +11,16 @@ export class AddComponent extends React.Component{
 
   handleChange = (e) => {
     this.setState({
-      value: [e.target.value], 
+      html: e.target.value, 
+    }, () => {
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'AddComponent')
     })
   }
 
-  getPageComponent = (type, index) => {
+  getPageComponent = (type) => {
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
-		return <Component key={`${type}-${index}`} content="" handleUpdate={() => {}}/>
+		return <Component key={`${type}-${this.props.id}`} content="" id={this.props.id} handleUpdate={() => {}}/>
   }
   
   handleTypeSelect = (e) => {

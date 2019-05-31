@@ -23,6 +23,7 @@ export class Title extends React.Component{
         onChange={this.handleChange} 
         placeholder="Title of the page"
         className="cm-title"
+        id={this.props.id}
       />
     )
   }

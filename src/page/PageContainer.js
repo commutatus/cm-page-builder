@@ -1,13 +1,11 @@
 import React from 'react'
 import '../styles/page.css'
-import { Dropdown } from '../components/Dropdown';
 import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
-import { AddComponent } from '../components/AddComponent'
 import moment from 'moment'
-import { Embed } from '../components/Embed';
-import { Upload } from '../components/Upload';
 import { PermissionContext } from '../contexts/permission-context';
+import { Dropdown } from '../components/Dropdown';
+import '../styles/global.css'
 
 const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) => 
 	<div className="page-root-container">
@@ -15,6 +13,7 @@ const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) =>
 			<EmojiIconContainer />
 			<Title content={meta ? meta.title : ''} handleUpdate={emitUpdate} />
 			<div className="page-info">
+				<Dropdown handleOptionSelect={data => console.log(data)} optionSelected={{id: "11351", name: "Business Development"}} options={[{id: "11351", name: "Business Development"}]} />
 				<div className="seprator-dot"></div>
 				<div className="current-user-detail">
 					<img src={meta ? meta.creator.profile_photo : ''} />
@@ -26,7 +25,6 @@ const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) =>
 			{ 
 				pageComponents.map((component, index) => getPageComponent(component, index))
 			}
-			<AddComponent handleUpdate={() => {}}></AddComponent>
 		</div>
 	</div>
 class PageContainer extends React.Component {
@@ -34,47 +32,95 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || [],
+			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent' }],
 			meta: props.meta,
 		}
 	}
 
-	componentWillMount(){
-		window.addEventListener('keydown', this.handleKeyPress)
-	}
-
-	handleKeyPress = (e) => {
-		console.log(e)
-		e.preventDefault()
-		let referenceNode = document.activeElement
-		if(referenceNode){
-			switch(e.key){
-				case 'Backspace':
-					break;
-				case 'Enter':
-					debugger
-					break;
-			}
+	componentDidUpdate(){
+		// debugger
+		if(this.newElemPos){
+			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
+			this.newElemPos = null
 		}
+		// if(this.elemDelPos){
+		// 	let elemList = document.getElementsByClassName('page-container')
+		// 	elemList
+
+		// }
 	}
 
-	emitUpdate = (data, type, id) => {
+	emitUpdate = (data, type) => {
 		let {handleUpdate} = this.props
 		if(handleUpdate)
-			handleUpdate(data, type, id)
+			handleUpdate({data, type})
 	}
 
 	getPageComponent = (data, index) => {
-		let typeName = data || this.props.typeMapping[data.component_type]
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		let Component = require(`../components/${typeName}`)[typeName]
 		return (
 			<Component 
-				key={`${data.component_type}-${index}`} 
+				key={dataId}
 				content={data.content}
 				handleUpdate={this.emitUpdate}
-				id={index}
+				id={dataId}
 			/>
 		)
+	}
+
+	handleAction = (type, id, elem) => {
+		let {pageComponents} = this.state
+		let temp = [], position = 1, componentIndex = id
+		if(id && id.includes('AddComponent')){
+			id = +(id.split('-')[1])
+		}
+		switch(type){
+			case 'add-component':
+				for(let i in pageComponents){
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					if(id == componentId){ //can compare with the id also.
+						temp.push({...pageComponents[i], position})
+						this.newElemPos = position
+						temp.push({content: '', position: position+1, component_type: 'AddComponent' })
+						position += 2
+					}
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
+				}
+				this.setState({pageComponents: temp})
+				break
+			case 'remove-component':
+				if(pageComponents.length > 1){
+					for(let i in pageComponents){
+						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+						if(id == componentId){ //can compare with the id also.
+							// this.elemDelPos = pos
+							continue
+						}
+						else{
+							temp.push({...pageComponents[i], position})
+							position++
+						}
+					}
+					this.setState({pageComponents: temp})
+				}
+				break
+		}
+	}
+
+	handelKeyPress = (e) => {
+		// console.log(e.target)
+		switch(e.key){
+			case 'ArrowUp':
+
+				break;
+			case 'ArrowDown':
+					break;
+		}
 	}
 
 	// handleSelect = () => {
@@ -84,14 +130,18 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta } = this.state
 		return (
-			<PermissionContext.Provider value="Read"> 
-				<PageDetails 
-					pageComponents={pageComponents}
-					emitUpdate={this.emitUpdate}
-					meta={meta}
-					getPageComponent={this.getPageComponent}
-				/>
-			</PermissionContext.Provider>
+			<div
+				onKeyUp={this.handelKeyPress}
+			>
+				<PermissionContext.Provider value={{status: 'Read', handleAction: this.handleAction}}> 
+					<PageDetails 
+						pageComponents={pageComponents}
+						emitUpdate={this.emitUpdate}
+						meta={meta}
+						getPageComponent={this.getPageComponent}
+					/>
+				</PermissionContext.Provider>
+			</div>
 		)
 	}
 }

@@ -28,7 +28,10 @@
 @mixin editable-style {
   caret-color: $primary-color;
   cursor: text;
-  -webkit-text-fill-color: #9EA0A4;
+  -webkit-text-fill-color:black;
+  &:empty{
+    -webkit-text-fill-color: #9EA0A4;
+  }
   &:focus {
     outline: none;
   }
