@@ -55,6 +55,7 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "express": "^4.16.2",
+    "is-accessor-descriptor": "^3.0.1",
     "massd": "^1.0.9",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
