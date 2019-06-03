@@ -31,7 +31,7 @@ export class AddComponent extends React.Component{
     return(
       <div className="add-component-container">
         {this.getPageComponent(this.state.pageComponentType)}
-        <div className="type-container">
+        <div className="text-type-tools">
           <div data-type="Header1" onClick={this.handleTypeSelect}>h1</div>
           <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
           <div data-type="Header3" onClick={this.handleTypeSelect}>h3</div>

@@ -1,16 +1,12 @@
 @import './variables.scss';
 
 @mixin heading-font($fontSize, $fontWeight) {
+  position: relative;
   color: $primary-color;
   font-size: $fontSize;
   font-weight: $fontWeight;
-  background-color: $gray-bg;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  transition: background-color .3s linear;
-  &:focus {
-    background-color: transparent;
-  }
 }
 
 @mixin text-wrapping {

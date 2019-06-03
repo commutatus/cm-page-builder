@@ -15,12 +15,12 @@
   position: relative;
   width: 100%;
   justify-content: space-between; }
-  .add-component-container .type-container {
+  .add-component-container .text-type-tools {
     display: flex;
     align-items: flex-end;
     background-color: #ffffff;
     animation: fadeIn .3s ease-in; }
-    .add-component-container .type-container div {
+    .add-component-container .text-type-tools div {
       padding: 0 10px;
       margin-right: 10px;
       border: 1px solid;
