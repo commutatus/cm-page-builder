@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
+    "emoji-picker-react": "^2.1.1",
     "express": "^4.16.2",
     "massd": "^1.0.9",
     "moment": "^2.24.0",
