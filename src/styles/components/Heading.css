@@ -15,6 +15,7 @@
   color: #1D2129;
   font-size: 1.875em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   margin: 14px 0 1px;
@@ -31,6 +32,8 @@
     -webkit-text-fill-color: #9EA0A4; }
   .cm-header1.edit:focus {
     outline: none; }
+  .cm-header1.edit:empty {
+    background-color: transparent; }
   .cm-header1.edit:focus {
     background-color: transparent; }
 
@@ -40,6 +43,7 @@
   color: #1D2129;
   font-size: 1.875em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   width: 100%;
@@ -51,6 +55,7 @@
   color: #1D2129;
   font-size: 1.5em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   margin: 16px 0 1px;
@@ -67,6 +72,8 @@
     -webkit-text-fill-color: #9EA0A4; }
   .cm-header2.edit:focus {
     outline: none; }
+  .cm-header2.edit:empty {
+    background-color: transparent; }
   .cm-header2.edit:focus {
     background-color: transparent; }
 
@@ -75,6 +82,7 @@
   color: #1D2129;
   font-size: 1.5em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   margin: 16px 0 1px;
@@ -87,6 +95,7 @@
   color: #1D2129;
   font-size: 1.25em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   margin: 8px 0 1px;
@@ -103,6 +112,8 @@
     -webkit-text-fill-color: #9EA0A4; }
   .cm-header3.edit:focus {
     outline: none; }
+  .cm-header3.edit:empty {
+    background-color: transparent; }
   .cm-header3.edit:focus {
     background-color: transparent; }
 
@@ -111,6 +122,7 @@
   color: #1D2129;
   font-size: 1.25em;
   font-weight: 600;
+  font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
   margin: 8px 0 1px;
@@ -122,16 +134,22 @@
   position: absolute;
   top: -25px;
   display: flex;
-  width: 265px;
-  height: 32px;
   border-radius: 2px;
   background-color: #52565E;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2); }
   .text-selection-tool .tool-btn {
-    font-size: 18px;
+    font-size: 14px;
     padding: 5px;
     margin: 0 4px;
     color: #FFFFFF;
+    cursor: pointer; }
+  .text-selection-tool .bold-tool-btn {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    margin: 0 4px;
+    color: #FFFFFF;
+    line-height: 17px;
     cursor: pointer; }
   .text-selection-tool .divider {
     border: 1px solid #1D2129;

@@ -8,6 +8,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -27,6 +30,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -46,6 +52,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -61,16 +70,23 @@
   position: absolute;
   top: -25px;
   display: flex;
-  width: 265px;
-  height: 32px;
   border-radius: 2px;	
   background-color: #52565E;	
   box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
   .tool-btn {
-    font-size: $t8-text;
+    font-size: $t4-text;
     padding: 5px;
     margin: 0 4px;
     color: $white;
+    cursor: pointer;
+  }
+  .bold-tool-btn {
+    font-size: $t8-text;
+    font-weight: $bold-text;
+    padding: 5px;
+    margin: 0 4px;
+    color: $white;
+    line-height: 17px;
     cursor: pointer;
   }
   .divider {
