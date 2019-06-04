@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import classNames from 'classnames';
 import { PermissionContext } from '../contexts/permission-context';
 
 
@@ -85,9 +86,9 @@ export default class ContentEditable extends React.Component{
               <div
                 data-id={this.props.id}
                 ref={node => this.elem = node}
-                className={className}
+                className={classNames(className, value.status.toLowerCase())}
                 onBlur={this.emitChange}
-                contentEditable
+                contentEditable={value.status === 'Edit'}
                 placeholder={placeholder}
                 dangerouslySetInnerHTML={{__html: this.props.html}}
                 styles={styles}

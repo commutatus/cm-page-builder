@@ -1,6 +1,6 @@
 {
-  "name": "awesome-react-starter",
-  "version": "1.0.0",
+  "name": "cm-pages-builder",
+  "version": "1.3.0",
   "description": "Awesome react starter kit",
   "main": "index.js",
   "scripts": {
@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Surendhar95/awesome-react-starter.git"
+    "url": "git+https://github.com/commutatus/cm-page-builder.git"
   },
   "author": "Surendhar",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Surendhar95/awesome-react-starter/issues"
+    "url": "https://github.com/commutatus/cm-page-builder/issues"
   },
-  "homepage": "https://github.com/Surendhar95/awesome-react-starter#readme",
+  "homepage": "https://github.com/commutatus/cm-page-builder#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -55,7 +55,10 @@
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "emoji-picker-react": "^2.1.1",
+    "classnames": "^2.2.6",
     "express": "^4.16.2",
+    "is-accessor-descriptor": "^3.0.1",
+    "is-data-descriptor": "^2.0.0",
     "massd": "^1.0.9",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
