@@ -123,6 +123,11 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	editText = () => {
+		// e.preventDefault()
+		document.execCommand('italic')
+	}
+
 	// handleSelect = () => {
 
 	// }
@@ -141,6 +146,7 @@ class PageContainer extends React.Component {
 						getPageComponent={this.getPageComponent}
 					/>
 				</PermissionContext.Provider>
+				<div onMouseDown={this.editText}>italics</div>
 			</div>
 		)
 	}
