@@ -4,14 +4,6 @@ import classNames from 'classnames';
 import { PermissionContext } from '../contexts/permission-context';
 
 
-const urlify = (text) => {
-  var urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, function(url) {
-      return '<a href="' + url + '">' + url + '</a>';
-  })
-  // or alternatively
-  // return text.replace(urlRegex, '<a href="$1">$1</a>')
-}
 export default class ContentEditable extends React.Component{
 
   constructor(props){
@@ -22,8 +14,6 @@ export default class ContentEditable extends React.Component{
   shouldComponentUpdate(nextProps){
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
-
-  
 
   onTextEdit = (e) => {
     // e.preventDefault()
@@ -63,8 +53,6 @@ export default class ContentEditable extends React.Component{
 
   emitChange = () => {
     var html = this.elem.innerHTML
-    // html = urlify(html)
-    // this.elem.style = `-webkit-text-fill-color: ${html ? '#1D2129' : '#9EA0A4'};`
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
         target: {
@@ -73,7 +61,13 @@ export default class ContentEditable extends React.Component{
       });
     }
     this.lastHtml = html;
-    
+  }
+
+  onInputChange = () => {
+    var html = this.elem.innerHTML
+    if (this.props.onInputChange) {
+      this.props.onInputChange(html);
+    }
   }
 
   render() {
@@ -87,6 +81,7 @@ export default class ContentEditable extends React.Component{
                 data-id={this.props.id}
                 ref={node => this.elem = node}
                 className={classNames(className, value.status.toLowerCase())}
+                onInput={this.onInputChange}
                 onBlur={this.emitChange}
                 contentEditable={value.status === 'Edit'}
                 placeholder={placeholder}
