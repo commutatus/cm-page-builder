@@ -32,11 +32,14 @@ export class AddComponent extends React.Component{
       <div className="add-component-container">
         {this.getPageComponent(this.state.pageComponentType)}
         <div className="text-type-tools">
-          <div data-type="Header1" onClick={this.handleTypeSelect}>h1</div>
-          <div data-type="Header2" onClick={this.handleTypeSelect}>h2</div>
-          <div data-type="Header3" onClick={this.handleTypeSelect}>h3</div>
+          <div data-type="Header1" onClick={this.handleTypeSelect}><i className="cm-h1" /></div>
+          <div data-type="Header2" onClick={this.handleTypeSelect}><i className="cm-h2" /></div>
+          <div><i className="cm-numbers" /></div>
+          <div><i className="cm-bullets" /></div>
+          <div><i className="cm-page" /></div>
           {/* <div data-type="Header1" onClick={this.handleTypeSelect}>Li</div> */}
-          <div data-type="Upload" onClick={this.handleTypeSelect}>Img</div>
+          <div data-type="Upload" onClick={this.handleTypeSelect}><i className="cm-picture" /></div>
+          <div><i className="cm-video" /></div>
           <div data-type="Embed" onClick={this.handleTypeSelect}>emb</div>
         </div>
       </div>

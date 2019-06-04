@@ -12,7 +12,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif; }
+  font-family: 'Open Sans', sans-serif !important; }
   *::selection {
     background-color: #B2D7FF; }
 

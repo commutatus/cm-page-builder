@@ -6,5 +6,6 @@
   margin: 2px 0 1px;
   padding: 3px 2px;
   @include text-wrapping;
-  @include editable-style;  
+  @include editable-style; 
+  font-family: 'Open Sans', sans-serif !important; 
 }
