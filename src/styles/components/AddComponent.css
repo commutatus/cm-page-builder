@@ -12,16 +12,19 @@
 
 .add-component-container {
   display: flex;
+  align-items: center;
   position: relative;
   width: 100%;
   justify-content: space-between; }
   .add-component-container .text-type-tools {
     display: flex;
-    align-items: flex-end;
-    background-color: #ffffff;
+    position: absolute;
+    right: 5px;
     animation: fadeIn .3s ease-in; }
     .add-component-container .text-type-tools div {
-      padding: 0 10px;
-      margin-right: 10px;
-      border: 1px solid;
+      margin: 0 5px;
+      padding: 0 5px;
+      color: #1D2129;
+      opacity: 0.4;
+      font-size: 14px;
       cursor: pointer; }

@@ -4,7 +4,7 @@
   @include text-wrapping;
   color: $primary-color;
   font-weight: $bold-text;
-  font-size: $title-text;  
+  font-size: $title-text; 
 }
 
 .cm-title.edit {
@@ -16,6 +16,7 @@
   background-color: $gray-bg;
   transition: background-color .3s linear;
   @include editable-style;
+  font-family: 'Open Sans', sans-serif !important; 
   &:focus {
     background-color: transparent;
   }

@@ -29,15 +29,29 @@ export class Header1 extends React.Component{
           id={this.props.id}
         />
         <div className="text-selection-tool">
-          <div className="tool-btn">B</div>
-          <div className="tool-btn">&#8520;</div>
-          <div className="tool-btn">&#167;</div>
-          <div className="tool-btn">&#9996;</div>
+          <div className="bold-tool-btn">B</div>
+          <div className="tool-btn">
+            <i className="cm-italic" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-strikethrough" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-link" />
+          </div>
           <div className="divider"></div>
-          <div className="tool-btn">H1</div>
-          <div className="tool-btn">H2</div>
-          <div className="tool-btn">&#9782;</div>
-          <div className="tool-btn">&#9778;</div>
+          <div className="tool-btn">
+            <i className="cm-h1" />
+          </div>
+          <div className="tool-btn">
+          <i className="cm-h2" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-bullets" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-numbers" />
+          </div>
         </div>
       </React.Fragment>
     )
