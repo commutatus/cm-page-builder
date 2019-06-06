@@ -8,6 +8,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -27,6 +30,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -46,6 +52,9 @@
   @include text-wrapping;
   background-color: $gray-bg;
   transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
   &:focus {
     background-color: transparent;
   }
@@ -55,26 +64,4 @@
   @include heading-font($h3-text, $w6-text);
   margin: 8px 0 1px;
   @include text-wrapping;
-}
-
-.text-selection-tool {
-  position: absolute;
-  top: -25px;
-  display: flex;
-  width: 265px;
-  height: 32px;
-  border-radius: 2px;	
-  background-color: #52565E;	
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
-  .tool-btn {
-    font-size: $t8-text;
-    padding: 5px;
-    margin: 0 4px;
-    color: $white;
-    cursor: pointer;
-  }
-  .divider {
-    border: 1px solid #1D2129;
-    opacity: 0.2;
-  }
 }

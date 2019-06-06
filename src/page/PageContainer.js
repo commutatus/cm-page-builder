@@ -116,7 +116,31 @@ class PageContainer extends React.Component {
 						getPageComponent={this.getPageComponent}
 					/>
 				</PermissionContext.Provider>
-				<div onMouseDown={this.editText}>italics</div>
+				<div className="text-selection-tool">
+          <div className="bold-tool-btn">B</div>
+          <div className="tool-btn">
+            <i className="cm-italic" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-strikethrough" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-link" />
+          </div>
+          <div className="divider"></div>
+          <div className="tool-btn">
+            <i className="cm-h1" />
+          </div>
+          <div className="tool-btn">
+          <i className="cm-h2" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-bullets" />
+          </div>
+          <div className="tool-btn">
+            <i className="cm-numbers" />
+          </div>
+        </div>
 			</div>
 		)
 	}

@@ -2,7 +2,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif !important;
   &::selection {
     background-color: #B2D7FF;
   }
@@ -20,4 +20,31 @@ body {
 
 [contenteditable] {
   -webkit-tap-highlight-color: transparent;
+}
+
+.text-selection-tool {
+  display: inline-flex;
+  border-radius: 2px;	
+  background-color: #52565E;	
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+  .tool-btn {
+    font-size: $t4-text;
+    padding: 5px;
+    margin: 0 4px;
+    color: $white;
+    cursor: pointer;
+  }
+  .bold-tool-btn {
+    font-size: $t8-text;
+    font-weight: $bold-text;
+    padding: 5px;
+    margin: 0 4px;
+    color: $white;
+    line-height: 17px;
+    cursor: pointer;
+  }
+  .divider {
+    border: 1px solid #1D2129;
+    opacity: 0.2;
+  }
 }
