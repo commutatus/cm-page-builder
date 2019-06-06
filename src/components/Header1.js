@@ -28,7 +28,7 @@ export class Header1 extends React.Component{
           className="cm-header1"
           id={this.props.id}
         />
-        <div className="text-selection-tool">
+        {/* <div className="text-selection-tool">
           <div className="tool-btn">B</div>
           <div className="tool-btn">&#8520;</div>
           <div className="tool-btn">&#167;</div>
@@ -38,7 +38,7 @@ export class Header1 extends React.Component{
           <div className="tool-btn">H2</div>
           <div className="tool-btn">&#9782;</div>
           <div className="tool-btn">&#9778;</div>
-        </div>
+        </div> */}
       </React.Fragment>
     )
   }

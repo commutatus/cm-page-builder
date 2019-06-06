@@ -1,32 +1,9 @@
 import React from 'react'
 import '../styles/page.css'
-import { EmojiIconContainer } from '../components/EmojiIconContainer';
-import { Title } from '../components/Title'
-import moment from 'moment'
 import { PermissionContext } from '../contexts/permission-context';
-import { Dropdown } from '../components/Dropdown';
+import {PageDetails} from './PageDetails'
 import '../styles/global.css'
 
-const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) => 
-	<div className="page-root-container">
-		<div className="page-container">
-			<EmojiIconContainer />
-			<Title content={meta ? meta.title : ''} handleUpdate={emitUpdate} />
-			<div className="page-info">
-				<Dropdown handleOptionSelect={data => console.log(data)} optionSelected={{id: "11351", name: "Business Development"}} options={[{id: "11351", name: "Business Development"}]} />
-				<div className="seprator-dot"></div>
-				<div className="current-user-detail">
-					<img src={meta ? meta.creator.profile_photo : ''} />
-					<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
-				</div>
-				<div className="seprator-dot"></div>
-				<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
-			</div>
-			{ 
-				pageComponents.map((component, index) => getPageComponent(component, index))
-			}
-		</div>
-	</div>
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -38,16 +15,10 @@ class PageContainer extends React.Component {
 	}
 
 	componentDidUpdate(){
-		// debugger
 		if(this.newElemPos){
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
 		}
-		// if(this.elemDelPos){
-		// 	let elemList = document.getElementsByClassName('page-container')
-		// 	elemList
-
-		// }
 	}
 
 	emitUpdate = (data, type) => {
@@ -124,7 +95,6 @@ class PageContainer extends React.Component {
 	}
 
 	editText = () => {
-		// e.preventDefault()
 		document.execCommand('italic')
 	}
 
