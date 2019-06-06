@@ -94,8 +94,15 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	editText = () => {
-		document.execCommand('italic')
+	editText = (e) => {
+		e.preventDefault()
+		let action = e.currentTarget.dataset.action
+		console.log(action)
+		if(action === 'createLink'){
+			let link = prompt('Enter a link')
+			document.execCommand(action, null, link)
+		}
+		document.execCommand(action)
 	}
 
 	// handleSelect = () => {
@@ -117,14 +124,14 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				<div className="text-selection-tool">
-          <div className="bold-tool-btn">B</div>
-          <div className="tool-btn">
+          <div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
+          <div className="tool-btn" onMouseDown={this.editText} data-action="italic">
             <i className="cm-italic" />
           </div>
-          <div className="tool-btn">
+          <div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
             <i className="cm-strikethrough" />
           </div>
-          <div className="tool-btn">
+          <div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
             <i className="cm-link" />
           </div>
           <div className="divider"></div>
