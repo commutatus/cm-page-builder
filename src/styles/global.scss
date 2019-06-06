@@ -1,15 +1,15 @@
 @import './imports';
 
-* {
+
+
+
+.cm-page-builder {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif !important;
+  margin: 0;
   &::selection {
     background-color: #B2D7FF;
   }
-}
-
-body {
-  margin: 0;
 }
 
 //placeholder-style

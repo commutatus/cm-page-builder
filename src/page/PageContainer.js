@@ -136,6 +136,7 @@ class PageContainer extends React.Component {
 		const { pageComponents, meta } = this.state
 		return (
 			<div
+				className="cm-page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 

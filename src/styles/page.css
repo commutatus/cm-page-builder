@@ -11,8 +11,7 @@
     opacity: 0; } }
 
 .page-root-container {
-  max-width: 700px;
-  height: 100vh;
+  max-width: 710px;
   margin: 30px auto 0; }
   .page-root-container .page-container {
     width: 100%; }
