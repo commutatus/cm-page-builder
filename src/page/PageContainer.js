@@ -2,6 +2,7 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
+// import {MoreActions} from '../utils/MoreActions'
 import '../styles/global.css'
 
 class PageContainer extends React.Component {
@@ -9,7 +10,7 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent' }],
+			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
 			meta: props.meta,
 		}
 	}
@@ -28,6 +29,7 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
+		console.log(data)
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		let Component = require(`../components/${typeName}`)[typeName]
@@ -37,6 +39,7 @@ class PageContainer extends React.Component {
 				content={data.content}
 				handleUpdate={this.emitUpdate}
 				id={dataId}
+				currentType={data.currentType}
 			/>
 		)
 	}
@@ -54,7 +57,7 @@ class PageContainer extends React.Component {
 					if(id == componentId){ //can compare with the id also.
 						temp.push({...pageComponents[i], position})
 						this.newElemPos = position
-						temp.push({content: '', position: position+1, component_type: 'AddComponent' })
+						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Text" })
 						position += 2
 					}
 					else{
@@ -94,26 +97,61 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handleMouseUp = (e) => {
+		this.handleSelection(e)
+	}
+
+	handleSelection = (e) => {
+		let selection = window.getSelection()
+		if(selection.toString()){
+			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
+			console.log(e.target.dataset.id)
+			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
+			this.setState({actionDomRect: dimensions})
+		}
+		else{
+			this.currentElemSelection = null
+		}
+	}
+
 	editText = (e) => {
 		e.preventDefault()
 		let action = e.currentTarget.dataset.action
-		console.log(action)
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			document.execCommand(action, null, link)
+			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contentEditable="false">${window.getSelection()}</a>`)
 		}
 		document.execCommand(action)
 	}
 
-	// handleSelect = () => {
-
-	// }
+	editComponent = (e) => {
+		e.preventDefault()
+		let {pageComponents} = this.state
+		let type = e.currentTarget.dataset.type
+		console.log(this.currentElemSelection)
+		let componentId = this.currentElemSelection.elemId
+		let isNewComponent = false
+		if(componentId.includes('AddComponent')){
+			componentId = componentId.split('-')[1]
+			isNewComponent = true
+		}
+		pageComponents = pageComponents.map((component, index) => {
+			console.log(isNewComponent, componentId)
+			if(isNewComponent && componentId === index){
+				return({...component, currentType: type})
+			}
+			// return({...component, component_type: type}) 
+		})	
+		this.setState({pageComponents, actionDomRect: null})
+	}
 
 	render() {
-		const { pageComponents, meta } = this.state
+		const { pageComponents, meta, actionDomRect } = this.state
+		console.log(this.state)
 		return (
 			<div
 				onKeyUp={this.handelKeyPress}
+				onMouseUp={this.handleMouseUp}
 			>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
 					<PageDetails 
@@ -123,31 +161,34 @@ class PageContainer extends React.Component {
 						getPageComponent={this.getPageComponent}
 					/>
 				</PermissionContext.Provider>
-				<div className="text-selection-tool">
-          <div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
-          <div className="tool-btn" onMouseDown={this.editText} data-action="italic">
-            <i className="cm-italic" />
-          </div>
-          <div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
-            <i className="cm-strikethrough" />
-          </div>
-          <div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
-            <i className="cm-link" />
-          </div>
-          <div className="divider"></div>
-          <div className="tool-btn">
-            <i className="cm-h1" />
-          </div>
-          <div className="tool-btn">
-          <i className="cm-h2" />
-          </div>
-          <div className="tool-btn">
-            <i className="cm-bullets" />
-          </div>
-          <div className="tool-btn">
-            <i className="cm-numbers" />
-          </div>
-        </div>
+				{
+					actionDomRect && actionDomRect.top && 
+					<div className="text-selection-tool" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
+						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
+						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
+							<i className="cm-italic" />
+						</div>
+						<div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
+							<i className="cm-strikethrough" />
+						</div>
+						<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
+							<i className="cm-link" />
+						</div>
+						<div className="divider"></div>
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
+							<i className="cm-h1" />
+						</div>
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
+						<i className="cm-h2" />
+						</div>
+						<div className="tool-btn">
+							<i className="cm-bullets" />
+						</div>
+						<div className="tool-btn">
+							<i className="cm-numbers" />
+						</div>
+					</div>
+				}
 			</div>
 		)
 	}

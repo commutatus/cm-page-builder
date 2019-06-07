@@ -27,6 +27,7 @@ body {
   -webkit-tap-highlight-color: transparent; }
 
 .text-selection-tool {
+  position: absolute;
   display: inline-flex;
   border-radius: 2px;
   background-color: #52565E;
