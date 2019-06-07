@@ -86,18 +86,13 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	handelKeyPress = (e) => {
-		// console.log(e.target)
-		
-	}
 
 	handleMouseUp = (e) => {
-		// console.log(e.target)
 		this.handleSelection(e)
 	}
 
+	
 	handleKeyPressList = (e) => {
-		console.log(e.target)
 		let elem = e.target
 		switch(e.key){
 			case 'ArrowUp':
