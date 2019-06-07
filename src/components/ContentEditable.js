@@ -15,15 +15,13 @@ export default class ContentEditable extends React.Component{
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
 
-  onTextEdit = (e) => {
-    // e.preventDefault()
-    // let selection = window.getSelection()
-    // if(selection.anchorNode.isSameNode(selection.focusNode)){
-    //   // console.log('selected text: ', selection.anchorNode)
-    //   let type = e.target.dataset.name
-
-    // }
-
+  handleFocus = () => {
+    if(this.elem){
+      // debugger
+      // let range = document.createRange()
+      // let len = this.elem.innerText.length
+      // range.setStart(this.elem, len)
+    } 
   }
 
   handleKeyPress = (e, handleAction) => {
@@ -36,9 +34,11 @@ export default class ContentEditable extends React.Component{
     }
   }
 
-  handleKeyUp = (e, handleAction) => {
+  handleKeyDown = (e, handleAction) => {
     if(e.key === 'Backspace'){
       if(!this.elem.innerHTML){
+        let prevChild = this.elem.parentNode.previousSibling.firstChild
+        prevChild.focus()
         handleAction('remove-component', this.props.id, this.elem)
       }
     }
@@ -83,12 +83,13 @@ export default class ContentEditable extends React.Component{
                 className={classNames(className, value.status.toLowerCase())}
                 onInput={this.onInputChange}
                 onBlur={this.emitChange}
+                onFocus={this.handleFocus}
                 contentEditable={value.status === 'Edit'}
                 placeholder={placeholder}
                 dangerouslySetInnerHTML={{__html: this.props.html}}
                 styles={styles}
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction)}
-                onKeyUp={(e) => this.handleKeyUp(e, value.handleAction)}
+                onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}
               />
           </div>
         }

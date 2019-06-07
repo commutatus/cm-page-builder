@@ -6,7 +6,7 @@ export class AddComponent extends React.Component{
     super(props)
     this.state = {
       showActionBtn: true,
-      pageComponentType: "Text"
+      pageComponentType: props.currentType
     }
   }
 
@@ -28,7 +28,7 @@ export class AddComponent extends React.Component{
   }
   
   handleTypeSelect = (e) => {
-    this.setState({pageComponentType: e.target.dataset.type})
+    this.setState({pageComponentType: e.currentTarget.dataset.type})
   }
 
   render(){
