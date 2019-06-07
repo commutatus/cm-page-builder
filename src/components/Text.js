@@ -22,7 +22,8 @@ export class Text extends React.Component{
     return(
       <ContentEditable 
         html={this.state.html} 
-        onChange={this.handleChange} 
+        onChange={this.handleChange}
+        onInputChange={this.props.onInputChange}
         placeholder="Start typing or choose a component..."
         className="cm-text-block"
         id={this.props.id}

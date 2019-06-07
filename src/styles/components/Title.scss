@@ -1,14 +1,22 @@
 @import '../imports.scss';
 
-.cm-title {
+.cm-title.read {
+  @include text-wrapping;
+  color: $primary-color;
+  font-weight: $bold-text;
+  font-size: $title-text; 
+}
+
+.cm-title.edit {
   @include text-wrapping;
   padding: 4px 2px;
   color: $primary-color;
-  font-weight: $w6-text;
+  font-weight: $bold-text;
   font-size: $title-text;
   background-color: $gray-bg;
   transition: background-color .3s linear;
   @include editable-style;
+  font-family: 'Open Sans', sans-serif !important; 
   &:focus {
     background-color: transparent;
   }

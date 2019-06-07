@@ -10,22 +10,31 @@
   to {
     opacity: 0; } }
 
-.cm-title {
+.cm-title.read {
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #1D2129;
+  font-weight: bold;
+  font-size: 2.375em; }
+
+.cm-title.edit {
   width: 100%;
   white-space: pre-wrap;
   word-break: break-word;
   padding: 4px 2px;
   color: #1D2129;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 2.375em;
   background-color: #F4F5F7;
   transition: background-color .3s linear;
   caret-color: #1D2129;
   cursor: text;
-  -webkit-text-fill-color: black; }
-  .cm-title:empty {
+  -webkit-text-fill-color: black;
+  font-family: 'Open Sans', sans-serif !important; }
+  .cm-title.edit:empty {
     -webkit-text-fill-color: #9EA0A4; }
-  .cm-title:focus {
+  .cm-title.edit:focus {
     outline: none; }
-  .cm-title:focus {
+  .cm-title.edit:focus {
     background-color: transparent; }

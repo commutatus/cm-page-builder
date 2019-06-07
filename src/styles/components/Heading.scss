@@ -1,25 +1,96 @@
 @import '../imports.scss';
 
-.cm-header1 {
+.cm-header1.edit {
   @include heading-font($h1-text, $w6-text);
   margin: 14px 0 1px;
   padding: 3px 2px;
   @include editable-style;
   @include text-wrapping;
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
 }
 
-.cm-header2 {
+.cm-header1.read {
+  margin: 14px 0 1px;
+  @include heading-font($h1-text, $w6-text);
+  @include text-wrapping;
+}
+
+.cm-header2.edit {
   @include heading-font($h2-text, $w6-text);
   margin: 16px 0 1px;
   padding: 3px 2px;
   @include editable-style;
   @include text-wrapping;
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
 }
 
-.cm-header3 {
+.cm-header2.read {
+  @include heading-font($h2-text, $w6-text);
+  margin: 16px 0 1px;
+  @include text-wrapping;
+}
+
+.cm-header3.edit {
   @include heading-font($h3-text, $w6-text);
   margin: 8px 0 1px;
   padding: 3px 2px;
   @include editable-style;
   @include text-wrapping;
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.cm-header3.read {
+  @include heading-font($h3-text, $w6-text);
+  margin: 8px 0 1px;
+  @include text-wrapping;
+}
+
+.text-selection-tool {
+  position: absolute;
+  top: -25px;
+  display: flex;
+  border-radius: 2px;	
+  background-color: #52565E;	
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+  .tool-btn {
+    font-size: $t4-text;
+    padding: 5px;
+    margin: 0 4px;
+    color: $white;
+    cursor: pointer;
+  }
+  .bold-tool-btn {
+    font-size: $t8-text;
+    font-weight: $bold-text;
+    padding: 5px;
+    margin: 0 4px;
+    color: $white;
+    line-height: 17px;
+    cursor: pointer;
+  }
+  .divider {
+    border: 1px solid #1D2129;
+    opacity: 0.2;
+  }
 }
