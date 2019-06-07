@@ -29,7 +29,7 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		console.log(data)
+		// console.log(data)
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		let Component = require(`../components/${typeName}`)[typeName]
@@ -88,24 +88,38 @@ class PageContainer extends React.Component {
 
 	handelKeyPress = (e) => {
 		// console.log(e.target)
-		switch(e.key){
-			case 'ArrowUp':
-
-				break;
-			case 'ArrowDown':
-					break;
-		}
+		
 	}
 
 	handleMouseUp = (e) => {
+		// console.log(e.target)
 		this.handleSelection(e)
+	}
+
+	handleKeyPressList = (e) => {
+		console.log(e.target)
+		let elem = e.target
+		switch(e.key){
+			case 'ArrowUp':
+				let prevSibling = elem.parentElement.parentElement.previousElementSibling
+				if(prevSibling){
+					prevSibling.firstChild.firstChild.focus()
+				}
+				break;
+			case 'ArrowDown':
+				let nextSibling = elem.parentElement.parentElement.nextElementSibling
+				if(nextSibling){
+					nextSibling.firstChild.firstChild.focus()
+				}
+				break;
+		}
 	}
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
 		if(selection.toString()){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			console.log(e.target.dataset.id)
+			// console.log(e.target.dataset.id)
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
 			this.setState({actionDomRect: dimensions})
 		}
@@ -128,20 +142,21 @@ class PageContainer extends React.Component {
 		e.preventDefault()
 		let {pageComponents} = this.state
 		let type = e.currentTarget.dataset.type
-		console.log(this.currentElemSelection)
 		let componentId = this.currentElemSelection.elemId
-		let isNewComponent = false
-		if(componentId.includes('AddComponent')){
-			componentId = componentId.split('-')[1]
-			isNewComponent = true
-		}
-		pageComponents = pageComponents.map((component, index) => {
-			console.log(isNewComponent, componentId)
-			if(isNewComponent && componentId === index){
-				return({...component, currentType: type})
+		if(componentId){
+			let isNewComponent = false
+			if(componentId.includes('AddComponent')){
+				componentId = componentId.split('-')[1]
+				isNewComponent = true
 			}
-			// return({...component, component_type: type}) 
-		})	
+			pageComponents = pageComponents.map((component, index) => {
+				if(isNewComponent && componentId == index){
+					return({...component, currentType: type})
+				}
+				return({...component, component_type: type}) 
+			})	
+		}
+		console.log(pageComponents)
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
@@ -149,21 +164,20 @@ class PageContainer extends React.Component {
 		const { pageComponents, meta, actionDomRect } = this.state
 		console.log(this.state)
 		return (
-			<div
-				onKeyUp={this.handelKeyPress}
-				onMouseUp={this.handleMouseUp}
-			>
+			<div>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
+						onMouseUp={this.handleMouseUp}
+						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
 					/>
 				</PermissionContext.Provider>
 				{
 					actionDomRect && actionDomRect.top && 
-					<div className="text-selection-tool" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
+					<div className="text-selection-tool" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />

@@ -13,7 +13,7 @@ export class Header2 extends React.Component{
     this.setState({
       html: e.target.value, 
     }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Header2')
     })
   }
 
@@ -24,6 +24,7 @@ export class Header2 extends React.Component{
         html={this.state.html}
         id={this.props.id} 
         onChange={this.handleChange} 
+        onInputChange={this.props.onInputChange}
         placeholder="Header2"
         className="cm-header2"
         id={this.props.id}

@@ -4,7 +4,7 @@ import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
 import { Dropdown } from '../components/Dropdown';
 
-export const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}) => 
+export const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent, onMouseUp, onKeyDown}) => 
 	<div className="page-root-container">
 		<div className="page-container">
 			<EmojiIconContainer />
@@ -19,8 +19,10 @@ export const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent}
 				<div className="seprator-dot"></div>
 				<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
 			</div>
+			<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
 			{ 
 				pageComponents.map((component, index) => getPageComponent(component, index))
 			}
+			</div>
 		</div>
 	</div>
