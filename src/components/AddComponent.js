@@ -20,6 +20,7 @@ export class AddComponent extends React.Component{
   }
 
   handleInput = (data) => {
+//     console.log(data)
     this.setState({showActionBtn: !data})
   }
 
@@ -30,7 +31,6 @@ export class AddComponent extends React.Component{
       <Component 
         key={`${type}-${this.props.id}`} 
         id={this.props.id} 
-        content="" 
         handleUpdate={this.props.handleUpdate}
         onInputChange={this.handleInput}
       />
