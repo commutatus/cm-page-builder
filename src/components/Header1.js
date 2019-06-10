@@ -14,15 +14,16 @@ export class Header1 extends React.Component{
     this.setState({
       html: e.target.value, 
     }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Header1')
     })
   }
 
   render(){
     return(
       <ContentEditable 
-        html={this.state.html} 
-        onChange={this.handleChange} 
+        html={this.state.html}
+        onChange={this.handleChange}
+        onInputChange={this.props.onInputChange}
         placeholder="Header1"
         className="cm-header1"
         id={this.props.id}

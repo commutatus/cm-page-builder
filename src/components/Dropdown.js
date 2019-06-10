@@ -31,7 +31,7 @@ export class Dropdown extends React.Component{
 
   handleClick = (selectedOption) => {
     this.setState({selectedOption})
-    this.props.handleOptionSelect(selectedOption)
+    // this.props.handleOptionSelect(selectedOption)
   }
 
   handleChange = (e) => {

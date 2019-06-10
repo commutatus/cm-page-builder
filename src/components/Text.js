@@ -13,7 +13,7 @@ export class Text extends React.Component{
     this.setState({
       value: e.target.value, 
     }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Text')
     })
   }
 
