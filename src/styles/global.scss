@@ -1,15 +1,16 @@
 @import './imports';
 
-
-
+* {
+  &::selection {
+    background-color: #B2D7FF;
+  }
+}
 
 .cm-page-builder {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif !important;
   margin: 0;
-  &::selection {
-    background-color: #B2D7FF;
-  }
+  
 }
 
 //placeholder-style
