@@ -32,12 +32,15 @@
   transition: opacity 300ms, transform 300ms; }
 
 .cm-uploader {
-  margin: 8px 0 1px;
+  margin: 2px 0;
   padding: 5px;
   color: #A8AAAD;
   font-size: 16px;
+  font-family: 'Open Sans', sans-serif !important;
   background-color: #F4F5F7;
   transition: background-color .3s linear;
   cursor: pointer; }
   .cm-uploader:hover {
     background-color: transparent; }
+  .cm-uploader span {
+    margin-right: 7px; }

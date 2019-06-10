@@ -50,10 +50,10 @@ export class AddComponent extends React.Component{
           in={showActionBtn}
           timeout={300}
           classNames="fade"
+          unmountOnExit
         >
           <React.Fragment>
             {
-              showActionBtn && 
               <div className="text-type-tools" style={{display: this.state.html ? 'none' : 'flex'}}>
                 <div data-type="Header1" onClick={this.handleTypeSelect}>
                   <i className="cm-h1" />
