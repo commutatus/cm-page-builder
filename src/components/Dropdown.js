@@ -15,12 +15,12 @@ export class Dropdown extends React.Component{
   }
 
   toggleDropdown = (e) => {
-    // this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
-    //   if(this.state.isDropdownOpen)
-    //     window.addEventListener('click', this.handleOutsideClick)
-    //   else
-    //     window.removeEventListener('click', this.handleOutsideClick)
-    // })
+    this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
+      if(this.state.isDropdownOpen)
+        window.addEventListener('click', this.handleOutsideClick)
+      else
+        window.removeEventListener('click', this.handleOutsideClick)
+    })
   }
 
   handleOutsideClick = (e) => {
@@ -30,7 +30,7 @@ export class Dropdown extends React.Component{
   }
 
   handleClick = (selectedOption) => {
-    // this.setState({selectedOption})
+    this.setState({selectedOption})
     // this.props.handleOptionSelect(selectedOption)
   }
 
@@ -41,8 +41,8 @@ export class Dropdown extends React.Component{
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
-      <div className="dropdown-container" ref={(node) => this.elem = node}>
-        <div className={isDropdownOpen ? '' : 'dropdown-value' }  onClick={this.toggleDropdown}>
+      <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
+        <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
           {
             isDropdownOpen ?
             <input 
