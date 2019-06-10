@@ -1,14 +1,35 @@
-@keyframes fadeIn {
-  from {
-    opacity: 0; }
-  to {
-    opacity: 1; } }
+.dropdown-fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1; }
-  to {
-    opacity: 0; } }
+.dropdown-fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.dropdown-fade-exit {
+  opacity: 0; }
+
+.dropdown-fade-exit-active {
+  opacity: 1;
+  transition: opacity 300ms; }
+
+.fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.fade-exit {
+  opacity: 1; }
+
+.fade-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms; }
 
 .dropdown-wrapper {
   position: relative; }
@@ -17,18 +38,20 @@
     background-color: #F4F5F7;
     border-radius: 1px;
     color: #1D2129;
-    font-size: 14px; }
-    .dropdown-wrapper .dropdown-value:focus {
-      outline: none; }
+    font-size: 14px;
+    cursor: pointer; }
   .dropdown-wrapper .dropdown-input input {
     width: 100%;
     padding: 5px 2px;
+    color: #1D2129;
+    font-size: 14px;
     border: 1px solid #D4D4D4;
     box-sizing: border-box; }
-    .dropdown-wrapper .dropdown-input input::focus {
+    .dropdown-wrapper .dropdown-input input:focus {
       outline-color: #037EF3; }
   .dropdown-wrapper .dropdown-body {
     position: absolute;
+    top: 30px;
     left: 0;
     right: 0;
     padding: 0 5px;

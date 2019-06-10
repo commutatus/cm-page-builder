@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { CSSTransition } from 'react-transition-group';
 import '../styles/components/Dropdown.css';
 
 export class Dropdown extends React.Component{
@@ -42,32 +43,40 @@ export class Dropdown extends React.Component{
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
       <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
-        <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
-          {
-            isDropdownOpen ?
-            <input 
-              onChange={this.handleChange} 
-              onClick={(e) => e.stopPropagation()} 
-              data-id="cmSearchInput" 
-              value={cmSearchInput}
-              autoFocus
-            />
-            :
-            (selectedOption && selectedOption.name) || (options && options[0].name)
-          }
-        </div>  
-        {
-          isDropdownOpen && 
-          <div className="dropdown-body">
+        <CSSTransition
+          in={isDropdownOpen}
+          timeout={300}
+          classNames="dropdown-fade"
+        >
+          <div>
+            <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
+              {
+                isDropdownOpen ?
+                <input 
+                  onChange={this.handleChange} 
+                  onClick={(e) => e.stopPropagation()} 
+                  data-id="cmSearchInput" 
+                  value={cmSearchInput}
+                  autoFocus
+                />
+                :
+                (selectedOption && selectedOption.name) || (options && options[0].name)
+              }
+            </div>  
             {
-              options
-                .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
-                .map((option, i) => 
-                  <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
-                )
+              isDropdownOpen && 
+              <div className="dropdown-body">
+                {
+                  options
+                    .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
+                    .map((option, i) => 
+                      <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
+                    )
+                }
+              </div>
             }
           </div>
-        }
+        </CSSTransition>
       </div>
     )
   }
