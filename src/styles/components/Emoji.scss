@@ -1,11 +1,13 @@
 @import '../imports';
 .cm-emoji-container {
+  position: relative;
   width: 85px;
   height: 85px;	
   margin-bottom: 30px;
   padding: 5px;	
   border-radius: 1px;	
   transition:  background-color .3s linear;
+  z-index: 10;
   cursor: pointer;
   &:hover {
     background-color: $gray-bg; 

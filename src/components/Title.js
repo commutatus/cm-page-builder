@@ -1,30 +1,18 @@
 import React from 'react'
 import ContentEditable from './ContentEditable'
+import withComponent from './withComponent'
 import '../styles/components/Title.css';
 
-export class Title extends React.Component{
-
-  state = {
-    html: this.props.content
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      html: e.target.value, 
-    }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
-    })
-  }
-
-  render(){
+const WrappedTitle = (props) => {
     return(
       <ContentEditable 
-        html={this.state.html} 
-        onChange={this.handleChange} 
+        html={props.html} 
+        onChange={props.handleChange} 
         placeholder="Title of the page"
         className="cm-title"
-        id={this.props.id}
+        id={props.id}
       />
     )
-  }
 }
+
+export const Title = withComponent(WrappedTitle)
