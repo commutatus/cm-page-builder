@@ -12,6 +12,7 @@ class PageContainer extends React.Component {
 		this.state = {
 			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
 			meta: props.meta,
+			actionDomRect: null
 		}
 	}
 
@@ -26,8 +27,17 @@ class PageContainer extends React.Component {
 		this.setState({ pageComponents: nextProps.pageComponents, meta: nextProps.meta })
 	}
 
-	emitUpdate = (data, id) => {
-		let { handleUpdate } = this.props
+	handlePageClick = (e) => {
+		let editTooltip = document.getElementById('cm-text-edit-tooltip')
+		if(editTooltip && !editTooltip.contains(e.target)){
+			this.setState({actionDomRect: null})
+		}else{
+			document.removeEventListener('mousedown', this.handlePageClick)
+		}
+	}
+
+	emitUpdate = (data, type) => {
+		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate(data, id)
 	}
@@ -176,7 +186,7 @@ class PageContainer extends React.Component {
 				</PermissionContext.Provider>
 				{
 					actionDomRect && actionDomRect.top && 
-					<div className="text-selection-tool" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
