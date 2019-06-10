@@ -19,6 +19,7 @@ export class EmojiIconContainer extends React.Component{
   }
 
   onEmojiClick = (data, object, e) => {
+    e.preventDefault()
     this.elem.innerHTML = this.jsemoji.replace_colons(`:${object.name}:`)
   }
   
