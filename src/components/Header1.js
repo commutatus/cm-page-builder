@@ -1,34 +1,21 @@
 import React from 'react'
 import ContentEditable from './ContentEditable'
 import '../styles/components/Heading.css';
+import withComponent from './withComponent'
 
+const WrappedHeader1 = (props) => {
 
-export class Header1 extends React.Component{
-
-  state = {
-    html: this.props.content
-  }
-
-
-  handleChange = (e) => {
-    this.setState({
-      html: e.target.value, 
-    }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Header1')
-    })
-  }
-
-  render(){
-    return(
-      <ContentEditable 
-        html={this.state.html}
-        onChange={this.handleChange}
-        onInputChange={this.props.onInputChange}
-        placeholder="Header1"
-        className="cm-header1"
-        id={this.props.id}
-      />
-    )
-  }
+  return(
+    <ContentEditable 
+      html={props.html}
+      onChange={props.handleChange}
+      onInputChange={props.onInputChange}
+      placeholder="Header1"
+      className="cm-header1"
+      id={props.id}
+    />
+  )
 }
+
+export const Header1 = withComponent(WrappedHeader1)
   

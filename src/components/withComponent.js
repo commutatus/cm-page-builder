@@ -19,11 +19,11 @@ const withComponent = (WrappedComponent) => {
             videoUrl: this.props.url || ''
         }
 
-        _handleChanges = () => {
+        _handleChanges = (e) => {
             this.setState({
                 html: e.target.value, 
             }, () => {
-                this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
+                this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, !this.props.id.includes('AddComponent') ? this.props.id : null )
             })
         }
 
@@ -34,7 +34,11 @@ const withComponent = (WrappedComponent) => {
               let reader = new FileReader();
               reader.onload = (e) => {
                 picBase64 = e.target.result;
-                this.setState({file: picBase64, name: fileName})
+                this.setState({
+                    file: picBase64, name: fileName
+                }, () => {
+                    this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.type }, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                })
               }
               reader.readAsDataURL(e.target.files[0]);
             }
@@ -44,7 +48,7 @@ const withComponent = (WrappedComponent) => {
             this.setState({
                 videoUrl: getVideoUrl(e.target.value), 
             }, () => {
-                this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Embed')
+                this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null )
             })
         }
         

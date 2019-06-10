@@ -22,15 +22,18 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, type) => {
-		let {handleUpdate} = this.props
+	componentWillReceiveProps(nextProps) {
+		this.setState({ pageComponents: nextProps.pageComponents, meta: nextProps.meta })
+	}
+
+	emitUpdate = (data, id) => {
+		let { handleUpdate } = this.props
 		if(handleUpdate)
-			handleUpdate({data, type})
+			handleUpdate(data, id)
 	}
 
 	getPageComponent = (data, index) => {
-		// console.log(data)
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type ?  data.component_type : 'text']
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		let Component = require(`../components/${typeName}`)[typeName]
 		return (
@@ -39,7 +42,7 @@ class PageContainer extends React.Component {
 				content={data.content}
 				handleUpdate={this.emitUpdate}
 				id={dataId}
-				currentType={data.currentType}
+				currentType={data.currentType ? data.currentType : data.component_type}
 			/>
 		)
 	}
@@ -114,7 +117,6 @@ class PageContainer extends React.Component {
 		let selection = window.getSelection()
 		if(selection.toString()){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			// console.log(e.target.dataset.id)
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
 			this.setState({actionDomRect: dimensions})
 		}
@@ -151,13 +153,11 @@ class PageContainer extends React.Component {
 				return({...component, component_type: type}) 
 			})	
 		}
-// 		console.log(pageComponents)
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.state)
 		return (
 			<div
 				className="cm-page-builder"
