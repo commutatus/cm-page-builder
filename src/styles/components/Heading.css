@@ -18,8 +18,8 @@
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  margin: 14px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0 20px;
+  padding: 4px 2px;
   caret-color: #1D2129;
   cursor: text;
   -webkit-text-fill-color: black;
@@ -38,7 +38,7 @@
     background-color: transparent; }
 
 .cm-header1.read {
-  margin: 14px 0 1px;
+  margin: 2px 0 20px;
   position: relative;
   color: #1D2129;
   font-size: 1.875em;
@@ -58,8 +58,8 @@
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  margin: 16px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0;
+  padding: 4px 2px;
   caret-color: #1D2129;
   cursor: text;
   -webkit-text-fill-color: black;
@@ -85,7 +85,7 @@
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  margin: 16px 0 1px;
+  margin: 2px 0;
   width: 100%;
   white-space: pre-wrap;
   word-break: break-word; }
@@ -98,8 +98,8 @@
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  margin: 8px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0;
+  padding: 4px 2px;
   caret-color: #1D2129;
   cursor: text;
   -webkit-text-fill-color: black;
@@ -125,7 +125,7 @@
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.2;
   letter-spacing: -0.002em;
-  margin: 8px 0 1px;
+  margin: 2px 0;
   width: 100%;
   white-space: pre-wrap;
   word-break: break-word; }

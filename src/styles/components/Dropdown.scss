@@ -1,6 +1,6 @@
 @import '../imports';
 
-.dropdown-container {
+.dropdown-wrapper {
   position: relative;
   .dropdown-value {
     @include chip-style;
@@ -10,11 +10,39 @@
       outline: none;
     }
   }
+
+  .dropdown-input {
+    input {
+      width: 100%;
+      padding: 5px 2px;
+      border: 1px solid #D4D4D4;
+      box-sizing: border-box;
+      &::focus {
+        outline-color: $blue;
+      }
+    }
+  }
+
   .dropdown-body {
     position: absolute;
-    width: 200px;
+    left: 0;
+    right: 0;
+    padding: 0 5px;
     max-height: 320px;
     background-color: $white;
-    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+    z-index: 10;
+    .dropdown-item {
+      margin: 5px 0;
+      padding: 7px 5px;
+      color: $primary-color;	
+      font-family: "Open Sans";	
+      font-size: $t4-text;
+      transition: background-color .2s linear;
+      cursor: pointer;
+      &:hover {
+        background-color: #F4F5F7;
+      }
+    }
   }
 }

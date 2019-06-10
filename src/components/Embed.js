@@ -22,7 +22,7 @@ export class Embed extends React.Component{
     this.setState({
       videoUrl: getVideoUrl(e.target.value), 
     }, () => {
-      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Title')
+      this.props.handleUpdate({content: this.state.html, id: this.props.id}, 'Embed')
     })
   }
 

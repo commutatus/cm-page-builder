@@ -6,11 +6,20 @@ export class AddComponent extends React.Component{
     super(props)
     this.state = {
       showActionBtn: true,
-      pageComponentType: props.currentType
+      pageComponentType: props.currentType 
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.currentType !== nextProps.currentType){
+      this.setState({
+        pageComponentType: nextProps.currentType, 
+      })
     }
   }
 
   handleInput = (data) => {
+//     console.log(data)
     this.setState({showActionBtn: !data})
   }
 
@@ -20,7 +29,7 @@ export class AddComponent extends React.Component{
     return(
       <Component 
         key={`${type}-${this.props.id}`} 
-        content="" id={this.props.id} 
+        id={this.props.id} 
         handleUpdate={this.props.handleUpdate}
         onInputChange={this.handleInput}
       />
@@ -34,7 +43,7 @@ export class AddComponent extends React.Component{
   render(){
     let { showActionBtn } = this.state
     return( 
-      <div className="add-component-container">
+      <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}
         {
           showActionBtn && 
