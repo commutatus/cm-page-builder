@@ -23,7 +23,8 @@ const withComponent = (WrappedComponent) => {
             this.setState({
                 html: e.target.value, 
             }, () => {
-                this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                if (e.target.value)
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, !this.props.id.includes('AddComponent') ? this.props.id : null )
             })
         }
 
@@ -48,7 +49,8 @@ const withComponent = (WrappedComponent) => {
             this.setState({
                 videoUrl: getVideoUrl(e.target.value), 
             }, () => {
-                this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                if (e.target.value)
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null )
             })
         }
         
