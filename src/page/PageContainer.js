@@ -12,6 +12,7 @@ class PageContainer extends React.Component {
 		this.state = {
 			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
 			meta: props.meta,
+			actionDomRect: null
 		}
 	}
 
@@ -19,6 +20,21 @@ class PageContainer extends React.Component {
 		if(this.newElemPos){
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
+		}
+	}
+
+	componentDidUpdate(){
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
+	}
+
+	handlePageClick = (e) => {
+		let editTooltip = document.getElementById('cm-text-edit-tooltip')
+		if(editTooltip && !editTooltip.contains(e.target)){
+			this.setState({actionDomRect: null})
+		}else{
+			document.removeEventListener('mousedown', this.handlePageClick)
 		}
 	}
 
@@ -114,7 +130,6 @@ class PageContainer extends React.Component {
 		let selection = window.getSelection()
 		if(selection.toString()){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			// console.log(e.target.dataset.id)
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
 			this.setState({actionDomRect: dimensions})
 		}
@@ -151,13 +166,13 @@ class PageContainer extends React.Component {
 				return({...component, component_type: type}) 
 			})	
 		}
-		console.log(pageComponents)
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.state)
+		console.log(this.state);
+		
 		return (
 			<div>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
@@ -172,7 +187,7 @@ class PageContainer extends React.Component {
 				</PermissionContext.Provider>
 				{
 					actionDomRect && actionDomRect.top && 
-					<div className="text-selection-tool" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />

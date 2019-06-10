@@ -19,7 +19,6 @@ export class AddComponent extends React.Component{
   }
 
   handleInput = (data) => {
-    console.log(data)
     this.setState({showActionBtn: !data})
   }
 
