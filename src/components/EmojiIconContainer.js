@@ -1,6 +1,8 @@
 import React from 'react'
 import EmojiPicker from 'emoji-picker-react'
 import JSEMOJI from 'emoji-js';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import '../styles/components/Emoji.css';
 
 export class EmojiIconContainer extends React.Component{
@@ -18,23 +20,33 @@ export class EmojiIconContainer extends React.Component{
     this.elem.innerHTML = this.jsemoji.replace_colons(`:smile:`)
   }
 
-  onEmojiClick = (data, object, e) => {
+  onEmojiClick = (data, e) => {
     e.preventDefault()
-    this.elem.innerHTML = this.jsemoji.replace_colons(`:${object.name}:`)
+    this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
   }
   
-  toggleEmojiPopup = (e) => {
-    this.setState({showPopup: !this.state.showPopup})
+  openEmojiPopup = (e) => {
+    if(!this.state.showPopup){
+      this.setState({showPopup: true})
+      document.addEventListener('click', this.closeEmojiPopup)
+    }
+  }
+
+  closeEmojiPopup = (e) => {
+    if(!this.rootNode.contains(e.target)){
+      this.setState({showPopup: false})
+      document.removeEventListener('click', this.closeEmojiPopup)
+    }
   }
 
   render() {
     let {showPopup} = this.state
     return(
-      <div className="cm-emoji-container" onClick={this.toggleEmojiPopup}>
+      <div className="cm-emoji-container" onClick={this.openEmojiPopup} ref={node => this.rootNode = node}>
         <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
         {
           showPopup &&
-          <EmojiPicker onEmojiClick={this.onEmojiClick}/>
+          <Picker set='emojione' onClick={this.onEmojiClick}/>
         }
       </div>
     )

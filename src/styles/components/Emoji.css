@@ -32,12 +32,14 @@
   transition: opacity 300ms, transform 300ms; }
 
 .cm-emoji-container {
+  position: relative;
   width: 85px;
   height: 85px;
   margin-bottom: 30px;
   padding: 5px;
   border-radius: 1px;
   transition: background-color .3s linear;
+  z-index: 10;
   cursor: pointer; }
   .cm-emoji-container:hover {
     background-color: #F4F5F7; }
