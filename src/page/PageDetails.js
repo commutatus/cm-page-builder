@@ -3,14 +3,33 @@ import moment from 'moment'
 import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
 import { Dropdown } from '../components/Dropdown';
+import { AutoCompleteDropdown } from '../components/AutoCompleteDropdown';
 
-export const PageDetails = ({meta, emitUpdate, pageComponents, getPageComponent, onMouseUp, onKeyDown}) => 
+export const PageDetails = ({
+	meta, 
+	emitUpdate, 
+	pageComponents, 
+	getPageComponent, 
+	onMouseUp, 
+	onKeyDown, 
+	requestHandler
+}) => 
 	<div className="page-root-container">
 		<div className="page-container">
 			<EmojiIconContainer />
 			<Title content={meta ? meta.title : ''} handleUpdate={emitUpdate} />
 			<div className="page-info">
-				<Dropdown handleOptionSelect={data => console.log(data)} optionSelected={{id: "11351", name: "Business Development"}} options={[{id: "11351", name: "Business Development"}]} />
+				<Dropdown 
+					handleOptionSelect={data => console.log(data)} 
+					optionSelected={{id: "11351", name: "Business Development"}} 
+					options={[{id: "11351", name: "Business Development"}]} 
+				/>
+				<div className="seprator-dot"></div>
+				<AutoCompleteDropdown 
+					handleOptionSelect={data => console.log(data)} 
+					requestHandler={requestHandler}
+					selectedOption={meta.office}
+				/>
 				<div className="seprator-dot"></div>
 				<div className="current-user-detail">
 					<img src={meta ? meta.creator.profile_photo : ''} />

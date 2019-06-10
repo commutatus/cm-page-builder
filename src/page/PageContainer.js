@@ -48,16 +48,18 @@ class PageContainer extends React.Component {
 		// console.log(data)
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		let Component = require(`../components/${typeName}`)[typeName]
-		return (
-			<Component 
-				key={dataId}
-				content={data.content}
-				handleUpdate={this.emitUpdate}
-				id={dataId}
-				currentType={data.currentType}
-			/>
-		)
+		if(typeName){
+			let Component = require(`../components/${typeName}`)[typeName]
+			return (
+				<Component 
+					key={dataId}
+					content={data.content}
+					handleUpdate={this.emitUpdate}
+					id={dataId}
+					currentType={data.currentType}
+				/>
+			)
+		}
 	}
 
 	handleAction = (type, id, elem) => {
@@ -166,13 +168,13 @@ class PageContainer extends React.Component {
 				return({...component, component_type: type}) 
 			})	
 		}
+		console.log(pageComponents);
+		
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.state);
-		
 		return (
 			<div>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
@@ -183,6 +185,7 @@ class PageContainer extends React.Component {
 						onMouseUp={this.handleMouseUp}
 						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
+						requestHandler={this.props.requestHandler}
 					/>
 				</PermissionContext.Provider>
 				{
