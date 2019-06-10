@@ -36,7 +36,7 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, type) => {
+	emitUpdate = (data, id) => {
 		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate(data, id)
