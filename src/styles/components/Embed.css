@@ -1,0 +1,55 @@
+.dropdown-fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
+
+.dropdown-fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.dropdown-fade-exit {
+  opacity: 0.5; }
+
+.dropdown-fade-exit-active {
+  opacity: 1;
+  transition: opacity 300ms; }
+
+.fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.fade-exit {
+  opacity: 1; }
+
+.fade-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms; }
+
+.cm-embed {
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 0;
+  padding: 5px;
+  color: #A8AAAD;
+  font-size: 16px;
+  background-color: #F4F5F7;
+  transition: background-color .3s linear;
+  cursor: pointer; }
+  .cm-embed:hover {
+    background-color: transparent; }
+  .cm-embed .embed-icon {
+    margin-right: 7px; }
+  .cm-embed .embed-input {
+    font-size: 16px;
+    border: none;
+    background-color: transparent; }
+    .cm-embed .embed-input::placeholder {
+      color: #A8AAAD; }
+    .cm-embed .embed-input:focus {
+      outline: none; }
