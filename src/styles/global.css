@@ -10,13 +10,12 @@
   to {
     opacity: 0; } }
 
-* {
-  box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif !important; }
-  *::selection {
-    background-color: #B2D7FF; }
+*::selection {
+  background-color: #B2D7FF; }
 
-body {
+.cm-page-builder {
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif !important;
   margin: 0; }
 
 [contenteditable]:empty:before {

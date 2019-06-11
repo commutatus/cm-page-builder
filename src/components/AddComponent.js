@@ -29,9 +29,10 @@ export class AddComponent extends React.Component{
       <Component 
         key={`${type}-${this.props.id}`} 
         id={this.props.id} 
-        content="" 
         handleUpdate={this.props.handleUpdate}
         onInputChange={this.handleInput}
+        currentType={this.state.pageComponentType}
+        newComponent
       />
     )
   }
@@ -42,6 +43,8 @@ export class AddComponent extends React.Component{
 
   render(){
     let { showActionBtn } = this.state
+    console.log(this.state);
+    
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}

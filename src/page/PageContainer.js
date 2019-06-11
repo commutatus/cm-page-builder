@@ -23,10 +23,8 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	componentDidUpdate(){
-		if(this.state.actionDomRect){
-			document.addEventListener('mousedown', this.handlePageClick)
-		}
+	componentWillReceiveProps(nextProps) {
+		this.setState({ pageComponents: nextProps.pageComponents, meta: nextProps.meta })
 	}
 
 	handlePageClick = (e) => {
@@ -38,15 +36,16 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, type) => {
+	emitUpdate = (data, id) => {
+		console.log(data);
+		
 		let {handleUpdate} = this.props
 		if(handleUpdate)
-			handleUpdate({data, type})
+			handleUpdate(data, id)
 	}
 
 	getPageComponent = (data, index) => {
-		// console.log(data)
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type ?  data.component_type : 'text']
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
@@ -56,7 +55,7 @@ class PageContainer extends React.Component {
 					content={data.content}
 					handleUpdate={this.emitUpdate}
 					id={dataId}
-					currentType={data.currentType}
+					currentType={data.currentType ? data.currentType : data.component_type}
 				/>
 			)
 		}
@@ -176,7 +175,11 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
 		return (
-			<div>
+			<div
+				className="cm-page-builder"
+				onKeyUp={this.handelKeyPress}
+				onMouseUp={this.handleMouseUp}
+			>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}

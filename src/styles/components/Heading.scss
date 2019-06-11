@@ -2,8 +2,8 @@
 
 .cm-header1.edit {
   @include heading-font($h1-text, $w6-text);
-  margin: 14px 0 1px;
-  padding: 3px 2px;
+  margin:  2px 0 20px;
+  padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
   background-color: $gray-bg;
@@ -17,15 +17,15 @@
 }
 
 .cm-header1.read {
-  margin: 14px 0 1px;
+  margin: 2px 0 20px;
   @include heading-font($h1-text, $w6-text);
   @include text-wrapping;
 }
 
 .cm-header2.edit {
   @include heading-font($h2-text, $w6-text);
-  margin: 16px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0;
+  padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
   background-color: $gray-bg;
@@ -40,14 +40,14 @@
 
 .cm-header2.read {
   @include heading-font($h2-text, $w6-text);
-  margin: 16px 0 1px;
+  margin: 2px 0;
   @include text-wrapping;
 }
 
 .cm-header3.edit {
   @include heading-font($h3-text, $w6-text);
-  margin: 8px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0;
+  padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
   background-color: $gray-bg;
@@ -62,6 +62,6 @@
 
 .cm-header3.read {
   @include heading-font($h3-text, $w6-text);
-  margin: 8px 0 1px;
+  margin: 2px 0;
   @include text-wrapping;
 }

@@ -76,7 +76,3 @@ export class AutoCompleteDropdown extends React.Component{
     )
   }
 }
-
-AutoCompleteDropdown.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.object).isRequired,
-}

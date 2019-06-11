@@ -28,7 +28,7 @@ export const PageDetails = ({
 				<AutoCompleteDropdown 
 					handleOptionSelect={data => console.log(data)} 
 					requestHandler={requestHandler}
-					selectedOption={meta.office}
+					selectedOption={meta && meta.office}
 				/>
 				<div className="seprator-dot"></div>
 				<div className="current-user-detail">

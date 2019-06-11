@@ -41,8 +41,8 @@ export class Dropdown extends React.Component{
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
-      <div className="dropdown-container" ref={(node) => this.elem = node}>
-        <div className={isDropdownOpen ? '' : 'dropdown-value' }  onClick={this.toggleDropdown}>
+      <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
+        <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
           {
             isDropdownOpen ?
             <input 

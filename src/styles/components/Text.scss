@@ -3,9 +3,17 @@
 .cm-text-block {
   color: $primary-color;
   font-size: $t6-text;
-  margin: 2px 0 1px;
-  padding: 3px 2px;
+  margin: 2px 0;
+  padding: 4px 2px;
   @include text-wrapping;
   @include editable-style; 
   font-family: 'Open Sans', sans-serif !important; 
+  background-color: $gray-bg;
+  transition: background-color .3s linear;
+  &:empty {
+    background-color: transparent;
+  }
+  &:focus {
+    background-color: transparent;
+  }
 }

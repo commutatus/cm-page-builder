@@ -25,3 +25,5 @@
   .cm-emoji-container img {
     width: 100%;
     height: 100%; }
+  .cm-emoji-container .emoji-picker {
+    z-index: 99; }
