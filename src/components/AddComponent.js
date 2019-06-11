@@ -1,4 +1,5 @@
 import React from 'react'
+import { CSSTransition } from 'react-transition-group'
 import '../styles/components/AddComponent.css'
 
 export class AddComponent extends React.Component{
@@ -19,7 +20,6 @@ export class AddComponent extends React.Component{
   }
 
   handleInput = (data) => {
-//     console.log(data)
     this.setState({showActionBtn: !data})
   }
 
@@ -44,41 +44,51 @@ export class AddComponent extends React.Component{
 
   render(){
     let { showActionBtn } = this.state
+    console.log(this.state);
+    
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}
-        {
-          showActionBtn && 
-          <div className="text-type-tools" style={{display: this.state.html ? 'none' : 'flex'}}>
-            <div data-type="Header1" onClick={this.handleTypeSelect}>
-              <i className="cm-h1" />
-            </div>
-            <div data-type="Header2" onClick={this.handleTypeSelect}>
-              <i className="cm-h2" />
-            </div>
-            <div>
-              <i className="cm-numbers" />
-            </div>
-            <div>
-              <i className="cm-bullets" />
-            </div>
-            <div>
-              <i className="cm-page" />
-            </div>
-            <div data-type="Upload" onClick={this.handleTypeSelect}>
-              <i className="cm-picture" />
-            </div>
-            <div>
-              <i className="cm-video" /> 
-            </div>
-            <div data-type="Embed" onClick={this.handleTypeSelect}>
-              <i className="cm-upload" /> 
-            </div>
-            <div>
-              <i className="cm-divider" />  
-            </div>
-          </div>
-        }
+        <CSSTransition
+          in={showActionBtn}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <React.Fragment>
+            {
+              <div className="text-type-tools" style={{display: this.state.html ? 'none' : 'flex'}}>
+                <div data-type="Header1" onClick={this.handleTypeSelect}>
+                  <i className="cm-h1" />
+                </div>
+                <div data-type="Header2" onClick={this.handleTypeSelect}>
+                  <i className="cm-h2" />
+                </div>
+                <div>
+                  <i className="cm-numbers" />
+                </div>
+                <div>
+                  <i className="cm-bullets" />
+                </div>
+                <div>
+                  <i className="cm-page" />
+                </div>
+                <div data-type="Upload" onClick={this.handleTypeSelect}>
+                  <i className="cm-picture" />
+                </div>
+                <div>
+                  <i className="cm-video" /> 
+                </div>
+                <div data-type="Embed" onClick={this.handleTypeSelect}>
+                  <i className="cm-upload" /> 
+                </div>
+                <div>
+                  <i className="cm-divider" />  
+                </div>
+              </div>
+            }
+          </React.Fragment>
+        </CSSTransition>
       </div>
     )
   }

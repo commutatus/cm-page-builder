@@ -1,23 +1,23 @@
 import React from 'react'
 const getVideoUrl = (url) => {
-    let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
-    if(url.includes('vimeo')){
-      return `//player.vimeo.com/video/${videoid}`
-    }
-    else if(url.includes('youtube')){
-      return `https://www.youtube.com/embed/${videoid}`
-    }
-    return ''
+	let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
+	if (url.includes('vimeo')) {
+		return `//player.vimeo.com/video/${videoid}`
+	}
+	else if (url.includes('youtube')) {
+		return `https://www.youtube.com/embed/${videoid}`
+	}
+	return ''
 }
 const withComponent = (WrappedComponent) => {
-    class withComponent extends React.Component {
+	class withComponent extends React.Component {
 
-        state = {
-            html: this.props.content,
-            file: '',
-            name: '',
-            videoUrl: this.props.url || ''
-        }
+		state = {
+			html: this.props.content,
+			file: '',
+			name: '',
+			videoUrl: this.props.url || ''
+		}
 
         _resolveId = () => {
             return this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null

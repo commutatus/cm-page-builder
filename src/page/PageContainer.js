@@ -21,6 +21,9 @@ class PageContainer extends React.Component {
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
 		}
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -36,25 +39,27 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, id) => {
+	emitUpdate = (...args) => {
 		let {handleUpdate} = this.props
 		if(handleUpdate)
-			handleUpdate(data, id)
+			handleUpdate(...args)
 	}
 
 	getPageComponent = (data, index) => {
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		let Component = require(`../components/${typeName}`)[typeName]
-		return (
-			<Component 
-				key={dataId}
-				content={data.content}
-				handleUpdate={this.emitUpdate}
-				id={dataId}
-				currentType={data.currentType ? data.currentType : data.component_type}
-			/>
-		)
+		if(typeName){
+			let Component = require(`../components/${typeName}`)[typeName]
+			return (
+				<Component 
+					key={dataId}
+					content={data.content}
+					handleUpdate={this.emitUpdate}
+					id={dataId}
+					currentType={data.currentType ? data.currentType : data.component_type}
+				/>
+			)
+		}
 	}
 
 	handleAction = (type, id, elem) => {
@@ -81,11 +86,15 @@ class PageContainer extends React.Component {
 				this.setState({pageComponents: temp})
 				break
 			case 'remove-component':
+				let rmCompId = -1
 				if(pageComponents.length > 1){
 					for(let i in pageComponents){
 						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+						let isNewComponent = componentIndex.includes('AddComponent')
 						if(id == componentId){ //can compare with the id also.
-							// this.elemDelPos = pos
+							if(!isNewComponent){
+								rmCompId = componentId
+							}
 							continue
 						}
 						else{
@@ -93,8 +102,11 @@ class PageContainer extends React.Component {
 							position++
 						}
 					}
-					this.setState({pageComponents: temp})
+					this.setState({pageComponents: temp}, () => {
+						this.emitUpdate(null, rmCompId)
+					})
 				}
+
 				break
 		}
 	}
@@ -172,7 +184,6 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				onKeyUp={this.handelKeyPress}
-				onMouseUp={this.handleMouseUp}
 			>
 				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction}}> 
 					<PageDetails 
@@ -182,11 +193,13 @@ class PageContainer extends React.Component {
 						onMouseUp={this.handleMouseUp}
 						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
+						requestHandler={this.props.requestHandler}
+						pageCategories={this.props.pageCategories}
 					/>
 				</PermissionContext.Provider>
 				{
 					actionDomRect && actionDomRect.top && 
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
