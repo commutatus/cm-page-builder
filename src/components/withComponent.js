@@ -24,7 +24,7 @@ const withComponent = (WrappedComponent) => {
 				html: e.target.value,
 			}, () => {
 				if (e.target.value)
-					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null)
+					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null)
 			})
 		}
 

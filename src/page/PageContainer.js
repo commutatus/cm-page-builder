@@ -21,6 +21,9 @@ class PageContainer extends React.Component {
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
 		}
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -36,11 +39,10 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, id) => {
-		console.log(data, id)
+	emitUpdate = (...args) => {
 		let {handleUpdate} = this.props
 		if(handleUpdate)
-			handleUpdate(data, id)
+			handleUpdate(...args)
 	}
 
 	getPageComponent = (data, index) => {
@@ -61,7 +63,6 @@ class PageContainer extends React.Component {
 	}
 
 	handleAction = (type, id, elem) => {
-		console.log()
 		let {pageComponents} = this.state
 		let temp = [], position = 1, componentIndex = id
 		if(id && id.includes('AddComponent')){
@@ -91,7 +92,6 @@ class PageContainer extends React.Component {
 						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
 						let isNewComponent = componentIndex.includes('AddComponent')
 						if(id == componentId){ //can compare with the id also.
-							// this.elemDelPos = pos
 							if(!isNewComponent){
 								rmCompId = componentId
 							}
@@ -175,7 +175,6 @@ class PageContainer extends React.Component {
 				return({...component, component_type: type}) 
 			})	
 		}
-// 		console.log(pageComponents)
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
@@ -185,7 +184,6 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				onKeyUp={this.handelKeyPress}
-				onMouseUp={this.handleMouseUp}
 			>
 				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
 					<PageDetails 
@@ -196,11 +194,12 @@ class PageContainer extends React.Component {
 						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
 						requestHandler={this.props.requestHandler}
+						pageCategories={this.props.pageCategories}
 					/>
 				</PermissionContext.Provider>
 				{
 					actionDomRect && actionDomRect.top && 
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height - 5, left: actionDomRect.left}}>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />

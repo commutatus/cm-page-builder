@@ -12,18 +12,27 @@ export const PageDetails = ({
 	getPageComponent, 
 	onMouseUp, 
 	onKeyDown, 
-	requestHandler
+	requestHandler,
+	pageCategories
 }) => 
 	<div className="page-root-container">
 		<div className="page-container">
 			<EmojiIconContainer />
-			<Title content={meta ? meta.title : ''} handleUpdate={emitUpdate} />
+			<Title 
+				content={meta ? meta.title : ''} 
+				handleUpdate={emitUpdate} 
+				onMouseUp={onMouseUp} 
+				currentType="Title" 
+			/>
 			<div className="page-info">
-				<Dropdown 
-					handleOptionSelect={data => console.log(data)} 
-					optionSelected={{id: "11351", name: "Business Development"}} 
-					options={[{id: "11351", name: "Business Development"}]} 
-				/>
+				{
+					pageCategories &&
+					<Dropdown 
+						handleOptionSelect={emitUpdate}
+						optionSelected={pageCategories} 
+						options={pageCategories} 
+					/>
+				}
 				<div className="seprator-dot"></div>
 				<AutoCompleteDropdown 
 					handleOptionSelect={data => console.log(data)} 
