@@ -25,13 +25,14 @@
 
   .dropdown-list-body {
     position: absolute;
-    top: 30px;
+    top: 33px;
     left: 0;
     right: 0;
     padding: 0 5px;
-    max-height: 320px;
+    max-height: 250px;
     background-color: $white;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+    overflow-y: auto;
     z-index: 10;
     .dropdown-item {
       margin: 5px 0;
