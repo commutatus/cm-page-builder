@@ -37,6 +37,7 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (data, id) => {
+		console.log(data, id)
 		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate(data, id)
@@ -60,6 +61,7 @@ class PageContainer extends React.Component {
 	}
 
 	handleAction = (type, id, elem) => {
+		console.log()
 		let {pageComponents} = this.state
 		let temp = [], position = 1, componentIndex = id
 		if(id && id.includes('AddComponent')){
@@ -86,8 +88,12 @@ class PageContainer extends React.Component {
 				if(pageComponents.length > 1){
 					for(let i in pageComponents){
 						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+						let isNewComponent = componentIndex.includes('AddComponent')
 						if(id == componentId){ //can compare with the id also.
 							// this.elemDelPos = pos
+							if(!isNewComponent){
+								this.emitUpdate(null, componentId)
+							}
 							continue
 						}
 						else{
@@ -171,14 +177,6 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-		console.log(this.state);
-		
->>>>>>> 4b607df08a36b652cfb25a89a0f8cd05ce4b0a2b
->>>>>>> 99d6b0b28402a15508a04fdd3617b8edaad404b5
 		return (
 			<div
 				className="cm-page-builder"
