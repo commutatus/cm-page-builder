@@ -45,9 +45,22 @@ class PageContainer extends React.Component {
 			handleUpdate(...args)
 	}
 
+	_getCurrentOrder = (currentIndex) => {
+		if (typeof this._getCurrentOrder.counter == 'undefined')
+			this._getCurrentOrder.counter = 1
+		if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`)
+			this._getCurrentOrder.counter++
+		else 
+			this._getCurrentOrder.counter = 1
+		return this._getCurrentOrder.counter
+	}
+
 	getPageComponent = (data, index) => {
+		let order = 0
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
+		if (data.currentType === `Olist` || data.component_type === `ordered_list`) 
+			order = this._getCurrentOrder(index)
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
@@ -57,6 +70,7 @@ class PageContainer extends React.Component {
 					handleUpdate={this.emitUpdate}
 					id={dataId}
 					currentType={data.currentType ? data.currentType : data.component_type}
+					order={order}
 				/>
 			)
 		}
@@ -76,6 +90,22 @@ class PageContainer extends React.Component {
 						temp.push({...pageComponents[i], position})
 						this.newElemPos = position
 						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Text" })
+						position += 2
+					}
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
+				}
+				this.setState({pageComponents: temp})
+				break
+			case 'olist':
+				for(let i in pageComponents){
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					if(id == componentId){ //can compare with the id also.
+						temp.push({...pageComponents[i], position})
+						this.newElemPos = position
+						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Olist" })
 						position += 2
 					}
 					else{
