@@ -19,12 +19,16 @@ const withComponent = (WrappedComponent) => {
             videoUrl: this.props.url || ''
         }
 
+        _resolveId = () => {
+            return this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null
+        }
+
         _handleChanges = (e) => {
             this.setState({
                 html: e.target.value, 
             }, () => {
                 if (e.target.value)
-                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, this._resolveId() )
             })
         }
 
@@ -38,7 +42,7 @@ const withComponent = (WrappedComponent) => {
                 this.setState({
                     file: picBase64, name: fileName
                 }, () => {
-                    this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.type }, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                    this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.type }, this._resolveId())
                 })
               }
               reader.readAsDataURL(e.target.files[0]);
@@ -50,7 +54,7 @@ const withComponent = (WrappedComponent) => {
                 videoUrl: getVideoUrl(e.target.value), 
             }, () => {
                 if (e.target.value)
-                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null )
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, this._resolveId() )
             })
         }
         
