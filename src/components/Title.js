@@ -11,6 +11,7 @@ const WrappedTitle = (props) => {
         placeholder="Title of the page"
         className="cm-title"
         id={props.id}
+        handleMouseUp={props.onMouseUp}
       />
     )
 }

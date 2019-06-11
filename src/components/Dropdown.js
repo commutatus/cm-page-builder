@@ -15,7 +15,7 @@ export class Dropdown extends React.Component{
     }
   }
 
-  toggleDropdown = (e) => {
+  toggleDropdown = () => {
     this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
       if(this.state.isDropdownOpen)
         window.addEventListener('click', this.handleOutsideClick)
@@ -25,14 +25,15 @@ export class Dropdown extends React.Component{
   }
 
   handleOutsideClick = (e) => {
-    if(!this.elem.contains(e.target)){
+    if(this.elem && !this.elem.contains(e.target)){
       this.toggleDropdown()
     }
   }
 
   handleClick = (selectedOption) => {
     this.setState({selectedOption})
-    // this.props.handleOptionSelect(selectedOption)
+    this.toggleDropdown()
+    this.props.handleOptionSelect(selectedOption, null, 'categories')
   }
 
   handleChange = (e) => {
