@@ -85,6 +85,7 @@ class PageContainer extends React.Component {
 				this.setState({pageComponents: temp})
 				break
 			case 'remove-component':
+				let rmCompId = -1
 				if(pageComponents.length > 1){
 					for(let i in pageComponents){
 						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
@@ -92,7 +93,7 @@ class PageContainer extends React.Component {
 						if(id == componentId){ //can compare with the id also.
 							// this.elemDelPos = pos
 							if(!isNewComponent){
-								this.emitUpdate(null, componentId)
+								rmCompId = componentId
 							}
 							continue
 						}
@@ -101,8 +102,11 @@ class PageContainer extends React.Component {
 							position++
 						}
 					}
-					this.setState({pageComponents: temp})
+					this.setState({pageComponents: temp}, () => {
+						this.emitUpdate(null, rmCompId)
+					})
 				}
+
 				break
 		}
 	}
