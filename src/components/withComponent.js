@@ -19,59 +19,61 @@ const withComponent = (WrappedComponent) => {
 			videoUrl: this.props.url || ''
 		}
 
-		_handleChanges = (e) => {
-			this.setState({
-				html: e.target.value,
-			}, () => {
-				if (e.target.value)
-					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null)
-			})
-		}
+        _resolveId = () => {
+            return this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null
+        }
 
-		_uploadImage = (e) => {
-			var picBase64 = ''
-			if (e.target.files && e.target.files[0]) {
-				let fileName = e.target.files[0].name;
-				let reader = new FileReader();
-				reader.onload = (e) => {
-					picBase64 = e.target.result;
-					this.setState({
-						file: picBase64, name: fileName
-					}, () => {
-						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null)
-					})
-				}
-				reader.readAsDataURL(e.target.files[0]);
-			}
-		}
+        _handleChanges = (e) => {
+            this.setState({
+                html: e.target.value, 
+            }, () => {
+                if (e.target.value)
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, this._resolveId() )
+            })
+        }
 
-		_handleEmbed = () => {
-			this.setState({
-				videoUrl: getVideoUrl(e.target.value),
-			}, () => {
-				if (e.target.value)
-					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null)
-			})
-		}
+        _uploadImage = (e) => {
+            var picBase64 = ''
+            if(e.target.files && e.target.files[0]){
+              let fileName = e.target.files[0].name;
+              let reader = new FileReader();
+              reader.onload = (e) => {
+                picBase64 = e.target.result;
+                this.setState({
+                    file: picBase64, name: fileName
+                }, () => {
+                    this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.type }, this._resolveId())
+                })
+              }
+              reader.readAsDataURL(e.target.files[0]);
+            }
+        }
 
-		render() {
-			const { html, file, videoUrl } = this.state
-			const { id, ...rest } = this.props
-			return (
-				<WrappedComponent
-					{...rest}
-					html={html}
-					handleChange={this._handleChanges}
-					uploadImage={this._uploadImage}
-					id={id}
-					file={file}
-					videoUrl={videoUrl}
-					handleEmbed={this._handleEmbed}
-				/>
-			)
-		}
-	}
-	return withComponent
+        _handleEmbed = () => {
+            this.setState({
+                videoUrl: getVideoUrl(e.target.value), 
+            }, () => {
+                if (e.target.value)
+                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, this._resolveId() )
+            })
+        }
+        
+        render () {
+            const { html, file, videoUrl } = this.state
+            const { id, ...rest } = this.props
+            return  <WrappedComponent
+                        { ...rest }
+                        html={html}
+                        handleChange={this._handleChanges}
+                        uploadImage={this._uploadImage}
+                        id={id}
+                        file={file}
+                        videoUrl={videoUrl}
+                        handleEmbed={this._handleEmbed}
+                    />
+        }
+    }
+    return withComponent
 }
 
 export default withComponent

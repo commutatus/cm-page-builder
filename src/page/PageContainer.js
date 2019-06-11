@@ -46,7 +46,7 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type ?  data.component_type : 'text']
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
@@ -185,7 +185,7 @@ class PageContainer extends React.Component {
 				className="cm-page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
