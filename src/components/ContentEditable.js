@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames';
 import { PermissionContext } from '../contexts/permission-context';
-
+import sanitizeHtml from 'sanitize-html'
 
 export default class ContentEditable extends React.Component{
 
@@ -37,7 +37,8 @@ export default class ContentEditable extends React.Component{
   handleKeyDown = (e, handleAction) => {
     if(e.key === 'Backspace'){
       if(!this.elem.innerHTML){
-        let prevChild = this.elem.parentNode.previousSibling.firstChild
+        console.log(e.target.dataset)
+        let prevChild = (this.elem.parentNode.previousSibling && this.elem.parentNode.previousSibling.firstChild) || this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild
         prevChild.focus()
         handleAction('remove-component', this.props.id, this.elem)
       }
@@ -71,7 +72,7 @@ export default class ContentEditable extends React.Component{
   }
 
   render() {
-    const { placeholder, className, styles } = this.props
+    const { placeholder, className, styles, handleMouseUp } = this.props
     return(
       <PermissionContext.Consumer>
         {
@@ -86,10 +87,11 @@ export default class ContentEditable extends React.Component{
                 onFocus={this.handleFocus}
                 contentEditable={value.status === 'Edit'}
                 placeholder={placeholder}
-                dangerouslySetInnerHTML={{__html: this.props.html}}
+                dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.html || '')}}
                 styles={styles}
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction)}
                 onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}
+                onMouseUp={handleMouseUp}
               />
           </div>
         }
