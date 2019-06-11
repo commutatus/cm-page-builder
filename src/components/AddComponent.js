@@ -33,6 +33,8 @@ export class AddComponent extends React.Component{
         id={this.props.id} 
         handleUpdate={this.props.handleUpdate}
         onInputChange={this.handleInput}
+        currentType='text'
+        newComponent
       />
     )
   }
