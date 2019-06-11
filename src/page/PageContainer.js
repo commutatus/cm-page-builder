@@ -37,8 +37,6 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (data, id) => {
-		console.log(data);
-		
 		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate(data, id)
@@ -173,6 +171,14 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+		console.log(this.state);
+		
+>>>>>>> 4b607df08a36b652cfb25a89a0f8cd05ce4b0a2b
+>>>>>>> 99d6b0b28402a15508a04fdd3617b8edaad404b5
 		return (
 			<div
 				className="cm-page-builder"
