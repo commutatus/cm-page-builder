@@ -13,6 +13,7 @@ class WrappedUpload extends React.Component{
           <img src={file} width="100%" height="400px" />
           :
           <React.Fragment>
+            <span><i className="cm-upload" /></span>
             Click to upload file
             <input ref={node => this.fileInputElem = node} type="file" accept="image/*" hidden onChange={this.props.uploadImage} />
           </React.Fragment>
