@@ -6,18 +6,18 @@
     @include chip-style;
     color: $primary-color;
     font-size: $t4-text;
-    &:focus {
-      outline: none;
-    }
+    cursor: pointer;
   }
 
   .dropdown-input {
     input {
       width: 100%;
       padding: 5px 2px;
+      color: $primary-color;	
+      font-size: $t4-text;
       border: 1px solid #D4D4D4;
       box-sizing: border-box;
-      &::focus {
+      &:focus {
         outline-color: $blue;
       }
     }
@@ -25,6 +25,7 @@
 
   .dropdown-body {
     position: absolute;
+    top: 30px;
     left: 0;
     right: 0;
     padding: 0 5px;

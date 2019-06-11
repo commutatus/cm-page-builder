@@ -167,8 +167,7 @@ class PageContainer extends React.Component {
 				return({...component, component_type: type}) 
 			})	
 		}
-		console.log(pageComponents);
-		
+// 		console.log(pageComponents)
 		this.setState({pageComponents, actionDomRect: null})
 	}
 
