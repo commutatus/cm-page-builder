@@ -16,7 +16,8 @@ const withComponent = (WrappedComponent) => {
 			html: this.props.content,
 			file: '',
 			name: '',
-			videoUrl: this.props.url || ''
+			videoUrl: this.props.content || '',
+			emoji: this.props.emoji
 		}
 
 		_handleChanges = (e) => {
@@ -48,14 +49,14 @@ const withComponent = (WrappedComponent) => {
 			}
 		}
 
-		_handleEmbed = () => {
+		_handleEmbed = (e) => {
 			this.setState({
 				videoUrl: getVideoUrl(e.target.value),
 			}, () => {
-				if (e.target.value){
-					let {html} = this.state
-					let {currentType, position, id} = this.props
-					this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+				let {videoUrl} = this.state
+				let {currentType, position, id} = this.props
+				if(videoUrl){
+					this.props.handleUpdate({ content: videoUrl, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
 				}
 			})
 		}
@@ -74,6 +75,7 @@ const withComponent = (WrappedComponent) => {
 						file={file}
 						videoUrl={videoUrl}
 						handleEmbed={this._handleEmbed}
+						emoji={this.state.emoji}
 					/>
 				)
 			}

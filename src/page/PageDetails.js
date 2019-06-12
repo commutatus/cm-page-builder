@@ -19,7 +19,10 @@ export const PageDetails = ({
 	return(
 		<div className="page-root-container">
 			<div className="page-container">
-				<EmojiIconContainer />
+				<EmojiIconContainer 
+					handleUpdate={emitUpdate}
+					emoji={meta.emoji}
+				/>
 				<Title 
 					content={meta ? meta.title : ''} 
 					handleUpdate={emitUpdate} 
@@ -31,8 +34,8 @@ export const PageDetails = ({
 						pageCategories &&
 						<Dropdown 
 							handleOptionSelect={emitUpdate}
-							optionSelected={pageCategories} 
-							options={pageCategories} 
+							selectedOption={meta && meta.category}
+							options={pageCategories}
 						/>
 					}
 					<div className="seprator-dot"></div>
