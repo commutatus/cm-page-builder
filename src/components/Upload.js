@@ -4,13 +4,13 @@ import withComponent from './withComponent'
 class WrappedUpload extends React.Component{
 
   render() {
-    let {file} = this.props
+    let {image} = this.props
     return(
       <div className="cm-uploader" onClick={() => this.fileInputElem.click()}>
         {
-          file
+          image
           ?
-          <img src={file} width="100%" height="400px" />
+          <img src={image.url} width="100%" height="400px" alt={image.filename} />
           :
           <React.Fragment>
             <span><i className="cm-upload" /></span>

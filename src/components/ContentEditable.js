@@ -49,7 +49,10 @@ export default class ContentEditable extends React.Component{
     // }
   }
 
-  emitChange = () => {
+  emitChange = (e) => {
+    if(this.props.orderedList){
+      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+    }
     var html = this.elem.innerHTML
     if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange({
@@ -75,10 +78,15 @@ export default class ContentEditable extends React.Component{
     this.setState({showMoreOptions: true})
   }
 
+  handleFocus = (e) => {
+    if(this.props.orderedList){
+      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+    }
+  }
+  
   render() {
     const { placeholder, className, styles, handleMouseUp } = this.props
     const {showMoreOptions} = this.state
-    console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
