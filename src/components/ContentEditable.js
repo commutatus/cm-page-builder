@@ -68,10 +68,10 @@ export default class ContentEditable extends React.Component{
     }
   }
 
-  optionHandleClick = (e) => {
+  optionHandleClick = (e, handleAction) => {
     e.stopPropagation()
     e.preventDefault()
-    this.props.handleAction('remove-component', this.props.id)
+    handleAction('remove-component', this.props.id)
     this.setState({showMoreOptions: true})
   }
 
@@ -86,7 +86,7 @@ export default class ContentEditable extends React.Component{
             <div className="component-section">
               {
                 className !== 'cm-title' && value.status === 'Edit' &&
-                <div className="component-dragger" onClick={this.optionHandleClick}><i className="cm cm-handle" />
+                <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
                   {
                     showMoreOptions &&
                     <div onMouseUp={(e) => e.stopPropagation()}>test</div>

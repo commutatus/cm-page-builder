@@ -250,7 +250,7 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				{
-					actionDomRect && actionDomRect.top && this.props.status === 'Edit' && 
+					actionDomRect && actionDomRect.top && this.props.status === 'Edit' ?
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
@@ -276,6 +276,8 @@ class PageContainer extends React.Component {
 							<i className="cm-numbers" />
 						</div>
 					</div>
+					:
+					''
 				}
 			</div>
 		)
