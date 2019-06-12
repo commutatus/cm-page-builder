@@ -237,7 +237,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: "Edit" || this.props.status || 'Edit' , handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
