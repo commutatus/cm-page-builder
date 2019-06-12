@@ -3,6 +3,7 @@
 .cm-text-block.edit  {
   color: $primary-color;
   font-size: $t6-text;
+  line-height: 24px;
   margin: 2px 0;
   padding: 4px 2px;
   @include text-wrapping;
@@ -21,17 +22,8 @@
 .cm-text-block.read  {
   color: $primary-color;
   font-size: $t6-text;
-  margin: 2px 0;
-  padding: 4px 2px;
+  margin-bottom: 5px;
+  line-height: 24px;
   @include text-wrapping;
-  @include editable-style; 
   font-family: 'Open Sans', sans-serif !important; 
-  background-color: $gray-bg;
-  transition: background-color .3s linear;
-  &:empty {
-    background-color: transparent;
-  }
-  &:focus {
-    background-color: transparent;
-  }
 }

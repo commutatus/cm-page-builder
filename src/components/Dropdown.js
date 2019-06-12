@@ -34,7 +34,7 @@ export class Dropdown extends React.Component{
   handleClick = (selectedOption) => {
     this.setState({selectedOption})
     this.toggleDropdown()
-    this.props.handleOptionSelect(selectedOption, null, 'categories')
+    this.props.handleOptionSelect(selectedOption, null, this.props.type, this.props.component_type)
   }
 
   handleChange = (e) => {
@@ -43,7 +43,7 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
-    console.log(this.state)
+    // console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
@@ -70,7 +70,10 @@ export class Dropdown extends React.Component{
                           autoFocus
                         />
                         :
-                        (selectedOption && selectedOption.name) || ''
+                        <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
+                          <span><i className="cm-hashtag" /></span>
+                          {(selectedOption && selectedOption.name) || ''}
+                        </div>
                       }
                     </div>  
                     {

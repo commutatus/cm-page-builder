@@ -17,9 +17,9 @@ export class EmojiIconContainer extends React.Component{
     this.jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-emojione-64/';
   }
 
-  // componentDidMount(){
-  //   this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji.colons || ':smile:')
-  // }
+  componentDidMount(){
+    this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji && this.props.emoji.colons || ':smile:')
+  }
 
   onEmojiClick = (data, e) => {
     e.preventDefault()

@@ -1,0 +1,47 @@
+@import '../imports';
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 5px;
+  background-color: $gray-bg;
+  transition: background-color .2s linear;
+  &:hover {
+    background-color: transparent;
+  }
+  .sperator {
+    width: 100%;
+    border: 1px solid #ECECEC;
+  } 
+}
+
+.divider.edit {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 5px;
+  background-color: $gray-bg;
+  transition: background-color .2s linear;
+  &:hover {
+    background-color: transparent;
+  }
+  .sperator {
+    width: 100%;
+    height: 1px;
+    border: 1px solid #ECECEC;
+  } 
+}
+
+.divider.read {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  .sperator {
+    width: 100%;
+    border: 1px solid #ECECEC;
+  } 
+}
+
+
+

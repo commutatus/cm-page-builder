@@ -96,6 +96,7 @@ class PageContainer extends React.Component {
 					currentType={data.currentType ? data.currentType : data.component_type}
 					position={data.position}
 					order={order}
+					component_attachment={data.component_attachment}
 				/>
 			)
 		}
@@ -268,6 +269,8 @@ class PageContainer extends React.Component {
 						getPageComponent={this.getPageComponent}
 						requestHandler={this.props.requestHandler}
 						pageCategories={this.props.pageCategories}
+						currentOffices={this.props.currentOffices}
+						isEditMode={this.props.status === 'Edit'}
 					/>
 				</PermissionContext.Provider>
 				{
