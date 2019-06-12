@@ -4,7 +4,7 @@ import withComponent from './withComponent'
 
 const WrappedOlist = (props) =>  {
   return(
-    <div>
+    <div style={{display: 'flex'}}>
         <span>{props.order}.</span>
         <ContentEditable 
             html={props.html} 

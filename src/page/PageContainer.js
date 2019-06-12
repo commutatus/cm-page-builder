@@ -18,8 +18,8 @@ class PageContainer extends React.Component {
 
 	checkPageHeight() {
 		let pageElem = document.getElementById('page-builder');
-		if(pageElem) {
-			let commentElem = document.getElementById('page-comment-box');
+		let commentElem = document.getElementById('page-comment-box');
+		if(pageElem && commentElem) {
 			let totalElemHeight = pageElem.offsetHeight + commentElem.offsetHeight;
 			if(totalElemHeight < window.innerHeight) {
 				commentElem.style.bottom = 0;

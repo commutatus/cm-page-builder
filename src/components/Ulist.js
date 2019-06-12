@@ -5,7 +5,7 @@ import '../styles/components/Text.css';
 
 const WrappedUlist = (props) =>  {
   return(
-    <div>
+    <div style={{display: 'flex'}}>
         <span className="bulleted-dot"></span>
         <ContentEditable 
           html={props.html} 
