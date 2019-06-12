@@ -71,7 +71,7 @@ export class Dropdown extends React.Component{
                         />
                         :
                         <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
-                          <span><i className="cm-hashtag" /></span>
+                          <span><i className={this.props.component_type === 'category_id' ? 'cm-hashtag' : 'cm-hub'} /></span>
                           {(selectedOption && selectedOption.name) || ''}
                         </div>
                       }

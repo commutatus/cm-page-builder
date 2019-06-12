@@ -29,9 +29,15 @@
       outline: none;
     }
   }
+  iframe{
+    border: none;
+  }
 }
 
 .cm-embed.read {
   width: 100%;
   margin: 8px 0;
+  iframe{
+    border: none;
+  }
 }
