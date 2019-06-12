@@ -71,6 +71,7 @@ export default class ContentEditable extends React.Component{
   optionHandleClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
+    this.props.handleAction('remove-component', this.props.id)
     this.setState({showMoreOptions: true})
   }
 
