@@ -3,10 +3,26 @@
 .dropdown-wrapper {
   position: relative;
   .dropdown-value {
+    cursor: pointer;
+  }
+
+  .value-text-edit {
     @include chip-style;
     color: $primary-color;
     font-size: $t4-text;
-    cursor: pointer;
+    span {
+      color: $blue;
+      margin-right: 5px;
+    }
+  }
+
+  .value-text-read {
+    color: $primary-color;
+    font-size: $t4-text;
+    span {
+      color: $blue;
+      margin-right: 5px;
+    }
   }
 
   .dropdown-input {

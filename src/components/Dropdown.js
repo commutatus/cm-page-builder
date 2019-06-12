@@ -70,7 +70,10 @@ export class Dropdown extends React.Component{
                           autoFocus
                         />
                         :
-                        (selectedOption && selectedOption.name) || ''
+                        <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
+                          <span><i className="cm-hashtag" /></span>
+                          {(selectedOption && selectedOption.name) || ''}
+                        </div>
                       }
                     </div>  
                     {
