@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import '../styles/components/Dropdown.css';
+import { CSSTransition } from 'react-transition-group';
 import { debounce } from 'throttle-debounce';
 
 export class AutoCompleteDropdown extends React.Component{
@@ -45,33 +46,41 @@ export class AutoCompleteDropdown extends React.Component{
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
-      <div className="dropdown-container" ref={(node) => this.elem = node}>
-        <div className={isDropdownOpen ? '' : 'dropdown-value' }  onClick={this.toggleDropdown}>
-          {
-            isDropdownOpen ?
-            <input 
-              onChange={this.handleChange} 
-              onClick={(e) => e.stopPropagation()} 
-              data-id="cmSearchInput" 
-              value={cmSearchInput}
-              placeholder='Office'
-              autoFocus
-            />
-            :
-            selectedOption && selectedOption.name
-          }
-        </div>  
-        {
-          isDropdownOpen && 
-          <div className="dropdown-body">
+      <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
+        <CSSTransition
+          in={isDropdownOpen}
+          timeout={300}
+          classNames="dropdown-fade"
+        >
+          <div>
+            <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
+              {
+                isDropdownOpen ?
+                <input 
+                  onChange={this.handleChange} 
+                  onClick={(e) => e.stopPropagation()} 
+                  data-id="cmSearchInput" 
+                  value={cmSearchInput}
+                  placeholder='Office'
+                  autoFocus
+                />
+                :
+                selectedOption && selectedOption.name
+              }
+            </div>  
             {
-              options
-                .map((option, i) => 
-                  <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
-                )
+              isDropdownOpen && 
+              <div className="dropdown-list-body">
+                {
+                  options
+                    .map((option, i) => 
+                      <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
+                    )
+                }
+              </div>
             }
           </div>
-        }
+        </CSSTransition>  
       </div>
     )
   }

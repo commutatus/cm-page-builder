@@ -66,7 +66,7 @@ export class Dropdown extends React.Component{
             </div>  
             {
               isDropdownOpen && 
-              <div className="dropdown-body">
+              <div className="dropdown-list-body">
                 {
                   options
                     .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))

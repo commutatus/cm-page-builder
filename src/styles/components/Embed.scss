@@ -1,7 +1,9 @@
 @import '../imports';
 
 .cm-embed {
-  margin: 8px 0 1px;
+  display: inline-flex;
+  align-items: center;
+  margin: 2px 0;
   padding: 5px;
   color: $light-text;
   font-size: $t6-text;
@@ -10,5 +12,21 @@
   cursor: pointer;
   &:hover {
     background-color: transparent;
+  }
+
+  .embed-icon {
+    margin-right: 7px;
+  }
+
+  .embed-input {
+    font-size: $t6-text;
+    border: none;
+    background-color: transparent;
+    &::placeholder {
+      color: $light-text;
+    }
+    &:focus {
+      outline: none;
+    }
   }
 }
