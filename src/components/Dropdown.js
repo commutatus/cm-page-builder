@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/components/Dropdown.css';
+import { PermissionContext } from '../contexts/permission-context';
 
 export class Dropdown extends React.Component{
 
@@ -43,42 +44,53 @@ export class Dropdown extends React.Component{
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
     return(
-      <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
-        <CSSTransition
-          in={isDropdownOpen}
-          timeout={300}
-          classNames="dropdown-fade"
-        >
-          <div>
-            <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
-              {
-                isDropdownOpen ?
-                <input 
-                  onChange={this.handleChange} 
-                  onClick={(e) => e.stopPropagation()} 
-                  data-id="cmSearchInput" 
-                  value={cmSearchInput}
-                  autoFocus
-                />
-                :
-                (selectedOption && selectedOption.name) || (options && options[0].name)
-              }
-            </div>  
-            {
-              isDropdownOpen && 
-              <div className="dropdown-list-body">
-                {
-                  options
-                    .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
-                    .map((option, i) => 
-                      <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
-                    )
-                }
+      <PermissionContext.Consumer>
+        {
+          value => {
+            return(
+              <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
+                <CSSTransition
+                  in={isDropdownOpen}
+                  timeout={300}
+                  classNames="dropdown-fade"
+                >
+                  <div>
+                    <div 
+                      className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  
+                      onClick={value.status === 'Edit' ? this.toggleDropdown : undefined}
+                    > 
+                      {
+                        isDropdownOpen ?
+                        <input 
+                          onChange={this.handleChange} 
+                          onClick={(e) => e.stopPropagation()} 
+                          data-id="cmSearchInput" 
+                          value={cmSearchInput}
+                          autoFocus
+                        />
+                        :
+                        (selectedOption && selectedOption.name) || (options && options[0].name)
+                      }
+                    </div>  
+                    {
+                      isDropdownOpen && 
+                      <div className="dropdown-list-body">
+                        {
+                          options
+                            .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
+                            .map((option, i) => 
+                              <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
+                            )
+                        }
+                      </div>
+                    }
+                  </div>
+                </CSSTransition>
               </div>
-            }
-          </div>
-        </CSSTransition>
-      </div>
+            )
+          }
+        }
+      </PermissionContext.Consumer>
     )
   }
 }

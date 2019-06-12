@@ -4,6 +4,7 @@ import JSEMOJI from 'emoji-js';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import '../styles/components/Emoji.css';
+import { PermissionContext } from '../contexts/permission-context';
 
 export class EmojiIconContainer extends React.Component{
 
@@ -42,13 +43,25 @@ export class EmojiIconContainer extends React.Component{
   render() {
     let {showPopup} = this.state
     return(
-      <div className="cm-emoji-container" onClick={this.openEmojiPopup} ref={node => this.rootNode = node}>
-        <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
+      <PermissionContext.Consumer>
         {
-          showPopup &&
-          <Picker set='emojione' onClick={this.onEmojiClick}/>
+          value =>{
+            return(
+              <div 
+                className="cm-emoji-container" 
+                onClick={value.status === 'Edit' ? this.openEmojiPopup : undefined} 
+                ref={node => this.rootNode = node}
+              >
+                <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
+                {
+                  showPopup &&
+                  <Picker set='emojione' onClick={this.onEmojiClick}/>
+                }
+              </div>
+            )
+          }
         }
-      </div>
+      </PermissionContext.Consumer>
     )
   }
 }

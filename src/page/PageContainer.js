@@ -20,7 +20,7 @@ class PageContainer extends React.Component {
 		let pageElem = document.getElementById('page-builder');
 		let commentElem = document.getElementById('page-comment-box');
 		if(pageElem && commentElem) {
-			let totalElemHeight = pageElem.offsetHeight + commentElem.offsetHeight;
+			let totalElemHeight = pageElem.scrollHeight + commentElem.offsetHeight + pageElem.getBoundingClientRect().top;
 			if(totalElemHeight < window.innerHeight) {
 				commentElem.style.bottom = 0;
 			} else {
@@ -30,7 +30,7 @@ class PageContainer extends React.Component {
 	}
 
 	componentDidMount() {
-		this.checkPageHeight();
+		setTimeout(this.checkPageHeight, 1000)
 	}
 
 	componentDidUpdate(){
@@ -237,7 +237,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: "Read" || this.props.status || 'Edit' , handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: "Edit" || this.props.status || 'Edit' , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
@@ -250,7 +250,7 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				{
-					actionDomRect && actionDomRect.top && 
+					actionDomRect && actionDomRect.top && this.props.status === 'Edit' && 
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">

@@ -8,11 +8,13 @@ export default class ContentEditable extends React.Component{
 
   constructor(props){
     super(props)
-    this.state = {}
+    this.state = {
+      showMoreOptions: false
+    }
   }
 
-  shouldComponentUpdate(nextProps){
-    return nextProps.html !== (this.elem && this.elem.innerHTML)
+  shouldComponentUpdate(nextProps, nextState){
+    return (nextProps.html !== (this.elem && this.elem.innerHTML) )|| nextState.showMoreOptions !== this.state.showMoreOptions
   }
 
   handleKeyPress = (e, handleAction) => {
@@ -67,20 +69,23 @@ export default class ContentEditable extends React.Component{
   }
 
   optionHandleClick = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
     this.setState({showMoreOptions: true})
   }
 
   render() {
     const { placeholder, className, styles, handleMouseUp } = this.props
-    let {showMoreOptions} = this.state
+    const {showMoreOptions} = this.state
+    console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
           (value) => 
             <div className="component-section">
               {
-                className !== 'cm-title' && 
-                <div className="component-dragger"><i className="cm cm-handle" onClick={this.optionHandleClick} />
+                className !== 'cm-title' && value.status === 'Edit' &&
+                <div className="component-dragger" onClick={this.optionHandleClick}><i className="cm cm-handle" />
                   {
                     showMoreOptions &&
                     <div onMouseUp={(e) => e.stopPropagation()}>test</div>
