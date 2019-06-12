@@ -5,18 +5,19 @@ import '../styles/components/Text.css';
 
 const WrappedUlist = (props) =>  {
   return(
-    <React.Fragment>
+    <div style={{display: 'flex'}}>
         <span className="bulleted-dot"></span>
         <ContentEditable 
-            html={props.html} 
-            onChange={props.handleChange}
-            onInputChange={props.onInputChange}
-            placeholder="Bulleted list"
-            className="cm-text-block"
-            id={props.id}
+          html={props.html} 
+          onChange={props.handleChange}
+          onInputChange={props.onInputChange}
+          placeholder="Bulleted list"
+          className="cm-text-block"
+          id={props.id}
+          unorderedList
         />
-    </React.Fragment>
+    </div>
   )
 }
 
-export const Ulist = withComponent(WrappedUlist)
+export const Ulist = withComponent(WrappedUlist) 

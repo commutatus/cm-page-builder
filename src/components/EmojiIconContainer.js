@@ -4,6 +4,7 @@ import JSEMOJI from 'emoji-js';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import '../styles/components/Emoji.css';
+import { PermissionContext } from '../contexts/permission-context';
 
 export class EmojiIconContainer extends React.Component{
 
@@ -16,13 +17,14 @@ export class EmojiIconContainer extends React.Component{
     this.jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-emojione-64/';
   }
 
-  componentDidMount(){
-    this.elem.innerHTML = this.jsemoji.replace_colons(`:smile:`)
-  }
+  // componentDidMount(){
+  //   this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji.colons || ':smile:')
+  // }
 
   onEmojiClick = (data, e) => {
     e.preventDefault()
     this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
+    this.props.handleUpdate({...data}, null, 'emoji')
   }
   
   openEmojiPopup = (e) => {
@@ -33,7 +35,7 @@ export class EmojiIconContainer extends React.Component{
   }
 
   closeEmojiPopup = (e) => {
-    if(!this.rootNode.contains(e.target)){
+    if(this.rootNode && !this.rootNode.contains(e.target)){
       this.setState({showPopup: false})
       document.removeEventListener('click', this.closeEmojiPopup)
     }
@@ -42,13 +44,25 @@ export class EmojiIconContainer extends React.Component{
   render() {
     let {showPopup} = this.state
     return(
-      <div className="cm-emoji-container" onClick={this.openEmojiPopup} ref={node => this.rootNode = node}>
-        <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
+      <PermissionContext.Consumer>
         {
-          showPopup &&
-          <Picker set='emojione' onClick={this.onEmojiClick}/>
+          value =>{
+            return(
+              <div 
+                className="cm-emoji-container" 
+                onClick={value.status === 'Edit' ? this.openEmojiPopup : undefined} 
+                ref={node => this.rootNode = node}
+              >
+                <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
+                {
+                  showPopup &&
+                  <Picker set='emojione' onClick={this.onEmojiClick}/>
+                }
+              </div>
+            )
+          }
         }
-      </div>
+      </PermissionContext.Consumer>
     )
   }
 }

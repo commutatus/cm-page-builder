@@ -8,20 +8,13 @@ export default class ContentEditable extends React.Component{
 
   constructor(props){
     super(props)
-    this.state = {}
+    this.state = {
+      showMoreOptions: false
+    }
   }
 
-  shouldComponentUpdate(nextProps){
-    return nextProps.html !== (this.elem && this.elem.innerHTML)
-  }
-
-  handleFocus = () => {
-    if(this.elem){
-      // debugger
-      // let range = document.createRange()
-      // let len = this.elem.innerText.length
-      // range.setStart(this.elem, len)
-    } 
+  shouldComponentUpdate(nextProps, nextState){
+    return (nextProps.html !== (this.elem && this.elem.innerHTML) )|| nextState.showMoreOptions !== this.state.showMoreOptions
   }
 
   handleKeyPress = (e, handleAction) => {
@@ -30,6 +23,8 @@ export default class ContentEditable extends React.Component{
         e.preventDefault()
         if (this.props.orderedList)
           handleAction('olist', this.props.id, this.elem)
+        else if (this.props.unorderedList)
+          handleAction('ulist', this.props.id, this.elem)
         else
           handleAction('add-component', this.props.id, this.elem)
         break
@@ -38,20 +33,22 @@ export default class ContentEditable extends React.Component{
   }
 
   handleKeyDown = (e, handleAction) => {
-    if(e.key === 'Backspace'){
-      if(!this.elem.innerHTML){
-        let prevChild = (this.elem.parentNode.previousSibling && this.elem.parentNode.previousSibling.firstChild) || this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild
-        prevChild.focus()
-        handleAction('remove-component', this.props.id, this.elem)
-      }
-    }
-  }
-
-  getClassName = (name) => {
-    return {
-      'Read': 'reading-mode',
-      'Edit': 'edit-mode'
-    }
+    // if(e.key === 'Backspace'){
+    //   if(!this.elem.innerHTML){
+    //     let prevChild = null
+    //     if(this.elem.parentNode.previousSibling){
+    //       if(this.elem.parentNode.previousSibling.nodeName === 'SPAN'){
+    //         prevChild = this.elem.parentNode.parentNode.previousSibling.childNodes[1].childNodes[1]
+    //       }else{
+    //         prevChild = this.elem.parentNode.previousSibling.firstChild[1]
+    //       }
+    //     }else{
+    //       prevChild = this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild[1]
+    //     }
+    //     prevChild.focus()
+    //     handleAction('remove-component', this.props.id, this.elem)
+    //   }
+    // }
   }
 
   emitChange = () => {
@@ -73,14 +70,33 @@ export default class ContentEditable extends React.Component{
     }
   }
 
+  optionHandleClick = (e, handleAction) => {
+    e.stopPropagation()
+    e.preventDefault()
+    handleAction('remove-component', this.props.id)
+    this.setState({showMoreOptions: true})
+  }
+
   render() {
     const { placeholder, className, styles, handleMouseUp } = this.props
+    const {showMoreOptions} = this.state
     return(
       <PermissionContext.Consumer>
         {
           (value) => 
             <div className="component-section">
-              <div className="component-dragger"><i className="cm cm-handle" /></div>
+              {
+                console.log(value)
+              }
+              {
+                className !== 'cm-title' && value.status === 'Edit' &&
+                <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
+                  {
+                    showMoreOptions &&
+                    <div onMouseUp={(e) => e.stopPropagation()}>test</div>
+                  }
+                </div>
+              }
               <div
                 data-id={this.props.id}
                 ref={node => this.elem = node}

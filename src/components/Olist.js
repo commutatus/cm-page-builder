@@ -4,7 +4,7 @@ import withComponent from './withComponent'
 
 const WrappedOlist = (props) =>  {
   return(
-    <React.Fragment>
+    <div style={{display: 'flex'}}>
         <span>{props.order}.</span>
         <ContentEditable 
             html={props.html} 
@@ -15,8 +15,8 @@ const WrappedOlist = (props) =>  {
             id={props.id}
             orderedList
         />
-    </React.Fragment>
+    </div>
   )
 }
 
-export const Olist = withComponent(WrappedOlist)
+export const Olist = withComponent(WrappedOlist) 

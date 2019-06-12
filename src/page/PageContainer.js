@@ -2,7 +2,7 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-// import {MoreActions} from '../utils/MoreActions'
+import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
 import '../styles/global.css'
 
 class PageContainer extends React.Component {
@@ -10,13 +10,31 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
+			pageComponents: sortDataOnPos(props.pageComponents) || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
 			meta: props.meta,
 			actionDomRect: null
 		}
 	}
 
+	checkPageHeight() {
+		let pageElem = document.getElementById('page-builder');
+		let commentElem = document.getElementById('page-comment-box');
+		if(pageElem && commentElem) {
+			let totalElemHeight = pageElem.scrollHeight + commentElem.offsetHeight + pageElem.getBoundingClientRect().top;
+			if(totalElemHeight < window.innerHeight) {
+				commentElem.style.bottom = 0;
+			} else {
+				commentElem.style.bottom = 'unset';
+			}
+		}
+	}
+
+	componentDidMount() {
+		setTimeout(this.checkPageHeight, 1000)
+	}
+
 	componentDidUpdate(){
+		this.checkPageHeight();
 		if(this.newElemPos){
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
@@ -27,7 +45,9 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({ pageComponents: nextProps.pageComponents, meta: nextProps.meta })
+		console.log('newState', this.state.pageComponents, 'newProps', nextProps.pageComponents)
+		let pageComponents = compareAndDiff(this.state.pageComponents, sortDataOnPos(nextProps.pageComponents))
+		this.setState({ pageComponents, meta: nextProps.meta })
 	}
 
 	handlePageClick = (e) => {
@@ -56,10 +76,11 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let order = 0
+		console.log('type', data.component_type)
+		let order = 1
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		if (data.currentType === `Olist` || data.component_type === `ordered_list`) 
+		if (data.currentType === 'Olist') 
 			order = this._getCurrentOrder(index)
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
@@ -70,6 +91,7 @@ class PageContainer extends React.Component {
 					handleUpdate={this.emitUpdate}
 					id={dataId}
 					currentType={data.currentType ? data.currentType : data.component_type}
+					position={data.position}
 					order={order}
 				/>
 			)
@@ -106,6 +128,22 @@ class PageContainer extends React.Component {
 						temp.push({...pageComponents[i], position})
 						this.newElemPos = position
 						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Olist" })
+						position += 2
+					}
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
+				}
+				this.setState({pageComponents: temp})
+				break
+			case 'ulist':
+				for(let i in pageComponents){
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					if(id == componentId){ //can compare with the id also.
+						temp.push({...pageComponents[i], position})
+						this.newElemPos = position
+						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Ulist" })
 						position += 2
 					}
 					else{
@@ -213,9 +251,10 @@ class PageContainer extends React.Component {
 		return (
 			<div
 				className="cm-page-builder"
+				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
@@ -228,7 +267,7 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				{
-					actionDomRect && actionDomRect.top && 
+					actionDomRect && actionDomRect.top && this.props.status === 'Edit' ?
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
@@ -254,6 +293,8 @@ class PageContainer extends React.Component {
 							<i className="cm-numbers" />
 						</div>
 					</div>
+					:
+					''
 				}
 			</div>
 		)
@@ -261,10 +302,3 @@ class PageContainer extends React.Component {
 }
 
 export default PageContainer
-
-
-
-
-
-
-const dummy = [{ "id": "2670", "name": "Contract signed", "short_name": null, "position": 5, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2666", "name": "First Contact", "short_name": null, "position": 2, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2671", "name": "Follow up", "short_name": null, "position": 6, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2711", "name": "Lead", "short_name": null, "position": 1, "type_id": "employee_follow_up", "type_name": null, "parent_id": null }, { "id": "2668", "name": "Meeting scheduled", "short_name": null, "position": 4, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2667", "name": "Proposal sent", "short_name": null, "position": 3, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }]
