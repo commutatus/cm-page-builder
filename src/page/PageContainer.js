@@ -47,10 +47,22 @@ class PageContainer extends React.Component {
 			handleUpdate(...args)
 	}
 
+	_getCurrentOrder = (currentIndex) => {
+		if (typeof this._getCurrentOrder.counter == 'undefined')
+			this._getCurrentOrder.counter = 1
+		if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`)
+			this._getCurrentOrder.counter++
+		else 
+			this._getCurrentOrder.counter = 1
+		return this._getCurrentOrder.counter
+	}
+
 	getPageComponent = (data, index) => {
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type ?  data.component_type : 'text']
+		let order = 0
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		// console.log(dataId, index)
+		if (data.currentType === 'Olist') 
+			order = this._getCurrentOrder(index)
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
@@ -61,6 +73,7 @@ class PageContainer extends React.Component {
 					id={dataId}
 					currentType={data.currentType ? data.currentType : data.component_type}
 					position={data.position}
+					order={order}
 				/>
 			)
 		}
@@ -80,6 +93,22 @@ class PageContainer extends React.Component {
 						temp.push({...pageComponents[i], position})
 						this.newElemPos = position
 						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Text" })
+						position += 2
+					}
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
+				}
+				this.setState({pageComponents: temp})
+				break
+			case 'olist':
+				for(let i in pageComponents){
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					if(id == componentId){ //can compare with the id also.
+						temp.push({...pageComponents[i], position})
+						this.newElemPos = position
+						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Olist" })
 						position += 2
 					}
 					else{
@@ -189,7 +218,7 @@ class PageContainer extends React.Component {
 				className="cm-page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: 'Edit', handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}

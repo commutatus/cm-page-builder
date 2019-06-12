@@ -35,6 +35,7 @@ lib
 
 # Dependency directories
 node_modules/
+.css
 jspm_packages/
 
 # TypeScript v1 declaration files

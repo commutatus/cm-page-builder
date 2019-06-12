@@ -15,20 +15,14 @@ export default class ContentEditable extends React.Component{
     return nextProps.html !== (this.elem && this.elem.innerHTML)
   }
 
-  handleFocus = () => {
-    if(this.elem){
-      // debugger
-      // let range = document.createRange()
-      // let len = this.elem.innerText.length
-      // range.setStart(this.elem, len)
-    } 
-  }
-
   handleKeyPress = (e, handleAction) => {
     switch(e.key){
       case 'Enter':
         e.preventDefault()
-        handleAction('add-component', this.props.id, this.elem)
+        if (this.props.orderedList)
+          handleAction('olist', this.props.id, this.elem)
+        else
+          handleAction('add-component', this.props.id, this.elem)
         break
       default:
     }
@@ -37,18 +31,10 @@ export default class ContentEditable extends React.Component{
   handleKeyDown = (e, handleAction) => {
     if(e.key === 'Backspace'){
       if(!this.elem.innerHTML){
-        // console.log(e.target.dataset)
         let prevChild = (this.elem.parentNode.previousSibling && this.elem.parentNode.previousSibling.firstChild) || this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild
         prevChild.focus()
         handleAction('remove-component', this.props.id, this.elem)
       }
-    }
-  }
-
-  getClassName = (name) => {
-    return {
-      'Read': 'reading-mode',
-      'Edit': 'edit-mode'
     }
   }
 
@@ -71,13 +57,27 @@ export default class ContentEditable extends React.Component{
     }
   }
 
+  optionHandleClick = (e) => {
+    this.setState({showMoreOptions: true})
+  }
+
   render() {
     const { placeholder, className, styles, handleMouseUp } = this.props
+    let {showMoreOptions} = this.state
     return(
       <PermissionContext.Consumer>
         {
           (value) => 
-            <div style={{width:'100%'}}>
+            <div className="component-section">
+              {
+                className !== 'cm-title' && 
+                <div className="component-dragger"><i className="cm cm-handle" onClick={this.optionHandleClick} />
+                  {
+                    showMoreOptions &&
+                    <div onMouseUp={(e) => e.stopPropagation()}>test</div>
+                  }
+                </div>
+              }
               <div
                 data-id={this.props.id}
                 ref={node => this.elem = node}

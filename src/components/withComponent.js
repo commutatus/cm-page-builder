@@ -60,24 +60,25 @@ const withComponent = (WrappedComponent) => {
 			})
 		}
 
-		render() {
-			const { html, file, videoUrl } = this.state
-			const { id, ...rest } = this.props
-			return (
-				<WrappedComponent
-					{...rest}
-					html={html}
-					handleChange={this._handleChanges}
-					uploadImage={this._uploadImage}
-					id={id}
-					file={file}
-					videoUrl={videoUrl}
-					handleEmbed={this._handleEmbed}
-				/>
-			)
-		}
-	}
-	return withComponent
+			
+		render () {
+				const { html, file, videoUrl } = this.state
+				const { id, ...rest } = this.props
+				return (
+					<WrappedComponent
+						{ ...rest }
+						html={html}
+						handleChange={this._handleChanges}
+						uploadImage={this._uploadImage}
+						id={id}
+						file={file}
+						videoUrl={videoUrl}
+						handleEmbed={this._handleEmbed}
+					/>
+				)
+			}
+    }
+    return withComponent
 }
 
 export default withComponent

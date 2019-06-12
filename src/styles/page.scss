@@ -41,4 +41,23 @@
             }
         }
     }
+
+    .component-section {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100%;
+        .component-dragger {
+          position: absolute;
+          left: -30px;
+          font-size: $t4-text;
+          color: $primary-color;
+          opacity: .4;
+        }
+    }
+    .bulleted-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
 }
