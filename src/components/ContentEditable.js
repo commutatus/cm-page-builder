@@ -85,6 +85,9 @@ export default class ContentEditable extends React.Component{
           (value) => 
             <div className="component-section">
               {
+                console.log(value)
+              }
+              {
                 className !== 'cm-title' && value.status === 'Edit' &&
                 <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
                   {

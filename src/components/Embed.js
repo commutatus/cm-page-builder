@@ -16,7 +16,7 @@ const WrappedEmbed = (props) => {
           <input 
             placeholder="Paste the URL from Vimeo or YouTube"
             className="embed-input"
-            onBlur={this.handleChange}
+            onBlur={props.handleEmbed}
           />
         </React.Fragment>
       }
