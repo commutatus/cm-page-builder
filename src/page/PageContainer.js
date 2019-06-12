@@ -14,6 +14,7 @@ class PageContainer extends React.Component {
 			meta: props.meta,
 			actionDomRect: null
 		}
+		this.newOrder = 0
 	}
 
 	checkPageHeight() {
@@ -45,7 +46,6 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log('newState', this.state.pageComponents, 'newProps', nextProps.pageComponents)
 		let pageComponents = compareAndDiff(this.state.pageComponents, sortDataOnPos(nextProps.pageComponents))
 		this.setState({ pageComponents, meta: nextProps.meta })
 	}
@@ -63,25 +63,28 @@ class PageContainer extends React.Component {
 		let {handleUpdate} = this.props
 		if(handleUpdate)
 			handleUpdate(...args)
+		this.newOrder = 1
 	}
 
 	_getCurrentOrder = (currentIndex) => {
 		if (typeof this._getCurrentOrder.counter == 'undefined')
 			this._getCurrentOrder.counter = 1
-		if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`)
-			this._getCurrentOrder.counter++
+		if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
+			this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
+			this.newOrder = 0
+		}
 		else 
 			this._getCurrentOrder.counter = 1
-		return this._getCurrentOrder.counter
+		return this._getCurrentOrder.counter 
 	}
 
 	getPageComponent = (data, index) => {
-		console.log('type', data.component_type)
 		let order = 1
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		if (data.currentType === 'Olist') 
+		if (data.currentType === 'Olist' || data.component_type === `Olist`) {
 			order = this._getCurrentOrder(index)
+		}
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
@@ -104,6 +107,7 @@ class PageContainer extends React.Component {
 		if(id && id.includes('AddComponent')){
 			id = +(id.split('-')[1])
 		}
+		console.log('Received type', type)
 		switch(type){
 			case 'add-component':
 				for(let i in pageComponents){
@@ -225,11 +229,11 @@ class PageContainer extends React.Component {
 		document.execCommand(action)
 	}
 
-	editComponent = (e) => {
+	editComponent = (e, newType) => {
 		e.preventDefault()
 		let {pageComponents} = this.state
-		let type = e.currentTarget.dataset.type
-		let componentId = this.currentElemSelection.elemId
+		let type = newType ? newType : e.currentTarget.dataset.type
+		let componentId = this.currentElemSelection ? this.currentElemSelection.elemId : null
 		if(componentId){
 			let isNewComponent = false
 			if(componentId.includes('AddComponent')){
@@ -254,7 +258,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: `Edit`||this.props.status , handleAction: this.handleAction, editComponent: this.editComponent}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}

@@ -17,14 +17,16 @@ export default class ContentEditable extends React.Component{
     return (nextProps.html !== (this.elem && this.elem.innerHTML) )|| nextState.showMoreOptions !== this.state.showMoreOptions
   }
 
-  handleKeyPress = (e, handleAction) => {
+  handleKeyPress = (e, handleAction, changeComponent) => {
     switch(e.key){
       case 'Enter':
         e.preventDefault()
-        if (this.props.orderedList)
-          handleAction('olist', this.props.id, this.elem)
-        else if (this.props.unorderedList)
-          handleAction('ulist', this.props.id, this.elem)
+        if (this.props.orderedList || this.props.unorderedList) {
+          if (!this.props.html)
+            changeComponent(e, 'Text')
+          else
+          handleAction(this.props.orderedList ? 'olist' : 'ulist', this.props.id, this.elem)
+        }
         else
           handleAction('add-component', this.props.id, this.elem)
         break
@@ -108,7 +110,7 @@ export default class ContentEditable extends React.Component{
                 placeholder={placeholder}
                 dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.html || '')}}
                 styles={styles}
-                onKeyPress={(e) => this.handleKeyPress(e, value.handleAction)}
+                onKeyPress={(e) => this.handleKeyPress(e, value.handleAction, value.editComponent)}
                 onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}
                 onMouseUp={handleMouseUp}
               />
