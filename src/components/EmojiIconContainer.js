@@ -18,12 +18,13 @@ export class EmojiIconContainer extends React.Component{
   }
 
   componentDidMount(){
-    this.elem.innerHTML = this.jsemoji.replace_colons(`:smile:`)
+    this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji.colons || ':smile:')
   }
 
   onEmojiClick = (data, e) => {
     e.preventDefault()
     this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
+    this.props.handleUpdate({...data}, null, 'emoji')
   }
   
   openEmojiPopup = (e) => {
@@ -34,7 +35,7 @@ export class EmojiIconContainer extends React.Component{
   }
 
   closeEmojiPopup = (e) => {
-    if(!this.rootNode.contains(e.target)){
+    if(this.rootNode && !this.rootNode.contains(e.target)){
       this.setState({showPopup: false})
       document.removeEventListener('click', this.closeEmojiPopup)
     }

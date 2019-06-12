@@ -10,7 +10,7 @@ export class Dropdown extends React.Component{
     super(props)
     this.state = {
       options: props.options,
-      selectedOption: props.value,
+      selectedOption: props.selectedOption,
       isDropdownOpen: false,
       cmSearchInput: props.value || ''
     }
@@ -43,6 +43,7 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
+    console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
@@ -69,7 +70,7 @@ export class Dropdown extends React.Component{
                           autoFocus
                         />
                         :
-                        (selectedOption && selectedOption.name) || (options && options[0].name)
+                        (selectedOption && selectedOption.name) || ''
                       }
                     </div>  
                     {
