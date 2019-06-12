@@ -27,14 +27,21 @@ export class AddComponent extends React.Component{
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
     return(
-      <Component 
-        key={`${type}-${this.props.id}`} 
-        id={this.props.id} 
-        handleUpdate={this.props.handleUpdate}
-        onInputChange={this.handleInput}
-        currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
-        newComponent
-      />
+      <React.Fragment>
+        {
+          (this.props.currentType === `Olist`)
+          &&
+          <span>{this.props.order}</span>
+        }
+        <Component 
+          key={`${type}-${this.props.id}`} 
+          id={this.props.id} 
+          handleUpdate={this.props.handleUpdate}
+          onInputChange={this.handleInput}
+          currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
+          newComponent
+        />
+      </React.Fragment>
     )
   }
   
@@ -43,9 +50,7 @@ export class AddComponent extends React.Component{
   }
 
   render(){
-    let { showActionBtn } = this.state
-    console.log(this.state);
-    
+    let { showActionBtn } = this.state    
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}
@@ -64,10 +69,10 @@ export class AddComponent extends React.Component{
                 <div data-type="Header2" onClick={this.handleTypeSelect}>
                   <i className="cm-h2" />
                 </div>
-                <div>
+                <div data-type="Olist" onClick={this.handleTypeSelect}>
                   <i className="cm-numbers" />
                 </div>
-                <div>
+                <div data-type="Ulist" onClick={this.handleTypeSelect}>
                   <i className="cm-bullets" />
                 </div>
                 <div>

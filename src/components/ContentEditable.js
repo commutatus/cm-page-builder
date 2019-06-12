@@ -28,7 +28,10 @@ export default class ContentEditable extends React.Component{
     switch(e.key){
       case 'Enter':
         e.preventDefault()
-        handleAction('add-component', this.props.id, this.elem)
+        if (this.props.orderedList)
+          handleAction('olist', this.props.id, this.elem)
+        else
+          handleAction('add-component', this.props.id, this.elem)
         break
       default:
     }
@@ -37,7 +40,6 @@ export default class ContentEditable extends React.Component{
   handleKeyDown = (e, handleAction) => {
     if(e.key === 'Backspace'){
       if(!this.elem.innerHTML){
-        console.log(e.target.dataset)
         let prevChild = (this.elem.parentNode.previousSibling && this.elem.parentNode.previousSibling.firstChild) || this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild
         prevChild.focus()
         handleAction('remove-component', this.props.id, this.elem)
