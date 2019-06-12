@@ -46,7 +46,7 @@ class PageContainer extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		let pageComponents = compareAndDiff(this.state.pageComponents, sortDataOnPos(nextProps.pageComponents))
-		console.log(pageComponents)
+		// console.log(pageComponents)
 		this.setState({ pageComponents, meta: nextProps.meta })
 	}
 
@@ -76,7 +76,7 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let order = 0
+		let order = 1
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if (data.currentType === 'Olist') 
@@ -92,6 +92,7 @@ class PageContainer extends React.Component {
 					currentType={data.currentType ? data.currentType : data.component_type}
 					position={data.position}
 					order={order}
+					component_attachment={data.component_attachment}
 				/>
 			)
 		}
@@ -247,6 +248,8 @@ class PageContainer extends React.Component {
 						getPageComponent={this.getPageComponent}
 						requestHandler={this.props.requestHandler}
 						pageCategories={this.props.pageCategories}
+						currentOffices={this.props.currentOffices}
+						isEditMode={this.props.status === 'Edit'}
 					/>
 				</PermissionContext.Provider>
 				{

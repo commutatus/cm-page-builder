@@ -17,7 +17,8 @@ const withComponent = (WrappedComponent) => {
 			file: '',
 			name: '',
 			videoUrl: this.props.content || '',
-			emoji: this.props.emoji
+			emoji: this.props.emoji,
+			image: this.props.component_attachment ? {...this.props.component_attachment} : null
 		}
 
 		_handleChanges = (e) => {
@@ -40,7 +41,7 @@ const withComponent = (WrappedComponent) => {
 				reader.onload = (e) => {
 					picBase64 = e.target.result;
 					this.setState({
-						file: picBase64, name: fileName
+						image: {url: picBase64, name: fileName}
 					}, () => {
 						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType, position: this.props.position }, !this.props.id.includes('AddComponent') ? this.props.id : null)
 					})
@@ -63,7 +64,7 @@ const withComponent = (WrappedComponent) => {
 
 			
 		render () {
-				const { html, file, videoUrl } = this.state
+				const { html, file, videoUrl, image } = this.state
 				const { id, ...rest } = this.props
 				return (
 					<WrappedComponent
@@ -73,6 +74,7 @@ const withComponent = (WrappedComponent) => {
 						uploadImage={this._uploadImage}
 						id={id}
 						file={file}
+						image={image}
 						videoUrl={videoUrl}
 						handleEmbed={this._handleEmbed}
 						emoji={this.state.emoji}

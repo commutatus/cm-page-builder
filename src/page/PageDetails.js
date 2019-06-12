@@ -13,7 +13,9 @@ export const PageDetails = ({
 	onMouseUp, 
 	onKeyDown, 
 	requestHandler,
-	pageCategories
+	pageCategories,
+	currentOffices,
+	isEditMode
 }) => {
 	// console.log(pageComponents)
 	return(
@@ -36,21 +38,33 @@ export const PageDetails = ({
 							handleOptionSelect={emitUpdate}
 							selectedOption={meta && meta.category}
 							options={pageCategories}
+							type="meta"
+							component_type="category_id"
 						/>
 					}
 					<div className="seprator-dot"></div>
-					<AutoCompleteDropdown 
-						handleOptionSelect={data => console.log(data)} 
-						requestHandler={requestHandler}
-						selectedOption={meta && meta.office}
-					/>
-					<div className="seprator-dot"></div>
-					<div className="current-user-detail">
-						<img src={meta ? meta.creator.profile_photo : ''} />
-						<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
-					</div>
-					<div className="seprator-dot"></div>
-					<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
+					{
+						currentOffices &&
+						<Dropdown 
+							handleOptionSelect={emitUpdate}
+							selectedOption={meta && meta.office}
+							options={currentOffices}
+							type="meta"
+							component_type={'office_id'}
+						/>
+					}
+					{
+					 !isEditMode && 
+					 <React.Fragment>
+						<div className="seprator-dot"></div>
+						<div className="current-user-detail">
+							<img src={meta ? meta.creator.profile_photo : ''} />
+							<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
+						</div>
+						<div className="seprator-dot"></div>
+						<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
+					 </React.Fragment>
+					}
 				</div>
 				<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
 				{ 
