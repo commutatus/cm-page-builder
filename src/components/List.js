@@ -1,7 +1,7 @@
 import React from 'react'
 import '../styles/components/List.css'
 
-export class List extends React.Component {
+export default class List extends React.Component {
 
     constructor(props) {
         super(props)

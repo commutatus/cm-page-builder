@@ -2,7 +2,7 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-// import {MoreActions} from '../utils/MoreActions'
+import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
 import '../styles/global.css'
 
 class PageContainer extends React.Component {
@@ -10,7 +10,7 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: props.pageComponents || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
+			pageComponents: sortDataOnPos(props.pageComponents) || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
 			meta: props.meta,
 			actionDomRect: null
 		}
@@ -27,7 +27,9 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({ pageComponents: nextProps.pageComponents, meta: nextProps.meta })
+		let pageComponents = compareAndDiff(this.state.pageComponents, sortDataOnPos(nextProps.pageComponents))
+		console.log(pageComponents)
+		this.setState({ pageComponents, meta: nextProps.meta })
 	}
 
 	handlePageClick = (e) => {
@@ -48,6 +50,7 @@ class PageContainer extends React.Component {
 	getPageComponent = (data, index) => {
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type ?  data.component_type : 'text']
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
+		// console.log(dataId, index)
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
@@ -57,6 +60,7 @@ class PageContainer extends React.Component {
 					handleUpdate={this.emitUpdate}
 					id={dataId}
 					currentType={data.currentType ? data.currentType : data.component_type}
+					position={data.position}
 				/>
 			)
 		}
@@ -231,10 +235,3 @@ class PageContainer extends React.Component {
 }
 
 export default PageContainer
-
-
-
-
-
-
-const dummy = [{ "id": "2670", "name": "Contract signed", "short_name": null, "position": 5, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2666", "name": "First Contact", "short_name": null, "position": 2, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2671", "name": "Follow up", "short_name": null, "position": 6, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2711", "name": "Lead", "short_name": null, "position": 1, "type_id": "employee_follow_up", "type_name": null, "parent_id": null }, { "id": "2668", "name": "Meeting scheduled", "short_name": null, "position": 4, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }, { "id": "2667", "name": "Proposal sent", "short_name": null, "position": 3, "type_id": "employee_follow_up", "type_name": "employee_follow_up", "parent_id": null }]

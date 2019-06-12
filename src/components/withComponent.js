@@ -23,8 +23,11 @@ const withComponent = (WrappedComponent) => {
 			this.setState({
 				html: e.target.value,
 			}, () => {
-				if (e.target.value)
-					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null)
+				if (e.target.value){
+					let {html} = this.state
+					let {currentType, position, id} = this.props
+					this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+				}
 			})
 		}
 
@@ -38,7 +41,7 @@ const withComponent = (WrappedComponent) => {
 					this.setState({
 						file: picBase64, name: fileName
 					}, () => {
-						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null)
+						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType, position: this.props.position }, !this.props.id.includes('AddComponent') ? this.props.id : null)
 					})
 				}
 				reader.readAsDataURL(e.target.files[0]);
@@ -49,8 +52,11 @@ const withComponent = (WrappedComponent) => {
 			this.setState({
 				videoUrl: getVideoUrl(e.target.value),
 			}, () => {
-				if (e.target.value)
-					this.props.handleUpdate({ content: this.state.html, component_type: this.props.currentType }, !this.props.id.includes('AddComponent') ? this.props.id : null)
+				if (e.target.value){
+					let {html} = this.state
+					let {currentType, position, id} = this.props
+					this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+				}
 			})
 		}
 

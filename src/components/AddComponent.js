@@ -34,17 +34,21 @@ export class AddComponent extends React.Component{
         onInputChange={this.handleInput}
         currentType={this.state.pageComponentType}
         newComponent
+        position={this.props.position}
       />
     )
   }
   
   handleTypeSelect = (e) => {
-    this.setState({pageComponentType: e.currentTarget.dataset.type})
+    this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
+      if(this.state.pageComponentType === 'Divider'){
+        this.props.handleUpdate({component_type: 'Divider', position: this.props.position})
+      }
+    })
   }
 
   render(){
     let { showActionBtn } = this.state
-    console.log(this.state);
     
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
@@ -82,7 +86,7 @@ export class AddComponent extends React.Component{
                 <div data-type="Embed" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
                 </div>
-                <div>
+                <div data-type="Divider" onClick={this.handleTypeSelect}>
                   <i className="cm-divider" />  
                 </div>
               </div>

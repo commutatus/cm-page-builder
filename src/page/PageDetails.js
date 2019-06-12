@@ -14,43 +14,48 @@ export const PageDetails = ({
 	onKeyDown, 
 	requestHandler,
 	pageCategories
-}) => 
-	<div className="page-root-container">
-		<div className="page-container">
-			<EmojiIconContainer />
-			<Title 
-				content={meta ? meta.title : ''} 
-				handleUpdate={emitUpdate} 
-				onMouseUp={onMouseUp} 
-				currentType="Title" 
-			/>
-			<div className="page-info">
-				{
-					pageCategories &&
-					<Dropdown 
-						handleOptionSelect={emitUpdate}
-						optionSelected={pageCategories} 
-						options={pageCategories} 
-					/>
-				}
-				<div className="seprator-dot"></div>
-				<AutoCompleteDropdown 
-					handleOptionSelect={data => console.log(data)} 
-					requestHandler={requestHandler}
-					selectedOption={meta && meta.office}
+}) => {
+	// console.log(pageComponents)
+	return(
+		<div className="page-root-container">
+			<div className="page-container">
+				<EmojiIconContainer />
+				<Title 
+					content={meta ? meta.title : ''} 
+					handleUpdate={emitUpdate} 
+					onMouseUp={onMouseUp} 
+					currentType="Title" 
 				/>
-				<div className="seprator-dot"></div>
-				<div className="current-user-detail">
-					<img src={meta ? meta.creator.profile_photo : ''} />
-					<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
+				<div className="page-info">
+					{
+						pageCategories &&
+						<Dropdown 
+							handleOptionSelect={emitUpdate}
+							optionSelected={pageCategories} 
+							options={pageCategories} 
+						/>
+					}
+					<div className="seprator-dot"></div>
+					<AutoCompleteDropdown 
+						handleOptionSelect={data => console.log(data)} 
+						requestHandler={requestHandler}
+						selectedOption={meta && meta.office}
+					/>
+					<div className="seprator-dot"></div>
+					<div className="current-user-detail">
+						<img src={meta ? meta.creator.profile_photo : ''} />
+						<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
+					</div>
+					<div className="seprator-dot"></div>
+					<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
 				</div>
-				<div className="seprator-dot"></div>
-				<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
-			</div>
-			<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
-			{ 
-				pageComponents.map((component, index) => getPageComponent(component, index))
-			}
+				<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
+				{ 
+					pageComponents.map((component, index) => getPageComponent(component, index))
+				}
+				</div>
 			</div>
 		</div>
-	</div>
+	)
+}
+	
