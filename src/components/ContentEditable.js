@@ -77,7 +77,8 @@ export default class ContentEditable extends React.Component{
       <PermissionContext.Consumer>
         {
           (value) => 
-            <div style={{width:'100%'}}>
+            <div className="component-section">
+              <div className="component-dragger"><i className="cm cm-handle" /></div>
               <div
                 data-id={this.props.id}
                 ref={node => this.elem = node}
