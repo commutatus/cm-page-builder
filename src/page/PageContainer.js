@@ -16,7 +16,25 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	checkPageHeight() {
+		let pageElem = document.getElementById('page-builder');
+		if(pageElem) {
+			let commentElem = document.getElementById('page-comment-box');
+			let totalElemHeight = pageElem.offsetHeight + commentElem.offsetHeight;
+			if(totalElemHeight < window.innerHeight) {
+				commentElem.style.bottom = 0;
+			} else {
+				commentElem.style.bottom = 'unset';
+			}
+		}
+	}
+
+	componentDidMount() {
+		this.checkPageHeight();
+	}
+
 	componentDidUpdate(){
+		this.checkPageHeight();
 		if(this.newElemPos){
 			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
 			this.newElemPos = null
@@ -213,6 +231,7 @@ class PageContainer extends React.Component {
 		return (
 			<div
 				className="cm-page-builder"
+				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
