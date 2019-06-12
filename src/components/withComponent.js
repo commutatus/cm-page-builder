@@ -74,7 +74,7 @@ const withComponent = (WrappedComponent) => {
 
 			
 		render () {
-				const { html, file, videoUrl, showMoreOptions } = this.state
+				const { html, file, videoUrl, showMoreOptions, image } = this.state
 				const { id, ...rest } = this.props
 				return (
 					<WrappedComponent
