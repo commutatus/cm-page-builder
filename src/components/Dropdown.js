@@ -16,7 +16,8 @@ export class Dropdown extends React.Component{
     }
   }
 
-  toggleDropdown = () => {
+  toggleDropdown = (e) => {
+    e.stopPropagation()
     this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
       if(this.state.isDropdownOpen)
         window.addEventListener('click', this.handleOutsideClick)
@@ -27,13 +28,13 @@ export class Dropdown extends React.Component{
 
   handleOutsideClick = (e) => {
     if(this.elem && !this.elem.contains(e.target)){
-      this.toggleDropdown()
+      this.toggleDropdown(e)
     }
   }
 
-  handleClick = (selectedOption) => {
+  handleClick = (e, selectedOption) => {
     this.setState({selectedOption})
-    this.toggleDropdown()
+    this.toggleDropdown(e)
     this.props.handleOptionSelect(selectedOption, null, this.props.type, this.props.component_type)
   }
 
@@ -43,7 +44,7 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
-    // console.log(this.state)
+    console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
@@ -83,7 +84,7 @@ export class Dropdown extends React.Component{
                           options
                             .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
                             .map((option, i) => 
-                              <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
+                              <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={(e) => this.handleClick(e,option)}>{option.name}</div>
                             )
                         }
                       </div>

@@ -6,7 +6,6 @@ import '../styles/components/List.css'
 const WrappedOlist = (props) =>  {
   return(
     <div style={{display: 'flex'}}>
-        <span>{props.order ? props.order : 1}.</span>
         <ContentEditable 
             html={props.html} 
             onChange={props.handleChange}
@@ -14,6 +13,7 @@ const WrappedOlist = (props) =>  {
             placeholder="Numbered list"
             className="cm-text-block"
             id={props.id}
+            listOrder={<span>{props.order}.</span>}
             orderedList
         />
     </div>

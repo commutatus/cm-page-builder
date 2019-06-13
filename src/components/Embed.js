@@ -9,7 +9,7 @@ const WrappedEmbed = (props) => {
     <PermissionContext.Consumer>
       {
         (value) => (
-          <div className={`cm-embed ${value.status.toLowerCase()}`}>
+          <div className="component-section cm-embed">
             {
               value.status === `Edit`
               &&
@@ -23,7 +23,7 @@ const WrappedEmbed = (props) => {
             {
               (videoUrl) 
               ?
-              <iframe title="video-frame" width="100%" height="320px" src={videoUrl} />
+              <iframe title="video-frame" className={`${value.status.toLowerCase()}`} width="100%" height="320px" src={videoUrl} />
               :
               <React.Fragment>
                 <span className="embed-icon"><i className="cm-video" /></span>
