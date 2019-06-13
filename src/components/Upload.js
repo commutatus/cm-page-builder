@@ -10,7 +10,17 @@ class WrappedUpload extends React.Component{
       <PermissionContext.Consumer>
         {
           value => 
-          <div className={`cm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem.click()}>
+          <div className={`component-sectioncm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem.click()}>
+            {
+              value.status === `Edit`
+              &&
+              <div className="component-dragger" onClick={(e) => props.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
+                {/* {
+                  showMoreOptions &&
+                  <div onMouseUp={(e) => e.stopPropagation()}>test</div>
+                } */}
+              </div>
+            }
             {
               image
               ?

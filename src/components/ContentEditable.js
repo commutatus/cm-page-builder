@@ -89,16 +89,14 @@ export default class ContentEditable extends React.Component{
   }
   
   render() {
-    const { placeholder, className, styles, handleMouseUp } = this.props
+    const { placeholder, className, styles, handleMouseUp, listOrder } = this.props
     const {showMoreOptions} = this.state
     return(
       <PermissionContext.Consumer>
         {
           (value) => 
             <div className="component-section">
-              {
-                console.log(value)
-              }
+              {listOrder}
               {
                 className !== 'cm-title' && value.status === 'Edit' &&
                 <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
