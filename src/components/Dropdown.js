@@ -44,7 +44,7 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
-    console.log(this.state)
+    // console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {

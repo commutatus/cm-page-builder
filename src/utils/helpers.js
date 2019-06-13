@@ -12,6 +12,7 @@ export function sortDataOnPos(data){
 export function compareAndDiff(newState, newData){        
   let data = []
   let i = 0, j = 0
+
   while(i < newState.length){
     if(newData[j]){
       if(newState[i].id === newData[j].id || newState[i].content === newData[j].content){

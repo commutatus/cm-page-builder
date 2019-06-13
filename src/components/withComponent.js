@@ -30,7 +30,11 @@ const withComponent = (WrappedComponent) => {
 				if (e.target.value){
 					let {html} = this.state
 					let {currentType, position, id} = this.props
-					this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+					if(currentType === 'Title'){
+						this.props.handleUpdate(html, null, 'title')
+					}else{
+						this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+					}
 				}
 			})
 		}
@@ -45,8 +49,8 @@ const withComponent = (WrappedComponent) => {
 					this.setState({
 						image: {url: picBase64, name: fileName}
 					}, () => {
-                        if ( picBase64 && fileName )
-						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType, position: this.props.position }, !this.props.id.includes('AddComponent') ? this.props.id : null)
+						if ( picBase64 && fileName )
+							this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType, position: this.props.position }, !this.props.id.includes('AddComponent') ? this.props.id : null)
 					})
 				}
 				reader.readAsDataURL(e.target.files[0]);
@@ -63,44 +67,43 @@ const withComponent = (WrappedComponent) => {
 					this.props.handleUpdate({ content: videoUrl, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
 				}
 			})
-        }
-        
-        optionHandleClick = (e, handleAction) => {
-            e.stopPropagation()
-            e.preventDefault()
-            handleAction('remove-component', this.props.id)
-            this.setState({showMoreOptions: true})
-        }
+		}
+		
+		optionHandleClick = (e, handleAction) => {
+			e.stopPropagation()
+			e.preventDefault()
+			handleAction('remove-component', this.props.id)
+			this.setState({showMoreOptions: true})
+		}
 
-        onInputChange = (html) =>{
-            console.log('html', html)
-            this.setState({ html })
-        } 
+		onInputChange = (html) =>{
+			this.setState({ html })
+		} 
 
 			
 		render () {
-				const { html, file, videoUrl, showMoreOptions, image } = this.state
-				const { id, ...rest } = this.props
-				return (
-					<WrappedComponent
-						{ ...rest }
-						html={html}
-						handleChange={this._handleChanges}
-						uploadImage={this._uploadImage}
-						id={id}
-						file={file}
-						image={image}
-						videoUrl={videoUrl}
-						handleEmbed={this._handleEmbed}
-						emoji={this.state.emoji}
-                        showMoreOptions={showMoreOptions}
-                        optionHandleClick={this.optionHandleClick}
-                        onInputChange={this.onInputChange}
-					/>
-				)
-			}
-    }
-    return withComponent
+			const { html, file, videoUrl, showMoreOptions, image } = this.state
+			const { id, ...rest } = this.props
+			return (
+				<WrappedComponent
+					{ ...rest }
+					html={html}
+					handleChange={this._handleChanges}
+					uploadImage={this._uploadImage}
+					id={id}
+					file={file}
+					image={image}
+					videoUrl={videoUrl}
+					handleEmbed={this._handleEmbed}
+					emoji={this.state.emoji}
+					showMoreOptions={showMoreOptions}
+					optionHandleClick={this.optionHandleClick}
+					onInputChange={this.onInputChange}
+				/>
+			)
+		}
+	}
+	return withComponent
 }
 
 export default withComponent

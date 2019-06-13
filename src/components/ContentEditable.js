@@ -21,15 +21,17 @@ export default class ContentEditable extends React.Component{
     switch(e.key){
       case 'Enter':
         e.preventDefault()
-        if (this.props.orderedList || this.props.unorderedList) {
-          console.log('inner', this.elem.innerHTML)
-          if (!this.elem.innerHTML)
-            changeComponent(e, 'Text', this.props.id)
+        e.target.blur()
+        setTimeout(() => {
+          if (this.props.orderedList || this.props.unorderedList) {
+            if (!this.elem && !this.elem.innerHTML)
+              changeComponent(e, 'Text', this.props.id)
+            else
+              handleAction(this.props.orderedList ? 'olist' : 'ulist', this.props.id, this.elem)
+          }
           else
-            handleAction(this.props.orderedList ? 'olist' : 'ulist', this.props.id, this.elem)
-        }
-        else
-          handleAction('add-component', this.props.id, this.elem)
+            handleAction('add-component', this.props.id, this.elem)
+        })
         break
       default:
     }
@@ -55,9 +57,8 @@ export default class ContentEditable extends React.Component{
   }
 
   emitChange = (e) => {
-    console.log('Emit man')
     if(this.props.orderedList){
-      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+      e.target.parentElement.parentElement.firstElementChild.classList.remove("list-span-focus")
     }
     var html = this.elem.innerHTML
     if (this.props.onChange && html !== this.lastHtml) {
@@ -70,10 +71,11 @@ export default class ContentEditable extends React.Component{
     this.lastHtml = html;
   }
 
-  onInputChange = () => {
+  onInputChange = (e) => {
     var html = this.elem.innerHTML
     if (this.props.onInputChange) {
       this.props.onInputChange(html);
+      // this.emitChange(e)
     }
   }
 
@@ -81,7 +83,7 @@ export default class ContentEditable extends React.Component{
     e.stopPropagation()
     e.preventDefault()
     handleAction('remove-component', this.props.id)
-    this.setState({showMoreOptions: true})
+    // this.setState({showMoreOptions: true})
   }
 
   handleFocus = (e) => {
@@ -91,9 +93,8 @@ export default class ContentEditable extends React.Component{
   }
   
   render() {
-    const { placeholder, className, styles, handleMouseUp, listOrder } = this.props
+    const { placeholder, className, styles, handleMouseUp, listOrder, html } = this.props
     const {showMoreOptions} = this.state
-    console.log('this.props', this.props.html)
     return(
       <PermissionContext.Consumer>
         {
@@ -117,8 +118,8 @@ export default class ContentEditable extends React.Component{
                 onBlur={this.emitChange}
                 onFocus={this.handleFocus}
                 contentEditable={value.status === 'Edit'}
-                placeholder={placeholder}
-                dangerouslySetInnerHTML={{__html: sanitizeHtml(this.props.html || '')}}
+                placeholder={html || value.status === 'Edit' ? placeholder : ''}
+                dangerouslySetInnerHTML={{__html: sanitizeHtml(html || '')}}
                 styles={styles}
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction, value.editComponent)}
                 onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}

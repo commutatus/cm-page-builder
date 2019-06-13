@@ -12,9 +12,9 @@ export class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-      this.setState({
-        pageComponentType: nextProps.currentType, 
-      })
+    this.setState({
+      pageComponentType: nextProps.currentType, 
+    })
   }
 
   handleInput = (data) => {
@@ -47,7 +47,7 @@ export class AddComponent extends React.Component{
   }
 
   render(){
-    let { showActionBtn } = this.state    
+    let { showActionBtn } = this.state  
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}
@@ -80,10 +80,10 @@ export class AddComponent extends React.Component{
                 </div>
                 <div data-type="Embed" onClick={this.handleTypeSelect}>
                   <i className="cm-video" /> 
-                </div>
+                {/* </div>
                 <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
-                </div>
+                </div> */}
                 <div data-type="Divider" onClick={this.handleTypeSelect}>
                   <i className="cm-divider" />  
                 </div>
