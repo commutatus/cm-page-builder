@@ -6,7 +6,7 @@ import '../styles/components/List.css'
 const WrappedOlist = (props) =>  {
   return(
     <div style={{display: 'flex'}}>
-        <span>{props.order}.</span>
+        <span>{props.order ? props.order : 1}.</span>
         <ContentEditable 
             html={props.html} 
             onChange={props.handleChange}

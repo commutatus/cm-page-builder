@@ -72,6 +72,11 @@ const withComponent = (WrappedComponent) => {
             this.setState({showMoreOptions: true})
         }
 
+        onInputChange = (html) =>{
+            console.log('html', html)
+            this.setState({ html })
+        } 
+
 			
 		render () {
 				const { html, file, videoUrl, showMoreOptions, image } = this.state
@@ -90,6 +95,7 @@ const withComponent = (WrappedComponent) => {
 						emoji={this.state.emoji}
                         showMoreOptions={showMoreOptions}
                         optionHandleClick={this.optionHandleClick}
+                        onInputChange={this.onInputChange}
 					/>
 				)
 			}

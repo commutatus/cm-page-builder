@@ -69,9 +69,8 @@ class PageContainer extends React.Component {
 	_getCurrentOrder = (currentIndex) => {
 		if (typeof this._getCurrentOrder.counter == 'undefined')
 			this._getCurrentOrder.counter = 1
-		if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
-			this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
-			this.newOrder = 0
+		if (currentIndex > 0 && this.state.pageComponents[currentIndex-1] && (this.state.pageComponents[currentIndex-1].component_type === `ordered_list` || this.state.pageComponents[currentIndex-1].currentType === `Olist`)) {
+			this._getCurrentOrder.counter = this._getCurrentOrder.counter+1
 		}
 		else 
 			this._getCurrentOrder.counter = 1
@@ -79,10 +78,12 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
+		console.log('data', data)
 		let order = 1
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		if (data.currentType === 'Olist' || data.component_type === `Olist`) {
+		if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
+			console.log(data, 'order')
 			order = this._getCurrentOrder(index)
 		}
 		if(typeName){
@@ -230,11 +231,11 @@ class PageContainer extends React.Component {
 		document.execCommand(action)
 	}
 
-	editComponent = (e, newType) => {
+	editComponent = (e, newType, id) => {
 		e.preventDefault()
 		let {pageComponents} = this.state
 		let type = newType ? newType : e.currentTarget.dataset.type
-		let componentId = this.currentElemSelection ? this.currentElemSelection.elemId : null
+		let componentId = id ? id : this.currentElemSelection.elemId
 		if(componentId){
 			let isNewComponent = false
 			if(componentId.includes('AddComponent')){
@@ -243,9 +244,11 @@ class PageContainer extends React.Component {
 			}
 			pageComponents = pageComponents.map((component, index) => {
 				if(isNewComponent && componentId == index){
-					return({...component, currentType: type})
+					return({...component, currentType: this.props.typeMapping[type], component_type: type })
 				}
-				return({...component, component_type: type}) 
+				else if (componentId === component.id)
+					return({...component, component_type: type }) 
+				return({...component }) 
 			})	
 		}
 		this.setState({pageComponents, actionDomRect: null})
@@ -259,7 +262,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction, editComponent: this.editComponent}}> 
+				<PermissionContext.Provider value={{status: `Edit` , handleAction: this.handleAction, editComponent: this.editComponent}}> 
 					<PageDetails 
 						pageComponents={pageComponents}
 						emitUpdate={this.emitUpdate}
@@ -287,10 +290,10 @@ class PageContainer extends React.Component {
 							<i className="cm-link" />
 						</div>
 						<div className="divider"></div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="header">
 							<i className="cm-h1" />
 						</div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="sub_header">
 						<i className="cm-h2" />
 						</div>
 						<div className="tool-btn">
