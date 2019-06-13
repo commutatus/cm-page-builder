@@ -6,11 +6,10 @@ import { PermissionContext } from '../contexts/permission-context';
 const WrappedEmbed = (props) => {
   let {videoUrl, showMoreOptions} = props
   return(
-    <div className="cm-embed">
-      <PermissionContext.Consumer>
+    <PermissionContext.Consumer>
       {
         (value) => (
-          <React.Fragment>
+          <div className={`cm-embed ${value.status.toLowerCase()}`}>
             {
               value.status === `Edit`
               &&
@@ -35,12 +34,10 @@ const WrappedEmbed = (props) => {
                 />
               </React.Fragment>
             }
-          </React.Fragment>
-         
+          </div>
         )
       }
       </PermissionContext.Consumer>
-    </div>
   )
 }
 

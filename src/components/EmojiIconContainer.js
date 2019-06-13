@@ -49,7 +49,7 @@ export class EmojiIconContainer extends React.Component{
           value =>{
             return(
               <div 
-                className="cm-emoji-container" 
+                className={`cm-emoji-container ${value.status.toLowerCase()}`} 
                 onClick={value.status === 'Edit' ? this.openEmojiPopup : undefined} 
                 ref={node => this.rootNode = node}
               >

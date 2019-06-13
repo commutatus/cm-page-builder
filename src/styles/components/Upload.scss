@@ -6,13 +6,22 @@
   color: $light-text;
   font-size: $t6-text;
   font-family: 'Open Sans', sans-serif !important;
-  background-color: $gray-bg;
-  transition: background-color .3s linear;
-  cursor: pointer;
-  &:hover {
-    background-color: transparent;
-  }
   span {
     margin-right: 7px;
+  }
+  
+}
+
+.cm-uploader.read {
+  width: 100%;
+  margin: 8px 0px;
+}
+
+.cm-uploader.edit{
+  cursor: pointer;
+  transition: background-color .3s linear;
+  background-color: $gray-bg;
+  &:hover {
+    background-color: transparent;
   }
 }
