@@ -6,7 +6,6 @@ import '../styles/components/List.css'
 const WrappedUlist = (props) =>  {
   return(
     <div style={{display: 'flex'}}>
-        <span className="bulleted-dot"></span>
         <ContentEditable 
           html={props.html} 
           onChange={props.handleChange}
@@ -14,6 +13,7 @@ const WrappedUlist = (props) =>  {
           placeholder="Bulleted list"
           className="cm-text-block"
           id={props.id}
+          listOrder={<span className="bulleted-dot"></span>}
           unorderedList
         />
     </div>

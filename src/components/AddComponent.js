@@ -12,11 +12,9 @@ export class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.currentType !== nextProps.currentType){
       this.setState({
         pageComponentType: nextProps.currentType, 
       })
-    }
   }
 
   handleInput = (data) => {
@@ -27,20 +25,21 @@ export class AddComponent extends React.Component{
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
     return(
-      <Component 
-        key={`${type}-${this.props.id}`} 
-        id={this.props.id} 
-        handleUpdate={this.props.handleUpdate}
-        onInputChange={this.handleInput}
-        currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
-        newComponent
-        position={this.props.position}
-      />
+        <Component 
+          key={`${type}-${this.props.id}`} 
+          id={this.props.id} 
+          handleUpdate={this.props.handleUpdate}
+          onInputChange={this.handleInput}
+          currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
+          newComponent
+          order={this.props.order}
+          position={this.props.position}
+        />
     )
   }
   
-  handleTypeSelect = (e, type) => {
-    this.setState({pageComponentType: type ? type : e.currentTarget.dataset.type}, () => {
+  handleTypeSelect = (e) => {
+    this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
       if(this.state.pageComponentType === 'Divider'){
         this.props.handleUpdate({component_type: 'Divider', position: this.props.position})
       }

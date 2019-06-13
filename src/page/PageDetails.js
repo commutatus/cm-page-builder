@@ -23,7 +23,7 @@ export const PageDetails = ({
 			<div className="page-container">
 				<EmojiIconContainer 
 					handleUpdate={emitUpdate}
-					emoji={meta.emoji}
+					emoji={meta && meta.emoji}
 				/>
 				<Title 
 					content={meta ? meta.title : ''} 

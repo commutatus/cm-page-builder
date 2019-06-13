@@ -19,9 +19,9 @@ export function compareAndDiff(newState, newData){
         i++
         j++
       }
-      else if (!newData[j].content) {            
-        data.push({...newData[j], position: data.length})
-        j++
+      else if (!newState[i].content) {            
+        data.push({...newState[i], position: data.length})
+        i++
       }
       else{
         data.push({...newState[i], position: i+1})

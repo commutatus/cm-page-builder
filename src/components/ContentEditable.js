@@ -14,7 +14,7 @@ export default class ContentEditable extends React.Component{
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    return (nextProps.html !== (this.elem && this.elem.innerHTML) )|| nextState.showMoreOptions !== this.state.showMoreOptions
+    return (nextProps.html !== (this.elem && this.elem.innerHTML) )
   }
 
   handleKeyPress = (e, handleAction, changeComponent) => {
@@ -22,10 +22,11 @@ export default class ContentEditable extends React.Component{
       case 'Enter':
         e.preventDefault()
         if (this.props.orderedList || this.props.unorderedList) {
-          if (!this.props.html)
-            changeComponent(e, 'Text')
+          console.log('inner', this.elem.innerHTML)
+          if (!this.elem.innerHTML)
+            changeComponent(e, 'Text', this.props.id)
           else
-          handleAction(this.props.orderedList ? 'olist' : 'ulist', this.props.id, this.elem)
+            handleAction(this.props.orderedList ? 'olist' : 'ulist', this.props.id, this.elem)
         }
         else
           handleAction('add-component', this.props.id, this.elem)
@@ -54,6 +55,7 @@ export default class ContentEditable extends React.Component{
   }
 
   emitChange = (e) => {
+    console.log('Emit man')
     if(this.props.orderedList){
       e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
     }
@@ -89,16 +91,15 @@ export default class ContentEditable extends React.Component{
   }
   
   render() {
-    const { placeholder, className, styles, handleMouseUp } = this.props
+    const { placeholder, className, styles, handleMouseUp, listOrder } = this.props
     const {showMoreOptions} = this.state
+    console.log('this.props', this.props.html)
     return(
       <PermissionContext.Consumer>
         {
           (value) => 
             <div className="component-section">
-              {
-                console.log(value)
-              }
+              {listOrder}
               {
                 className !== 'cm-title' && value.status === 'Edit' &&
                 <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
