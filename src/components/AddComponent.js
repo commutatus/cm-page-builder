@@ -27,22 +27,15 @@ export class AddComponent extends React.Component{
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
     return(
-      <React.Fragment>
-        {
-          (this.props.currentType === `Olist` || this.state.pageComponentType === `Olist`)
-          &&
-          <span>{this.props.order}</span>
-        }
-        <Component 
-          key={`${type}-${this.props.id}`} 
-          id={this.props.id} 
-          handleUpdate={this.props.handleUpdate}
-          onInputChange={this.handleInput}
-          currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
-          newComponent
-          position={this.props.position}
-        />
-      </React.Fragment>
+      <Component 
+        key={`${type}-${this.props.id}`} 
+        id={this.props.id} 
+        handleUpdate={this.props.handleUpdate}
+        onInputChange={this.handleInput}
+        currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
+        newComponent
+        position={this.props.position}
+      />
     )
   }
   
