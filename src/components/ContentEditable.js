@@ -57,7 +57,7 @@ export default class ContentEditable extends React.Component{
   emitChange = (e) => {
     console.log('Emit man')
     if(this.props.orderedList){
-      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+      e.target.parentElement.parentElement.className = "list-span-focus"
     }
     var html = this.elem.innerHTML
     if (this.props.onChange && html !== this.lastHtml) {
@@ -80,13 +80,13 @@ export default class ContentEditable extends React.Component{
   optionHandleClick = (e, handleAction) => {
     e.stopPropagation()
     e.preventDefault()
-    handleAction('remove-component', this.props.id)
+    // handleAction('remove-component', this.props.id)
     this.setState({showMoreOptions: true})
   }
 
   handleFocus = (e) => {
     if(this.props.orderedList){
-      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+      e.target.parentElement.parentElement.className = "list-span-focus"
     }
   }
   
@@ -123,6 +123,7 @@ export default class ContentEditable extends React.Component{
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction, value.editComponent)}
                 onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}
                 onMouseUp={handleMouseUp}
+                data-gramm_editor="false"
               />
           </div>
         }

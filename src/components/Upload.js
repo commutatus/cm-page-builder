@@ -10,7 +10,7 @@ class WrappedUpload extends React.Component{
       <PermissionContext.Consumer>
         {
           value => 
-          <div className={`component-sectioncm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem.click()}>
+          <div className={`component-section cm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem.click()}>
             {
               value.status === `Edit`
               &&

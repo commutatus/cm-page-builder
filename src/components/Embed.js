@@ -25,14 +25,14 @@ const WrappedEmbed = (props) => {
               ?
               <iframe title="video-frame" className={`${value.status.toLowerCase()}`} width="100%" height="320px" src={videoUrl} />
               :
-              <React.Fragment>
+              <div className="embed-input-field">
                 <span className="embed-icon"><i className="cm-video" /></span>
                 <input 
                   placeholder="Paste the URL from Vimeo or YouTube"
                   className="embed-input"
                   onBlur={props.handleEmbed}
                 />
-              </React.Fragment>
+              </div>
             }
           </div>
         )
