@@ -1,11 +1,11 @@
 import React from 'react'
 import ContentEditable from './ContentEditable'
 import withComponent from './withComponent'
+import '../styles/components/List.css'
 
 const WrappedOlist = (props) =>  {
   return(
-    <React.Fragment>
-        <span>{props.order}.</span>
+    <div style={{display: 'flex'}}>
         <ContentEditable 
             html={props.html} 
             onChange={props.handleChange}
@@ -13,10 +13,11 @@ const WrappedOlist = (props) =>  {
             placeholder="Numbered list"
             className="cm-text-block"
             id={props.id}
+            listOrder={<span>{props.order}.</span>}
             orderedList
         />
-    </React.Fragment>
+    </div>
   )
 }
 
-export const Olist = withComponent(WrappedOlist)
+export const Olist = withComponent(WrappedOlist) 

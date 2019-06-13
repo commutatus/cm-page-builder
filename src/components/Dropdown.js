@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/components/Dropdown.css';
+import { PermissionContext } from '../contexts/permission-context';
 
 export class Dropdown extends React.Component{
 
@@ -9,13 +10,14 @@ export class Dropdown extends React.Component{
     super(props)
     this.state = {
       options: props.options,
-      selectedOption: props.value,
+      selectedOption: props.selectedOption,
       isDropdownOpen: false,
       cmSearchInput: props.value || ''
     }
   }
 
-  toggleDropdown = () => {
+  toggleDropdown = (e) => {
+    e.stopPropagation()
     this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
       if(this.state.isDropdownOpen)
         window.addEventListener('click', this.handleOutsideClick)
@@ -26,14 +28,14 @@ export class Dropdown extends React.Component{
 
   handleOutsideClick = (e) => {
     if(this.elem && !this.elem.contains(e.target)){
-      this.toggleDropdown()
+      this.toggleDropdown(e)
     }
   }
 
-  handleClick = (selectedOption) => {
+  handleClick = (e, selectedOption) => {
     this.setState({selectedOption})
-    this.toggleDropdown()
-    this.props.handleOptionSelect(selectedOption, null, 'categories')
+    this.toggleDropdown(e)
+    this.props.handleOptionSelect(selectedOption, null, this.props.type, this.props.component_type)
   }
 
   handleChange = (e) => {
@@ -42,43 +44,58 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
+    console.log(this.state)
     return(
-      <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
-        <CSSTransition
-          in={isDropdownOpen}
-          timeout={300}
-          classNames="dropdown-fade"
-        >
-          <div>
-            <div className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  onClick={this.toggleDropdown}>
-              {
-                isDropdownOpen ?
-                <input 
-                  onChange={this.handleChange} 
-                  onClick={(e) => e.stopPropagation()} 
-                  data-id="cmSearchInput" 
-                  value={cmSearchInput}
-                  autoFocus
-                />
-                :
-                (selectedOption && selectedOption.name) || (options && options[0].name)
-              }
-            </div>  
-            {
-              isDropdownOpen && 
-              <div className="dropdown-list-body">
-                {
-                  options
-                    .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
-                    .map((option, i) => 
-                      <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={() => this.handleClick(option)}>{option.name}</div>
-                    )
-                }
+      <PermissionContext.Consumer>
+        {
+          value => {
+            return(
+              <div className="dropdown-wrapper" ref={(node) => this.elem = node}>
+                <CSSTransition
+                  in={isDropdownOpen}
+                  timeout={300}
+                  classNames="dropdown-fade"
+                >
+                  <div>
+                    <div 
+                      className={isDropdownOpen ? 'dropdown-input' : 'dropdown-value' }  
+                      onClick={value.status === 'Edit' ? this.toggleDropdown : undefined}
+                    > 
+                      {
+                        isDropdownOpen ?
+                        <input 
+                          onChange={this.handleChange} 
+                          onClick={(e) => e.stopPropagation()} 
+                          data-id="cmSearchInput" 
+                          value={cmSearchInput}
+                          autoFocus
+                        />
+                        :
+                        <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
+                          <span><i className={this.props.component_type === 'category_id' ? 'cm-hashtag' : 'cm-hub'} /></span>
+                          {(selectedOption && selectedOption.name) || ''}
+                        </div>
+                      }
+                    </div>  
+                    {
+                      isDropdownOpen && 
+                      <div className="dropdown-list-body">
+                        {
+                          options
+                            .filter(option => !cmSearchInput || (option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
+                            .map((option, i) => 
+                              <div key={`dropdown-${option.id || i}`} className="dropdown-item" onClick={(e) => this.handleClick(e,option)}>{option.name}</div>
+                            )
+                        }
+                      </div>
+                    }
+                  </div>
+                </CSSTransition>
               </div>
-            }
-          </div>
-        </CSSTransition>
-      </div>
+            )
+          }
+        }
+      </PermissionContext.Consumer>
     )
   }
 }

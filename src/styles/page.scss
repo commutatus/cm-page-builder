@@ -2,18 +2,16 @@
 
 .page-root-container {
     max-width: 710px;
-    // height: 100vh;
-    margin: 30px auto 0; 
+    margin: 10px auto 60px; 
     .page-container {
         width: 100%;
         .page-info {
             display: flex;
             align-items: center;
-            margin: 10px 0 38px;
+            margin: 25px 0 38px;
             .current-user-detail {
                 display: inline-flex;
                 align-items: center;
-                @include chip-style;
                 img {
                     width: 20px;
                     height: 20px;
@@ -27,7 +25,6 @@
                 }
             }
             .date-updated {
-                @include chip-style;
                 color: $primary-color;	
                 font-size: $t4-text;
             }

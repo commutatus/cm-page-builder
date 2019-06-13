@@ -31,8 +31,8 @@
   transform: scale(0.9);
   transition: opacity 300ms, transform 300ms; }
 
-.cm-embed {
-  display: inline-flex;
+.cm-embed.edit {
+  display: flex;
   align-items: center;
   margin: 2px 0;
   padding: 5px;
@@ -41,15 +41,19 @@
   background-color: #F4F5F7;
   transition: background-color .3s linear;
   cursor: pointer; }
-  .cm-embed:hover {
+  .cm-embed.edit:hover {
     background-color: transparent; }
-  .cm-embed .embed-icon {
+  .cm-embed.edit .embed-icon {
     margin-right: 7px; }
-  .cm-embed .embed-input {
+  .cm-embed.edit .embed-input {
     font-size: 16px;
     border: none;
     background-color: transparent; }
-    .cm-embed .embed-input::placeholder {
+    .cm-embed.edit .embed-input::placeholder {
       color: #A8AAAD; }
-    .cm-embed .embed-input:focus {
+    .cm-embed.edit .embed-input:focus {
       outline: none; }
+
+.cm-embed.read {
+  width: 100%;
+  margin: 8px 0; }

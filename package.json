@@ -7,11 +7,12 @@
     "start": "node ./server.js",
     "start-dev-server": "webpack-dev-server --host localhost --mode development --content-base=www --inline --watch --hot --open",
     "dev": "npm-run-all -p watch-css start-dev-server",
-    "local": "npm-run-all -p watch-css watch-babel",
+    "local": "npm-run-all -p build-watch-css watch-babel",
     "build-babel": "babel src --out-dir lib",
     "build": "npm-run-all clean build-css build-babel",
     "clean": "rimraf lib",
     "build-css": "node-sass-chokidar src/styles -o lib/styles",
+    "build-watch-css": "node-sass-chokidar src/styles -o lib/styles --watch --recursive",
     "watch-css": "node-sass-chokidar src/styles -o src/styles --watch --recursive",
     "watch-babel": "babel src --out-dir lib --watch --recursive"
   },

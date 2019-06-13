@@ -1,4 +1,6 @@
 import React from 'react'
+import { PermissionContext } from '../contexts/permission-context';
+
 const getVideoUrl = (url) => {
 	let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
 	if (url.includes('vimeo')) {
@@ -16,62 +18,87 @@ const withComponent = (WrappedComponent) => {
 			html: this.props.content,
 			file: '',
 			name: '',
-			videoUrl: this.props.url || ''
+			videoUrl: this.props.content || '',
+			emoji: this.props.emoji,
+			image: this.props.component_attachment ? {...this.props.component_attachment} : null
 		}
 
-        _resolveId = () => {
-            return this.props.id && !this.props.id.includes('AddComponent') ? this.props.id : null
-        }
+		_handleChanges = (e) => {
+			this.setState({
+				html: e.target.value,
+			}, () => {
+				if (e.target.value){
+					let {html} = this.state
+					let {currentType, position, id} = this.props
+					this.props.handleUpdate({ content: html, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+				}
+			})
+		}
 
-        _handleChanges = (e) => {
-            this.setState({
-                html: e.target.value, 
-            }, () => {
-                if (e.target.value)
-                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType}, this._resolveId() )
-            })
-        }
+		_uploadImage = (e) => {
+			var picBase64 = ''
+			if (e.target.files && e.target.files[0]) {
+				let fileName = e.target.files[0].name;
+				let reader = new FileReader();
+				reader.onload = (e) => {
+					picBase64 = e.target.result;
+					this.setState({
+						image: {url: picBase64, name: fileName}
+					}, () => {
+                        if ( picBase64 && fileName )
+						this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.currentType, position: this.props.position }, !this.props.id.includes('AddComponent') ? this.props.id : null)
+					})
+				}
+				reader.readAsDataURL(e.target.files[0]);
+			}
+		}
 
-        _uploadImage = (e) => {
-            var picBase64 = ''
-            if(e.target.files && e.target.files[0]){
-              let fileName = e.target.files[0].name;
-              let reader = new FileReader();
-              reader.onload = (e) => {
-                picBase64 = e.target.result;
-                this.setState({
-                    file: picBase64, name: fileName
-                }, () => {
-                    this.props.handleUpdate({ component_attachment: { filename: fileName, content: picBase64 }, component_type: this.props.type }, this._resolveId())
-                })
-              }
-              reader.readAsDataURL(e.target.files[0]);
-            }
-        }
-
-        _handleEmbed = () => {
-            this.setState({
-                videoUrl: getVideoUrl(e.target.value), 
-            }, () => {
-                if (e.target.value)
-                    this.props.handleUpdate({content: this.state.html, component_type: this.props.currentType }, this._resolveId() )
-            })
+		_handleEmbed = (e) => {
+			this.setState({
+				videoUrl: getVideoUrl(e.target.value),
+			}, () => {
+				let {videoUrl} = this.state
+				let {currentType, position, id} = this.props
+				if(videoUrl){
+					this.props.handleUpdate({ content: videoUrl, component_type: currentType, position }, id && !id.includes('AddComponent') ? id : null)
+				}
+			})
         }
         
-        render () {
-            const { html, file, videoUrl } = this.state
-            const { id, ...rest } = this.props
-            return  <WrappedComponent
-                        { ...rest }
-                        html={html}
-                        handleChange={this._handleChanges}
-                        uploadImage={this._uploadImage}
-                        id={id}
-                        file={file}
-                        videoUrl={videoUrl}
-                        handleEmbed={this._handleEmbed}
-                    />
+        optionHandleClick = (e, handleAction) => {
+            e.stopPropagation()
+            e.preventDefault()
+            handleAction('remove-component', this.props.id)
+            this.setState({showMoreOptions: true})
         }
+
+        onInputChange = (html) =>{
+            console.log('html', html)
+            this.setState({ html })
+        } 
+
+			
+		render () {
+				const { html, file, videoUrl, showMoreOptions, image } = this.state
+				const { id, ...rest } = this.props
+				return (
+					<WrappedComponent
+						{ ...rest }
+						html={html}
+						handleChange={this._handleChanges}
+						uploadImage={this._uploadImage}
+						id={id}
+						file={file}
+						image={image}
+						videoUrl={videoUrl}
+						handleEmbed={this._handleEmbed}
+						emoji={this.state.emoji}
+                        showMoreOptions={showMoreOptions}
+                        optionHandleClick={this.optionHandleClick}
+                        onInputChange={this.onInputChange}
+					/>
+				)
+			}
     }
     return withComponent
 }

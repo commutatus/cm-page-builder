@@ -1,5 +1,5 @@
 @import '../imports';
-.cm-emoji-container {
+.cm-emoji-container.edit {
   position: relative;
   width: 85px;
   height: 85px;	
@@ -21,4 +21,11 @@
   .emoji-picker {
     z-index: 99;
   }
+}
+
+.cm-emoji-container.read{
+  width: 85px;
+  height: 85px;	
+  margin-bottom: 30px;
+  padding: 5px;	
 }

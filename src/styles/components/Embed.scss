@@ -1,7 +1,7 @@
 @import '../imports';
 
-.cm-embed {
-  display: inline-flex;
+.cm-embed.edit {
+  display: flex;
   align-items: center;
   margin: 2px 0;
   padding: 5px;
@@ -29,4 +29,16 @@
       outline: none;
     }
   }
+}
+
+
+.cm-embed{
+  iframe{
+    border: none;
+  }
+  .read {
+    width: 100%;
+    margin: 8px 0;
+  }
+  
 }

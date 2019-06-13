@@ -12,11 +12,9 @@ export class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.currentType !== nextProps.currentType){
       this.setState({
         pageComponentType: nextProps.currentType, 
       })
-    }
   }
 
   handleInput = (data) => {
@@ -27,12 +25,6 @@ export class AddComponent extends React.Component{
 		let typeName = type.split(' ').join('')
     let Component = require(`./${typeName}`)[typeName]
     return(
-      <React.Fragment>
-        {
-          (this.props.currentType === `Olist`)
-          &&
-          <span>{this.props.order}</span>
-        }
         <Component 
           key={`${type}-${this.props.id}`} 
           id={this.props.id} 
@@ -40,13 +32,18 @@ export class AddComponent extends React.Component{
           onInputChange={this.handleInput}
           currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
           newComponent
+          order={this.props.order}
+          position={this.props.position}
         />
-      </React.Fragment>
     )
   }
   
   handleTypeSelect = (e) => {
-    this.setState({pageComponentType: e.currentTarget.dataset.type})
+    this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
+      if(this.state.pageComponentType === 'Divider'){
+        this.props.handleUpdate({component_type: 'Divider', position: this.props.position})
+      }
+    })
   }
 
   render(){
@@ -75,19 +72,19 @@ export class AddComponent extends React.Component{
                 <div data-type="Ulist" onClick={this.handleTypeSelect}>
                   <i className="cm-bullets" />
                 </div>
-                <div>
+                {/* <div>
                   <i className="cm-page" />
-                </div>
+                </div> */}
                 <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-picture" />
                 </div>
-                <div>
+                <div data-type="Embed" onClick={this.handleTypeSelect}>
                   <i className="cm-video" /> 
                 </div>
-                <div data-type="Embed" onClick={this.handleTypeSelect}>
+                <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
                 </div>
-                <div>
+                <div data-type="Divider" onClick={this.handleTypeSelect}>
                   <i className="cm-divider" />  
                 </div>
               </div>

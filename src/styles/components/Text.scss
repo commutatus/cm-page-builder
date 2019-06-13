@@ -1,8 +1,9 @@
 @import '../imports';
 
-.cm-text-block {
+.cm-text-block.edit  {
   color: $primary-color;
   font-size: $t6-text;
+  line-height: 24px;
   margin: 2px 0;
   padding: 4px 2px;
   @include text-wrapping;
@@ -16,4 +17,13 @@
   &:focus {
     background-color: transparent;
   }
+}
+
+.cm-text-block.read  {
+  color: $primary-color;
+  font-size: $t6-text;
+  margin-bottom: 5px;
+  line-height: 24px;
+  @include text-wrapping;
+  font-family: 'Open Sans', sans-serif !important; 
 }

@@ -1,22 +1,23 @@
 import React from 'react'
 import ContentEditable from './ContentEditable'
 import withComponent from './withComponent'
-import '../styles/components/Text.css';
+import '../styles/components/List.css'
 
 const WrappedUlist = (props) =>  {
   return(
-    <React.Fragment>
-        <span className="bulleted-dot"></span>
+    <div style={{display: 'flex'}}>
         <ContentEditable 
-            html={props.html} 
-            onChange={props.handleChange}
-            onInputChange={props.onInputChange}
-            placeholder="Bulleted list"
-            className="cm-text-block"
-            id={props.id}
+          html={props.html} 
+          onChange={props.handleChange}
+          onInputChange={props.onInputChange}
+          placeholder="Bulleted list"
+          className="cm-text-block"
+          id={props.id}
+          listOrder={<span className="bulleted-dot"></span>}
+          unorderedList
         />
-    </React.Fragment>
+    </div>
   )
 }
 
-export const Ulist = withComponent(WrappedUlist)
+export const Ulist = withComponent(WrappedUlist) 
