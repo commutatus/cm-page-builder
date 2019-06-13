@@ -69,19 +69,17 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (...args) => {
+	emitUpdate = (data, id, type, key) => {
 		let {handleUpdate} = this.props
 		let {pageComponents} = this.state
-		if(args[0])	
-			pageComponents = pageComponents.map(component => +component.position === +args[0].position ? {...component, ...args[0], currentType: args[0].component_type} : component)
-			
-		console.log(pageComponents);
+		if(data && type !== 'meta'){
+			let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
+			pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
+		}
 		
-		this.setState({pageComponents}, () => {
-			if(handleUpdate)
-				handleUpdate(...args)
-		})
-		// this.newOrder = 1
+		this.setState({pageComponents})
+		if(handleUpdate)
+			handleUpdate(data, id, type, key)
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -99,7 +97,8 @@ class PageContainer extends React.Component {
 
 	getPageComponent = (data, index) => {
 		let order = 1
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
 			// order = this._getCurrentOrder(index)
@@ -273,7 +272,7 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(pageComponents)
+		console.log(this.props)
 		return (
 			<div
 				className="cm-page-builder"
