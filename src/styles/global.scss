@@ -21,6 +21,9 @@
 
 [contenteditable] {
   -webkit-tap-highlight-color: transparent;
+  a{
+    color: $blue;
+  }
 }
 
 .text-selection-tool {
