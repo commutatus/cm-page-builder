@@ -45,8 +45,13 @@ class PageContainer extends React.Component {
 			let data = []
 			pageComponents.map((component, i) => {
 				data.push(component)
-				if(['image', 'divider', 'video'].includes(component.component_type)){
-					data.push({content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' })
+				if(
+						(['image', 'divider', 'video'].includes(component.component_type)) && 
+						(
+							pageComponents[i+1] && pageComponents[i+1].component_type !== 'AddComponent' || !pageComponents[i+1]
+						)
+					){
+					data.push({content: '', position: i+2, component_type: 'AddComponent', currentType: 'Text'})
 				}
 			})
 			return data
@@ -88,11 +93,10 @@ class PageContainer extends React.Component {
 	emitUpdate = (data, id, type, key) => {
 		let {handleUpdate} = this.props
 		let {pageComponents} = this.state
-		if(data && !data.id && type !== 'meta'){
+		if(data && !id && type !== 'meta'){
 			let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
 			pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
 		}
-		
 		this.setState({pageComponents})
 		if(handleUpdate)
 			handleUpdate(data, id, type, key)
@@ -258,9 +262,10 @@ class PageContainer extends React.Component {
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contentEditable="false">${window.getSelection()}</a>`)
+			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contenteditable="false">${window.getSelection()}</a>`)
+		}else{
+			document.execCommand(action)
 		}
-		document.execCommand(action)
 	}
 
 	editComponent = (e, newType) => {
@@ -286,7 +291,6 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.state);
 		
 		return (
 			<div
@@ -321,7 +325,7 @@ class PageContainer extends React.Component {
 						<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
 							<i className="cm-link" />
 						</div>
-						<div className="divider"></div>
+						{/* <div className="divider"></div>
 						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
 							<i className="cm-h1" />
 						</div>
@@ -333,7 +337,7 @@ class PageContainer extends React.Component {
 						</div>
 						<div className="tool-btn">
 							<i className="cm-numbers" />
-						</div>
+						</div> */}
 					</div>
 					:
 					''
