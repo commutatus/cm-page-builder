@@ -12,9 +12,9 @@ export class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-      this.setState({
-        pageComponentType: nextProps.currentType, 
-      })
+    this.setState({
+      pageComponentType: nextProps.currentType, 
+    })
   }
 
   handleInput = (data) => {
@@ -47,7 +47,7 @@ export class AddComponent extends React.Component{
   }
 
   render(){
-    let { showActionBtn } = this.state    
+    let { showActionBtn } = this.state  
     return( 
       <div className="add-component-container" ref={node => this.elem = node}>
         {this.getPageComponent(this.state.pageComponentType)}
@@ -66,13 +66,13 @@ export class AddComponent extends React.Component{
                 <div data-type="Header2" onClick={this.handleTypeSelect}>
                   <i className="cm-h2" />
                 </div>
-                <div data-type="Olist" onClick={this.handleTypeSelect}>
+                {/* <div data-type="Olist" onClick={this.handleTypeSelect}>
                   <i className="cm-numbers" />
                 </div>
                 <div data-type="Ulist" onClick={this.handleTypeSelect}>
                   <i className="cm-bullets" />
                 </div>
-                {/* <div>
+                <div>
                   <i className="cm-page" />
                 </div> */}
                 <div data-type="Upload" onClick={this.handleTypeSelect}>
@@ -81,9 +81,9 @@ export class AddComponent extends React.Component{
                 <div data-type="Embed" onClick={this.handleTypeSelect}>
                   <i className="cm-video" /> 
                 </div>
-                <div data-type="Upload" onClick={this.handleTypeSelect}>
+                {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
-                </div>
+                </div> */}
                 <div data-type="Divider" onClick={this.handleTypeSelect}>
                   <i className="cm-divider" />  
                 </div>

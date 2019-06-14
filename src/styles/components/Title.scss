@@ -14,10 +14,13 @@
   color: $primary-color;
   font-weight: $bold-text;
   font-size: $title-text;
-  background-color: $gray-bg;
+  background-color: transparent;
   transition: background-color .3s linear;
   @include editable-style;
   font-family: 'Open Sans', sans-serif !important; 
+  &:hover {
+    background-color: $gray-bg;
+  }
   &:focus {
     background-color: transparent;
   }

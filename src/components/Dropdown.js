@@ -44,7 +44,7 @@ export class Dropdown extends React.Component{
 
   render(){
     const {options, selectedOption, isDropdownOpen, cmSearchInput} = this.state
-    console.log(this.state)
+    // console.log(this.state)
     return(
       <PermissionContext.Consumer>
         {
@@ -73,7 +73,13 @@ export class Dropdown extends React.Component{
                         :
                         <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
                           <span><i className={this.props.component_type === 'category_id' ? 'cm-hashtag' : 'cm-hub'} /></span>
-                          {(selectedOption && selectedOption.name) || ''}
+                          {
+                            (selectedOption && selectedOption.name) || 
+                            (
+                              value.status === 'Edit' &&
+                              (this.props.component_type === 'category_id'  ? "Select Background" : "Select Office")
+                            )
+                          }
                         </div>
                       }
                     </div>  

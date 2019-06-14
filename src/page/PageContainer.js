@@ -10,11 +10,62 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: sortDataOnPos(props.pageComponents) || [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }],
+			pageComponents: this.handleNonTextComponent(this.getPageComponentList(props), props),
 			meta: props.meta,
 			actionDomRect: null
 		}
-		this.newOrder = 0
+		// this.newOrder = 0
+		this.currentListOrder = 1
+	}
+
+	componentDidMount() {
+		setTimeout(this.checkPageHeight, 1000)
+	}
+	
+	componentWillReceiveProps(nextProps) {
+		let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
+		pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
+		this.setState({ pageComponents, meta: nextProps.meta })
+	}
+	
+	componentDidUpdate(){
+		this.currentListOrder = 1
+		this.checkPageHeight();
+		if(this.newElemPos){
+			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
+			this.newElemPos = null
+		}
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
+	}
+
+	handleNonTextComponent = (pageComponents, props) => {
+		if(props.status === 'Edit'){
+			let data = []
+			pageComponents.map((component, i) => {
+				data.push(component)
+				if(
+						(['image', 'divider', 'video'].includes(component.component_type)) && 
+						(
+							pageComponents[i+1] && pageComponents[i+1].component_type !== 'AddComponent' || !pageComponents[i+1]
+						)
+					){
+					data.push({content: '', position: i+2, component_type: 'AddComponent', currentType: 'Text'})
+				}
+			})
+			return data
+		}else{
+			return pageComponents
+		}
+	}
+	
+	getPageComponentList = (props) => {
+		if(props.status === 'Edit'){
+			return props.pageComponents.length > 0 ? sortDataOnPos(props.pageComponents) : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]
+		}else{
+			return sortDataOnPos(props.pageComponents)
+		}
 	}
 
 	checkPageHeight() {
@@ -29,27 +80,7 @@ class PageContainer extends React.Component {
 			}
 		}
 	}
-
-	componentDidMount() {
-		setTimeout(this.checkPageHeight, 1000)
-	}
-
-	componentDidUpdate(){
-		this.checkPageHeight();
-		if(this.newElemPos){
-			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
-			this.newElemPos = null
-		}
-		if(this.state.actionDomRect){
-			document.addEventListener('mousedown', this.handlePageClick)
-		}
-	}
-
-	componentWillReceiveProps(nextProps) {
-		let pageComponents = compareAndDiff(this.state.pageComponents, sortDataOnPos(nextProps.pageComponents))
-		this.setState({ pageComponents, meta: nextProps.meta })
-	}
-
+	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
 		if(editTooltip && !editTooltip.contains(e.target)){
@@ -59,32 +90,41 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (...args) => {
+	emitUpdate = (data, id, type, key) => {
 		let {handleUpdate} = this.props
+		let {pageComponents} = this.state
+		if(data && !id && type !== 'meta'){
+			let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
+			pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
+		}
+		this.setState({pageComponents})
 		if(handleUpdate)
-			handleUpdate(...args)
-		this.newOrder = 1
+			handleUpdate(data, id, type, key)
 	}
 
 	_getCurrentOrder = (currentIndex) => {
-		if (typeof this._getCurrentOrder.counter == 'undefined')
-			this._getCurrentOrder.counter = 1
-		if (currentIndex > 0 && this.state.pageComponents[currentIndex-1] && (this.state.pageComponents[currentIndex-1].component_type === `ordered_list` || this.state.pageComponents[currentIndex-1].currentType === `Olist`)) {
-			this._getCurrentOrder.counter = this._getCurrentOrder.counter+1
-		}
-		else 
-			this._getCurrentOrder.counter = 1
-		return this._getCurrentOrder.counter 
+		
+		// if (typeof this._getCurrentOrder.counter == 'undefined')
+		// 	this._getCurrentOrder.counter = 1
+		// if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
+		// 	this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
+		// 	this.newOrder = 0
+		// }
+		// else 
+		// 	this._getCurrentOrder.counter = 1
+		// return this._getCurrentOrder.counter 
 	}
 
 	getPageComponent = (data, index) => {
-		console.log('data', data)
 		let order = 1
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type] ?  this.props.typeMapping[data.component_type] : 'Text'
+		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		// console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
-			console.log(data, 'order')
-			order = this._getCurrentOrder(index)
+			order = this.currentListOrder
+			this.currentListOrder++
+		}else{
+			this.currentListOrder = 1
 		}
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
@@ -109,7 +149,6 @@ class PageContainer extends React.Component {
 		if(id && id.includes('AddComponent')){
 			id = +(id.split('-')[1])
 		}
-		console.log('Received type', type)
 		switch(type){
 			case 'add-component':
 				for(let i in pageComponents){
@@ -161,26 +200,23 @@ class PageContainer extends React.Component {
 				break
 			case 'remove-component':
 				let rmCompId = -1
-				if(pageComponents.length > 1){
-					for(let i in pageComponents){
-						let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
-						let isNewComponent = componentIndex.includes('AddComponent')
-						if(id == componentId){ //can compare with the id also.
-							if(!isNewComponent){
-								rmCompId = componentId
-							}
-							continue
+				for(let i in pageComponents){
+					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
+					let isNewComponent = componentIndex.includes('AddComponent')
+					if(id == componentId){ //can compare with the id also.
+						if(!isNewComponent){
+							rmCompId = componentId
 						}
-						else{
-							temp.push({...pageComponents[i], position})
-							position++
-						}
+						continue
 					}
-					this.setState({pageComponents: temp}, () => {
-						this.emitUpdate(null, rmCompId)
-					})
+					else{
+						temp.push({...pageComponents[i], position})
+						position++
+					}
 				}
-
+				this.setState({pageComponents: temp.length > 0 ? temp : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]}, () => {
+					this.emitUpdate(null, rmCompId)
+				})
 				break
 		}
 	}
@@ -226,16 +262,17 @@ class PageContainer extends React.Component {
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contentEditable="false">${window.getSelection()}</a>`)
+			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contenteditable="false">${window.getSelection()}</a>`)
+		}else{
+			document.execCommand(action)
 		}
-		document.execCommand(action)
 	}
 
-	editComponent = (e, newType, id) => {
+	editComponent = (e, newType) => {
 		e.preventDefault()
 		let {pageComponents} = this.state
 		let type = newType ? newType : e.currentTarget.dataset.type
-		let componentId = id ? id : this.currentElemSelection.elemId
+		let componentId = this.currentElemSelection ? this.currentElemSelection.elemId : null
 		if(componentId){
 			let isNewComponent = false
 			if(componentId.includes('AddComponent')){
@@ -244,11 +281,9 @@ class PageContainer extends React.Component {
 			}
 			pageComponents = pageComponents.map((component, index) => {
 				if(isNewComponent && componentId == index){
-					return({...component, currentType: this.props.typeMapping[type], component_type: type })
+					return({...component, currentType: type})
 				}
-				else if (componentId === component.id)
-					return({...component, component_type: type }) 
-				return({...component }) 
+				return({...component, component_type: type}) 
 			})	
 		}
 		this.setState({pageComponents, actionDomRect: null})
@@ -256,6 +291,8 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
+		console.log(this.state);
+		
 		return (
 			<div
 				className="cm-page-builder"
@@ -289,11 +326,11 @@ class PageContainer extends React.Component {
 						<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
 							<i className="cm-link" />
 						</div>
-						<div className="divider"></div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="header">
+						{/* <div className="divider"></div>
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
 							<i className="cm-h1" />
 						</div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="sub_header">
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
 						<i className="cm-h2" />
 						</div>
 						<div className="tool-btn">
@@ -301,7 +338,7 @@ class PageContainer extends React.Component {
 						</div>
 						<div className="tool-btn">
 							<i className="cm-numbers" />
-						</div>
+						</div> */}
 					</div>
 					:
 					''

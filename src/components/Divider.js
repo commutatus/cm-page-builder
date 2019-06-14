@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../styles/components/Divider.css'
 import { PermissionContext } from '../contexts/permission-context';
-
+import DragHandle from './DragHandle'
 export const Divider = (props) => {
   // const [showMoreOptions, setState] = useState(false)
   return(
@@ -12,12 +12,7 @@ export const Divider = (props) => {
         {
           value.status === `Edit`
           &&
-          <div className="component-dragger" onClick={(e) => props.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
-            {/* {
-              showMoreOptions &&
-              <div onMouseUp={(e) => e.stopPropagation()}>test</div>
-            } */}
-          </div>
+          <DragHandle handleAction={value.handleAction} id={props.id} /> 
         }
         <div className={`divider ${value.status.toLowerCase()}`}>
           <div className="sperator"></div>

@@ -9,19 +9,19 @@
   span {
     margin-right: 7px;
   }
-  
 }
 
 .cm-uploader.read {
   width: 100%;
+  pointer-events: none;
   margin: 8px 0px;
 }
 
-.cm-uploader.edit{
-  cursor: pointer;
+.cm-uploader.edit {
   transition: background-color .3s linear;
-  background-color: $gray-bg;
+  background-color: transparent;
+  cursor: pointer;
   &:hover {
-    background-color: transparent;
+    background-color: $gray-bg;
   }
 }

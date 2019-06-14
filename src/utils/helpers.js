@@ -12,9 +12,13 @@ export function sortDataOnPos(data){
 export function compareAndDiff(newState, newData){        
   let data = []
   let i = 0, j = 0
+
   while(i < newState.length){
     if(newData[j]){
-      if(newState[i].id === newData[j].id || newState[i].content === newData[j].content){
+      if(newState[i].id === newData[j].id || 
+          newState[i].content === newData[j].content ||
+          (newData[j].component_attachment && newState[i].component_attachment.filename === newData[j].component_attachment.filename)
+      ){
         data.push({...newData[j], position: i+1})
         i++
         j++

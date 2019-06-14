@@ -2,29 +2,27 @@ import React from 'react'
 import '../styles/components/Upload.css';
 import withComponent from './withComponent'
 import { PermissionContext } from '../contexts/permission-context';
+import DragHandle from './DragHandle'
+
 class WrappedUpload extends React.Component{
 
   render() {
     let {image} = this.props
+    console.log(image)
     return(
       <PermissionContext.Consumer>
         {
           value => 
-          <div className={`component-sectioncm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem.click()}>
+          <div className={`component-section cm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem && this.fileInputElem.click()}>
             {
               value.status === `Edit`
               &&
-              <div className="component-dragger" onClick={(e) => props.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
-                {/* {
-                  showMoreOptions &&
-                  <div onMouseUp={(e) => e.stopPropagation()}>test</div>
-                } */}
-              </div>
+              <DragHandle handleAction={value.handleAction} id={this.props.id} /> 
             }
             {
               image
               ?
-              <img src={image.url} width="100%" height="400px" alt={image.filename} />
+              <img src={image.url || image.content} width="100%" height="400px" alt={image.filename} />
               :
               <React.Fragment>
                 <span><i className="cm-upload" /></span>
