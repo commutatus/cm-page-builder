@@ -14,7 +14,7 @@
 }
 
 //placeholder-style
-[contenteditable]:empty:before {
+[contenteditable]:empty:focus:before {
   content: attr(placeholder);
   display: block;
 }
