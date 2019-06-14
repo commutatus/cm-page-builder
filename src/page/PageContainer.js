@@ -291,7 +291,6 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.state);
 		
 		return (
 			<div

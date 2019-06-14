@@ -1,8 +1,8 @@
 {
-  "name": "cm-pages-builder",
-  "version": "1.4.0",
+  "name": "cm-page-builder",
+  "version": "1.0.1",
   "description": "Awesome react starter kit",
-  "main": "index.js",
+  "main": "lib/page/index.js",
   "scripts": {
     "start": "node ./server.js",
     "start-dev-server": "webpack-dev-server --host localhost --mode development --content-base=www --inline --watch --hot --open",

@@ -41,7 +41,7 @@ export class AddComponent extends React.Component{
   handleTypeSelect = (e) => {
     this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
       if(this.state.pageComponentType === 'Divider'){
-        this.props.handleUpdate({component_type: 'Divider', position: this.props.position})
+        this.props.handleUpdate({component_type: 'Divider', position: this.props.position, content: `divider-${this.props.position}`})
       }
     })
   }

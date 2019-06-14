@@ -8,7 +8,7 @@ class WrappedUpload extends React.Component{
 
   render() {
     let {image} = this.props
-    console.log(image)
+    // console.log(image)
     return(
       <PermissionContext.Consumer>
         {

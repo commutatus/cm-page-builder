@@ -25,3 +25,8 @@
     background-color: transparent;
   }
 }
+
+.cm-title.edit[contenteditable]:empty:before {
+  content: attr(placeholder) !important;
+  display: block !important;
+}
