@@ -9,6 +9,22 @@ export default class DragHandle extends React.Component{
       showMoreOptions: false
     }
   }
+  
+  componentDidUpdate(){
+    if(this.state.showMoreOptions){
+      window.addEventListener('click', this.closeHandle)
+    }else{
+      window.removeEventListener('click', this.closeHandle)
+    }
+  }
+
+  closeHandle = (e) => {
+    let elemHandle = document.getElementById('drag-handle')
+    // console.log(e.target, elemHandle && !elemHandle.contains(e.target))
+    if(elemHandle && !elemHandle.contains(e.target)){
+      this.setState({showMoreOptions: false})
+    }
+  }
 
   optionHandleClick = (e) => {
     e.stopPropagation()
@@ -30,7 +46,7 @@ export default class DragHandle extends React.Component{
 
   render(){
     return(
-      <div className="component-dragger" onClick={this.optionHandleClick}>
+      <div className="component-dragger" onClick={this.optionHandleClick} id="drag-handle">
         <i className="cm cm-handle" />
         <CSSTransition
           in={this.state.showMoreOptions}
