@@ -8,6 +8,7 @@ class WrappedUpload extends React.Component{
 
   render() {
     let {image} = this.props
+    console.log(image)
     return(
       <PermissionContext.Consumer>
         {
@@ -21,7 +22,7 @@ class WrappedUpload extends React.Component{
             {
               image
               ?
-              <img src={image.url} width="100%" height="400px" alt={image.filename} />
+              <img src={image.url || image.content} width="100%" height="400px" alt={image.filename} />
               :
               <React.Fragment>
                 <span><i className="cm-upload" /></span>
