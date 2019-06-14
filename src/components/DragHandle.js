@@ -1,4 +1,6 @@
 import React from 'react';
+import { CSSTransition } from 'react-transition-group';
+import '../styles/components/DragHandle.css';
 
 export default class DragHandle extends React.Component{
   constructor(props){
@@ -11,7 +13,7 @@ export default class DragHandle extends React.Component{
   optionHandleClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    this.setState({showMoreOptions: true})
+    this.setState({showMoreOptions: !this.state.showMoreOptions})
   }
 
   handleClick = (e) => {
@@ -30,12 +32,24 @@ export default class DragHandle extends React.Component{
     return(
       <div className="component-dragger" onClick={this.optionHandleClick}>
         <i className="cm cm-handle" />
-        {
-          this.state.showMoreOptions &&
-          <div onClick={this.handleClick}>
-            <div data-action="delete">Delete</div>
-          </div>
-        }
+        <CSSTransition
+          in={this.state.showMoreOptions}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <React.Fragment>
+            {
+              this.state.showMoreOptions &&
+              <div className="showmore-popup" onClick={this.handleClick}>
+                <div data-action="delete" className="more-option">
+                <span><i className="cm-trash" /></span>
+                <span>Delete</span>
+                </div>
+              </div>
+            }
+          </React.Fragment>
+        </CSSTransition>
       </div>
     )
   }

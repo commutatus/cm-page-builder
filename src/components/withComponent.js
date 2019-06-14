@@ -77,6 +77,7 @@ const withComponent = (WrappedComponent) => {
 		}
 
 		onInputChange = (html) =>{
+			this.props.onInputChange(html)
 			this.setState({ html })
 		} 
 

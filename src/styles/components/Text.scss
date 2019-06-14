@@ -14,6 +14,9 @@
   &:hover {
     background-color: $gray-bg;
   }
+  &::placeholder  {
+    color: transparent !important;
+  }
   &:focus {
     background-color: transparent;
   }
