@@ -10,7 +10,7 @@ class PageContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: this.getPageComponentList(props),
+			pageComponents: this.handleNonTextComponent(this.getPageComponentList(props), props),
 			meta: props.meta,
 			actionDomRect: null
 		}
@@ -24,6 +24,7 @@ class PageContainer extends React.Component {
 	
 	componentWillReceiveProps(nextProps) {
 		let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
+		pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
 		this.setState({ pageComponents, meta: nextProps.meta })
 	}
 	
@@ -36,6 +37,21 @@ class PageContainer extends React.Component {
 		}
 		if(this.state.actionDomRect){
 			document.addEventListener('mousedown', this.handlePageClick)
+		}
+	}
+
+	handleNonTextComponent = (pageComponents, props) => {
+		if(props.status === 'Edit'){
+			let data = []
+			pageComponents.map((component, i) => {
+				data.push(component)
+				if(['image', 'divider', 'video'].includes(component.component_type)){
+					data.push({content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' })
+				}
+			})
+			return data
+		}else{
+			return pageComponents
 		}
 	}
 	
@@ -72,7 +88,7 @@ class PageContainer extends React.Component {
 	emitUpdate = (data, id, type, key) => {
 		let {handleUpdate} = this.props
 		let {pageComponents} = this.state
-		if(data && type !== 'meta'){
+		if(data && !data.id && type !== 'meta'){
 			let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
 			pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
 		}
@@ -98,10 +114,9 @@ class PageContainer extends React.Component {
 	getPageComponent = (data, index) => {
 		let order = 1
 		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
-		console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
+		// console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
 		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
 		if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
-			// order = this._getCurrentOrder(index)
 			order = this.currentListOrder
 			this.currentListOrder++
 		}else{
@@ -161,7 +176,6 @@ class PageContainer extends React.Component {
 						position++
 					}
 				}
-				console.log(pageComponents)
 				this.setState({pageComponents: temp})
 				break
 			case 'ulist':
@@ -272,7 +286,8 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		console.log(this.props)
+		console.log(this.state);
+		
 		return (
 			<div
 				className="cm-page-builder"

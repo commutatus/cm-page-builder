@@ -5,7 +5,7 @@ import '../styles/components/List.css'
 
 const WrappedUlist = (props) =>  {
   return(
-    <div style={{display: 'flex'}}>
+    <div className="cm-u-list">
         <ContentEditable 
           html={props.html} 
           onChange={props.handleChange}

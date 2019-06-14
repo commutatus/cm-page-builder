@@ -6,10 +6,10 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: $gray-bg;
+  background-color: transparent;
   transition: background-color .3s linear;
-  &:empty {
-    background-color: transparent;
+  &:hover {
+    background-color: $gray-bg;
   }
   &:focus {
     background-color: transparent;
@@ -28,10 +28,10 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: $gray-bg;
+  background-color: transparent;
   transition: background-color .3s linear;
-  &:empty {
-    background-color: transparent;
+  &:hover {
+    background-color: $gray-bg;
   }
   &:focus {
     background-color: transparent;
@@ -50,10 +50,10 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: $gray-bg;
+  background-color: transparent;
   transition: background-color .3s linear;
-  &:empty {
-    background-color: transparent;
+  &:hover {
+    background-color: $gray-bg;
   }
   &:focus {
     background-color: transparent;

@@ -66,13 +66,13 @@ export class AddComponent extends React.Component{
                 <div data-type="Header2" onClick={this.handleTypeSelect}>
                   <i className="cm-h2" />
                 </div>
-                <div data-type="Olist" onClick={this.handleTypeSelect}>
+                {/* <div data-type="Olist" onClick={this.handleTypeSelect}>
                   <i className="cm-numbers" />
                 </div>
                 <div data-type="Ulist" onClick={this.handleTypeSelect}>
                   <i className="cm-bullets" />
                 </div>
-                {/* <div>
+                <div>
                   <i className="cm-page" />
                 </div> */}
                 <div data-type="Upload" onClick={this.handleTypeSelect}>
@@ -80,8 +80,8 @@ export class AddComponent extends React.Component{
                 </div>
                 <div data-type="Embed" onClick={this.handleTypeSelect}>
                   <i className="cm-video" /> 
-                {/* </div>
-                <div data-type="Upload" onClick={this.handleTypeSelect}>
+                </div>
+                {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
                 </div> */}
                 <div data-type="Divider" onClick={this.handleTypeSelect}>

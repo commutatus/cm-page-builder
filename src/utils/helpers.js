@@ -15,7 +15,10 @@ export function compareAndDiff(newState, newData){
 
   while(i < newState.length){
     if(newData[j]){
-      if(newState[i].id === newData[j].id || newState[i].content === newData[j].content){
+      if(newState[i].id === newData[j].id || 
+          newState[i].content === newData[j].content ||
+          (newData[j].component_attachment && newState[i].component_attachment.filename === newData[j].component_attachment.filename)
+      ){
         data.push({...newData[j], position: i+1})
         i++
         j++

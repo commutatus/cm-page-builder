@@ -1,44 +1,51 @@
 @import '../imports';
 
-.cm-embed.edit {
-  display: flex;
-  align-items: center;
-  margin: 2px 0;
-  padding: 5px;
-  color: $light-text;
-  font-size: $t6-text;
-  background-color: $gray-bg;
-  transition: background-color .3s linear;
-  cursor: pointer;
-  &:hover {
-    background-color: transparent;
-  }
-
-  .embed-icon {
-    margin-right: 7px;
-  }
-
-  .embed-input {
+.cm-embed {
+  .embed-input-field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 2px 0;
+    padding: 5px;
+    color: $light-text;
     font-size: $t6-text;
-    border: none;
-    background-color: transparent;
-    &::placeholder {
-      color: $light-text;
+    transition: background-color .3s linear;
+    cursor: pointer;
+    &:hover {
+      background-color: $gray-bg;
     }
-    &:focus {
-      outline: none;
+    &:focus-within {
+      background-color: transparent;
+    }
+    .embed-icon {
+      margin-right: 7px;
+    }
+    .embed-input {
+      width: 100%;
+      font-size: $t6-text;
+      border: none;
+      background-color: transparent;
+      &::placeholder {
+        color: $light-text;
+        font-size: $t4-text;
+      }
+      &:focus {
+        outline: none;
+      }
     }
   }
-}
 
-
-.cm-embed{
-  iframe{
+  iframe {
     border: none;
   }
+
+  .edit {
+    margin: 5px 0;
+  }
+
   .read {
     width: 100%;
-    margin: 8px 0;
+    margin: 5px 0;
   }
-  
 }
+

@@ -3,15 +3,10 @@ import ReactDOM from 'react-dom'
 import classNames from 'classnames';
 import { PermissionContext } from '../contexts/permission-context';
 import sanitizeHtml from 'sanitize-html'
+import DragHandle from './DragHandle'
 
 export default class ContentEditable extends React.Component{
 
-  constructor(props){
-    super(props)
-    this.state = {
-      showMoreOptions: false
-    }
-  }
 
   shouldComponentUpdate(nextProps, nextState){
     return (nextProps.html !== (this.elem && this.elem.innerHTML) )
@@ -58,7 +53,7 @@ export default class ContentEditable extends React.Component{
 
   emitChange = (e) => {
     if(this.props.orderedList){
-      e.target.parentElement.parentElement.firstElementChild.classList.remove("list-span-focus")
+      e.target.parentElement.parentElement.className = "list-span-focus"
     }
     var html = this.elem.innerHTML
     if (this.props.onChange && html !== this.lastHtml) {
@@ -79,22 +74,15 @@ export default class ContentEditable extends React.Component{
     }
   }
 
-  optionHandleClick = (e, handleAction) => {
-    e.stopPropagation()
-    e.preventDefault()
-    handleAction('remove-component', this.props.id)
-    // this.setState({showMoreOptions: true})
-  }
 
   handleFocus = (e) => {
     if(this.props.orderedList){
-      e.target.parentElement.parentElement.firstElementChild.className = "list-span-focus"
+      e.target.parentElement.parentElement.className = "list-span-focus"
     }
   }
   
   render() {
     const { placeholder, className, styles, handleMouseUp, listOrder, html } = this.props
-    const {showMoreOptions} = this.state
     return(
       <PermissionContext.Consumer>
         {
@@ -103,12 +91,7 @@ export default class ContentEditable extends React.Component{
               {listOrder}
               {
                 className !== 'cm-title' && value.status === 'Edit' &&
-                <div className="component-dragger" onClick={(e) => this.optionHandleClick(e, value.handleAction)}><i className="cm cm-handle" />
-                  {
-                    showMoreOptions &&
-                    <div onMouseUp={(e) => e.stopPropagation()}>test</div>
-                  }
-                </div>
+                <DragHandle handleAction={value.handleAction} id={this.props.id}/>
               }
               <div
                 data-id={this.props.id}
@@ -124,6 +107,7 @@ export default class ContentEditable extends React.Component{
                 onKeyPress={(e) => this.handleKeyPress(e, value.handleAction, value.editComponent)}
                 onKeyDown={(e) => this.handleKeyDown(e, value.handleAction)}
                 onMouseUp={handleMouseUp}
+                data-gramm_editor="false"
               />
           </div>
         }

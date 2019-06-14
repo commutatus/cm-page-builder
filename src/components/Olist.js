@@ -5,7 +5,7 @@ import '../styles/components/List.css'
 
 const WrappedOlist = (props) =>  {
   return(
-    <div style={{display: 'flex'}}>
+    <div className="cm-o-list">
         <ContentEditable 
             html={props.html} 
             onChange={props.handleChange}
