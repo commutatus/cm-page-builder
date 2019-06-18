@@ -4,13 +4,14 @@ import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
 import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
 import '../styles/global.css'
+import { connect } from 'react-redux';
+import AddComponent from '../components/AddComponent';
 
 class PageContainer extends React.Component {
 
 	constructor(props) {
 		super(props)
 		this.state = {
-			pageComponents: this.handleNonTextComponent(this.getPageComponentList(props), props),
 			meta: props.meta,
 			actionDomRect: null
 		}
@@ -18,55 +19,55 @@ class PageContainer extends React.Component {
 		this.currentListOrder = 1
 	}
 
-	componentDidMount() {
-		setTimeout(this.checkPageHeight, 1000)
-	}
+	// componentDidMount() {
+	// 	setTimeout(this.checkPageHeight, 1000)
+	// }
 	
-	componentWillReceiveProps(nextProps) {
-		let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
-		pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
-		this.setState({ pageComponents, meta: nextProps.meta })
-	}
+	// componentWillReceiveProps(nextProps) {
+	// 	let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
+	// 	pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
+	// 	this.setState({ pageComponents, meta: nextProps.meta })
+	// }
 	
-	componentDidUpdate(){
-		this.currentListOrder = 1
-		this.checkPageHeight();
-		if(this.newElemPos){
-			document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
-			this.newElemPos = null
-		}
-		if(this.state.actionDomRect){
-			document.addEventListener('mousedown', this.handlePageClick)
-		}
-	}
+	// componentDidUpdate(){
+	// 	this.currentListOrder = 1
+	// 	this.checkPageHeight();
+	// 	if(this.newElemPos){
+	// 		document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
+	// 		this.newElemPos = null
+	// 	}
+	// 	if(this.state.actionDomRect){
+	// 		document.addEventListener('mousedown', this.handlePageClick)
+	// 	}
+	// }
 
-	handleNonTextComponent = (pageComponents, props) => {
-		if(props.status === 'Edit'){
-			let data = []
-			pageComponents.map((component, i) => {
-				data.push(component)
-				if(
-						(['image', 'divider', 'video'].includes(component.component_type)) && 
-						(
-							pageComponents[i+1] && pageComponents[i+1].component_type !== 'AddComponent' || !pageComponents[i+1]
-						)
-					){
-					data.push({content: '', position: i+2, component_type: 'AddComponent', currentType: 'Text'})
-				}
-			})
-			return data
-		}else{
-			return pageComponents
-		}
-	}
+	// handleNonTextComponent = (pageComponents, props) => {
+	// 	if(props.status === 'Edit'){
+	// 		let data = []
+	// 		pageComponents.map((component, i) => {
+	// 			data.push(component)
+	// 			if(
+	// 					(['image', 'divider', 'video'].includes(component.component_type)) && 
+	// 					(
+	// 						pageComponents[i+1] && pageComponents[i+1].component_type !== 'AddComponent' || !pageComponents[i+1]
+	// 					)
+	// 				){
+	// 				data.push({content: '', position: i+2, component_type: 'AddComponent', currentType: 'Text'})
+	// 			}
+	// 		})
+	// 		return data
+	// 	}else{
+	// 		return pageComponents
+	// 	}
+	// }
 	
-	getPageComponentList = (props) => {
-		if(props.status === 'Edit'){
-			return props.pageComponents.length > 0 ? sortDataOnPos(props.pageComponents) : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]
-		}else{
-			return sortDataOnPos(props.pageComponents)
-		}
-	}
+	// getPageComponentList = (props) => {
+	// 	if(props.status === 'Edit'){
+	// 		return props.pageComponents.length > 0 ? sortDataOnPos(props.pageComponents) : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]
+	// 	}else{
+	// 		return sortDataOnPos(props.pageComponents)
+	// 	}
+	// }
 
 	checkPageHeight() {
 		let pageElem = document.getElementById('page-builder');
@@ -91,54 +92,50 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (data, id, type, key) => {
-		let {handleUpdate} = this.props
-		let {pageComponents} = this.state
-		if(data && !id && type !== 'meta'){
-			let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
-			pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
-		}
-		this.setState({pageComponents})
-		if(handleUpdate)
-			handleUpdate(data, id, type, key)
+		// let {handleUpdate} = this.props
+		// let {pageComponents} = this.state
+		// if(data && !id && type !== 'meta'){
+		// 	let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
+		// 	pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
+		// }
+		// this.setState({pageComponents})
+		// if(handleUpdate)
+		// 	handleUpdate(data, id, type, key)
 	}
 
-	_getCurrentOrder = (currentIndex) => {
+	// _getCurrentOrder = (currentIndex) => {
 		
-		// if (typeof this._getCurrentOrder.counter == 'undefined')
-		// 	this._getCurrentOrder.counter = 1
-		// if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
-		// 	this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
-		// 	this.newOrder = 0
-		// }
-		// else 
-		// 	this._getCurrentOrder.counter = 1
-		// return this._getCurrentOrder.counter 
-	}
+	// 	if (typeof this._getCurrentOrder.counter == 'undefined')
+	// 		this._getCurrentOrder.counter = 1
+	// 	if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
+	// 		this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
+	// 		this.newOrder = 0
+	// 	}
+	// 	else 
+	// 		this._getCurrentOrder.counter = 1
+	// 	return this._getCurrentOrder.counter 
+	// }
 
 	getPageComponent = (data, index) => {
 		let order = 1
-		let typeName = data.component_type === 'AddComponent' ? data.component_type : this.props.typeMapping[data.component_type]
+		let typeName = data.componentType
 		// console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
-		let dataId = data.component_type !== 'AddComponent' ? data.id : `${data.component_type}-${index}`
-		if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
-			order = this.currentListOrder
-			this.currentListOrder++
-		}else{
-			this.currentListOrder = 1
-		}
+		let dataId = data.id
+		// if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
+		// 	order = this.currentListOrder
+		// 	this.currentListOrder++
+		// }else{
+		// 	this.currentListOrder = 1
+		// }
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
-				<Component 
-					key={dataId}
-					content={data.content}
-					handleUpdate={this.emitUpdate}
-					id={dataId}
-					currentType={data.currentType ? data.currentType : data.component_type}
-					position={data.position}
-					order={order}
-					component_attachment={data.component_attachment}
-				/>
+				<AddComponent key={dataId} id={dataId}>
+					<Component 
+						data={data}
+						handleUpdate={this.emitUpdate}
+					/>
+				</AddComponent>
 			)
 		}
 	}
@@ -150,22 +147,6 @@ class PageContainer extends React.Component {
 			id = +(id.split('-')[1])
 		}
 		switch(type){
-			case 'add-component':
-				for(let i in pageComponents){
-					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
-					if(id == componentId){ //can compare with the id also.
-						temp.push({...pageComponents[i], position})
-						this.newElemPos = position
-						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Text" })
-						position += 2
-					}
-					else{
-						temp.push({...pageComponents[i], position})
-						position++
-					}
-				}
-				this.setState({pageComponents: temp})
-				break
 			case 'olist':
 				for(let i in pageComponents){
 					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
@@ -197,26 +178,6 @@ class PageContainer extends React.Component {
 					}
 				}
 				this.setState({pageComponents: temp})
-				break
-			case 'remove-component':
-				let rmCompId = -1
-				for(let i in pageComponents){
-					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
-					let isNewComponent = componentIndex.includes('AddComponent')
-					if(id == componentId){ //can compare with the id also.
-						if(!isNewComponent){
-							rmCompId = componentId
-						}
-						continue
-					}
-					else{
-						temp.push({...pageComponents[i], position})
-						position++
-					}
-				}
-				this.setState({pageComponents: temp.length > 0 ? temp : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]}, () => {
-					this.emitUpdate(null, rmCompId)
-				})
 				break
 		}
 	}
@@ -291,16 +252,16 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
-		
+		const {appData} = this.props
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status , handleAction: this.handleAction, editComponent: this.editComponent}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction, editComponent: this.editComponent}}> 
 					<PageDetails 
-						pageComponents={pageComponents}
+						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
 						onMouseUp={this.handleMouseUp}
@@ -347,4 +308,8 @@ class PageContainer extends React.Component {
 	}
 }
 
-export default PageContainer
+const mapStateToProps = state => ({
+	appData: state.appData
+})
+
+export default connect(mapStateToProps)(PageContainer)
