@@ -7,12 +7,9 @@ import '../styles/components/Text.css';
 const WrappedText = (props) =>  {
   return(
     <ContentEditable 
-      html={props.html} 
-      onChange={props.handleChange}
-      onInputChange={props.onInputChange}
+      {...props}
       placeholder="Start typing or choose a component..."
       className="cm-text-block"
-      id={props.id}
     />
   )
 }

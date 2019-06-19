@@ -6,12 +6,9 @@ import '../styles/components/Title.css';
 const WrappedTitle = (props) => {
     return(
       <ContentEditable 
-        html={props.html} 
-        onChange={props.handleChange} 
+        {...props}
         placeholder="Title of the page"
         className="cm-title"
-        id={props.id}
-        handleMouseUp={props.onMouseUp}
       />
     )
 }

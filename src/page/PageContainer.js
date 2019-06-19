@@ -137,53 +137,9 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	handleAction = (type, id, elem) => {
-		let {pageComponents} = this.state
-		let temp = [], position = 1, componentIndex = id
-		if(id && id.includes('AddComponent')){
-			id = +(id.split('-')[1])
-		}
-		switch(type){
-			case 'olist':
-				for(let i in pageComponents){
-					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
-					if(id == componentId){ //can compare with the id also.
-						temp.push({...pageComponents[i], position})
-						this.newElemPos = position
-						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Olist" })
-						position += 2
-					}
-					else{
-						temp.push({...pageComponents[i], position})
-						position++
-					}
-				}
-				this.setState({pageComponents: temp})
-				break
-			case 'ulist':
-				for(let i in pageComponents){
-					let componentId = componentIndex && componentIndex.includes('AddComponent') ? i : pageComponents[i].id
-					if(id == componentId){ //can compare with the id also.
-						temp.push({...pageComponents[i], position})
-						this.newElemPos = position
-						temp.push({content: '', position: position+1, component_type: 'AddComponent', currentType:"Ulist" })
-						position += 2
-					}
-					else{
-						temp.push({...pageComponents[i], position})
-						position++
-					}
-				}
-				this.setState({pageComponents: temp})
-				break
-		}
-	}
-
-
-	handleMouseUp = (e) => {
-		this.handleSelection(e)
-	}
-
+	// handleMouseUp = (e) => {
+	// 	this.handleSelection(e)
+	// }
 	
 	handleKeyPressList = (e) => {
 		let elem = e.target
@@ -201,18 +157,19 @@ class PageContainer extends React.Component {
 				}
 				break;
 			case 'a':
-				if (e.ctrlKey || e.metaKey)
+				if (e.ctrlKey || e.metaKey) 
 					this.handleSelection(e)
-					
 				break;				
 		}
 	}
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
+		console.log(window.getSelection(), 'Get selection')
 		if(selection){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
+			console.log('dimension', dimensions)
 			if (dimensions.width > 1)
 				this.setState({actionDomRect: dimensions})
 		}
@@ -241,7 +198,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
