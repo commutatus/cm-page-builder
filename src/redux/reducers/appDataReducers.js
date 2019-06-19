@@ -7,12 +7,10 @@ export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 export const addNewComponent = (data) => {
   return dispatch => {
     let newId = uuid()
-    console.log(typeof newId, newId)
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
     })
-    console.log(newId)
     dispatch({
       type: SET_CURRENT_ELEM,
       elemId: newId
@@ -76,7 +74,7 @@ function updateComponentState(state, data){
 }
 
 function removeComponentFromState(state, data){
-  if(state.componentData.length > 0){
+  if(state.componentData.length > 1){
     const {componentData} = state
     const {blockId} = data
     let temp = []
@@ -93,7 +91,7 @@ function removeComponentFromState(state, data){
     }
     return ({componentData: temp})
   }else{
-    return initialState
+    return state
   }
 }
 

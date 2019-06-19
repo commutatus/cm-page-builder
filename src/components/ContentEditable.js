@@ -65,7 +65,7 @@ class ContentEditable extends React.Component{
 
   handleFocus = (e) => {
     e.persist()
-    this.props.setCurrentElem(e.target.dataset.id)
+    this.props.setCurrentElem(this.props.id)
     // if(this.props.orderedList){
     //   e.target.parentElement.parentElement.className = "list-span-focus"
     // }
@@ -86,7 +86,6 @@ class ContentEditable extends React.Component{
                 <DragHandle handleAction={value.handleAction} id={this.props.id}/>
               }
               <div
-                data-block-id={this.props.id}
                 data-root="true"
                 ref={node => this.elem = node}
                 className={classNames(className, value.status.toLowerCase())}

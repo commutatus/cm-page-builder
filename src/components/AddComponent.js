@@ -4,42 +4,37 @@ import '../styles/components/AddComponent.css'
 import { connect } from 'react-redux';
 import {
   addNewComponent,
-  updateComponent
+  updateComponent,
+  removeComponent
 } from '../redux/reducers/appDataReducers'
+import {
+  setCurrentElem
+} from '../redux/reducers/currentElemReducer'
+import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 
 class AddComponent extends React.Component{
   constructor(props){
     super(props)
     this.state = {
       showActionBtn: true,
-      // pageComponentType: props.currentType 
     }
   }
 
   componentDidMount(){
-    let {currentElem, id} = this.props
-    if(currentElem.elemId && id === currentElem.elemId){
-      this.checkAndFocus(id)
-    }
+    this.checkAndFocus(this.props)
   }
-
-  // componentWillReceiveProps(nextProps){
-  //   this.setState({
-  //     pageComponentType: nextProps.currentType, 
-  //   })
-  // }
   
   componentDidUpdate(){
-    let {currentElem, id} = this.props
-    if(currentElem.elemId && id === currentElem.elemId){
-      this.checkAndFocus(id)
-    }
+    this.checkAndFocus(this.props)
   }
 
-  checkAndFocus = (id) => {
-    let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
-    if(elem !== document.activeElement){
-      elem.focus()
+  checkAndFocus = (props) => {
+    let {currentElem, id} = props
+    if(currentElem.elemId && id === currentElem.elemId){
+      let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
+      if(elem !== document.activeElement){
+        elem.focus()
+      }
     }
   } 
 
@@ -48,27 +43,56 @@ class AddComponent extends React.Component{
   }
 
   handleClick = (e) => {
-    console.log(e.currentTarget)
-    if(document.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
+    if(this.elem.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
       this.props.updateComponent({currentTarget, target, action: 'updateComponentType'})
     }
-    // this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
-    //   if(this.state.pageComponentType === 'Divider'){
-    //     this.props.handleUpdate({component_type: 'Divider', position: this.props.position, content: `divider-${this.props.position}`})
-    //   }
-    // })
   }
 
-  handleTypeSelect = () => {}
 
   handleKeyDown = (e) => {
+    let {appData, currentElem} = this.props 
+    let currentElemPos
     switch (e.key) {
       case 'Enter':
-        e.preventDefault()
-        this.props.addNewComponent({id: e.target.dataset.blockId})
-        break;
+        if(!e.shiftKey){
+          e.preventDefault()
+          this.props.addNewComponent({id: e.currentTarget.dataset.blockId})
+          break;
+        }
+      case 'Backspace':
+        if(this.elem.querySelector(`[data-root="true"]`).innerHTML === ''){
+          let newCurrentId = null
+          for(let i in appData.componentData){
+            if(appData.componentData[+i+1] && (appData.componentData[+i+1].id === currentElem.elemId)){
+              newCurrentId = appData.componentData[i].id
+            }
+          }
+          this.props.removeComponent({blockId: currentElem.elemId})
+          this.props.setCurrentElem(newCurrentId)
+        }
+        break
+      case 'ArrowUp':
+        currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
+        while(currentElemPos > 0){
+          if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos-1].componentType)){
+            this.props.setCurrentElem(appData.componentData[currentElemPos-1].id)
+            break
+          }
+          currentElemPos--
+        }
+        break
+      case 'ArrowDown':
+          currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
+          while(currentElemPos < appData.componentData.length - 1){
+            if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos+1].componentType)){
+              this.props.setCurrentElem(appData.componentData[currentElemPos+1].id)
+              break
+            }
+            currentElemPos++
+          }
+          break
       default:
         break;
     }
@@ -95,10 +119,10 @@ class AddComponent extends React.Component{
           <React.Fragment>
             {
               <div className="text-type-tools" data-block-type="component-select-div" style={{display: this.state.html ? 'none' : 'flex'}}>
-                <div data-type="Header1" onClick={this.handleTypeSelect}>
+                <div data-type="Header1">
                   <i className="cm-h1" />
                 </div>
-                <div data-type="Header2" onClick={this.handleTypeSelect}>
+                <div data-type="Header2">
                   <i className="cm-h2" />
                 </div>
                 {/* <div data-type="Olist" onClick={this.handleTypeSelect}>
@@ -110,16 +134,16 @@ class AddComponent extends React.Component{
                 <div>
                   <i className="cm-page" />
                 </div> */}
-                <div data-type="Upload" onClick={this.handleTypeSelect}>
+                <div data-type="Upload">
                   <i className="cm-picture" />
                 </div>
-                <div data-type="Embed" onClick={this.handleTypeSelect}>
+                <div data-type="Embed">
                   <i className="cm-video" /> 
                 </div>
                 {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
                   <i className="cm-upload" /> 
                 </div> */}
-                <div data-type="Divider" onClick={this.handleTypeSelect}>
+                <div data-type="Divider">
                   <i className="cm-divider" />  
                 </div>
               </div>
@@ -133,7 +157,9 @@ class AddComponent extends React.Component{
 
 const mapDispatchToProps = {
   addNewComponent,
-  updateComponent
+  updateComponent,
+  removeComponent,
+  setCurrentElem
 }
 
 export default connect(state => state, mapDispatchToProps)(AddComponent)
