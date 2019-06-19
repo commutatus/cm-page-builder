@@ -46,13 +46,13 @@ class AddComponent extends React.Component{
     if(this.elem.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
-      this.props.updateComponentType({currentTarget, target, action: 'updateComponentType'})
+      this.props.updateComponentType({blockId: currentTarget.dataset.blockId, type: target.dataset.type, action: 'updateComponentType'})
     }
   }
 
 
   handleKeyDown = (e) => {
-    let {appData, currentElem} = this.props 
+    let {appData, currentElem, data} = this.props 
     let currentElemPos
     switch (e.key) {
       case 'Enter':
@@ -64,14 +64,18 @@ class AddComponent extends React.Component{
         }
       case 'Backspace':
         if(this.elem.querySelector(`[data-root="true"]`).innerHTML === ''){
-          let newCurrentId = null
-          for(let i in appData.componentData){
-            if(appData.componentData[+i+1] && (appData.componentData[+i+1].id === currentElem.elemId)){
-              newCurrentId = appData.componentData[i].id
+          if (this.props.data.componentType === 'Ulist' || this.props.data.componentType === 'Olist')
+            this.props.updateComponentType({blockId: e.currentTarget.dataset.blockId, type: 'Text', action: 'updateComponentType'})
+          else {
+            let newCurrentId = null
+            for(let i in appData.componentData){
+              if(appData.componentData[+i+1] && (appData.componentData[+i+1].id === currentElem.elemId)){
+                newCurrentId = appData.componentData[i].id
+              }
             }
+            this.props.removeComponent({blockId: currentElem.elemId})
+            this.props.setCurrentElem(newCurrentId)
           }
-          this.props.removeComponent({blockId: currentElem.elemId})
-          this.props.setCurrentElem(newCurrentId)
         }
         break
       case 'ArrowUp':

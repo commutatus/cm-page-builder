@@ -52,10 +52,10 @@ function addComponent(state, data){
 
 function updateComponentTypeState(state, data){
   let {componentData} = state
-  let {currentTarget, target} = data
+  let {blockId, type} = data
   componentData = componentData.map(component => {
-    if(component.id === currentTarget.dataset.blockId){
-      return ({...component, componentType: target.dataset.type})
+    if(component.id === blockId){
+      return ({...component, componentType: type})
     }else{
       return component
     }
