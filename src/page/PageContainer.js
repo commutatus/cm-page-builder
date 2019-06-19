@@ -79,7 +79,6 @@ class PageContainer extends React.Component {
 	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
-		console.log('target', e.target, editTooltip)
 
 		if(editTooltip && !editTooltip.contains(e.target)){
 			this.setState({actionDomRect: null})
@@ -116,20 +115,12 @@ class PageContainer extends React.Component {
 	getPageComponent = (data, index) => {
 		let order = 1
 		let typeName = data.componentType
-		// console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
 		let dataId = data.id
-		// if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
-		// 	order = this.currentListOrder
-		// 	this.currentListOrder++
-		// }else{
-		// 	this.currentListOrder = 1
-		// }
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
-				<AddComponent key={dataId} id={dataId}>
+				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component 
-						data={data}
 						handleUpdate={this.emitUpdate}
 					/>
 				</AddComponent>
@@ -137,9 +128,9 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	// handleMouseUp = (e) => {
-	// 	this.handleSelection(e)
-	// }
+	handleMouseUp = (e) => {
+		this.handleSelection(e)
+	}
 	
 	handleKeyPressList = (e) => {
 		let elem = e.target
@@ -165,11 +156,9 @@ class PageContainer extends React.Component {
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
-		console.log(window.getSelection(), 'Get selection')
 		if(selection){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			console.log('dimension', dimensions)
 			if (dimensions.width > 1)
 				this.setState({actionDomRect: dimensions})
 		}

@@ -43,20 +43,10 @@ function addComponent(state, data){
   const {id} = data
   let temp = []
   let position = 1
-  for(let i in componentData){
-    let componentId = componentData[i].id
-    if(id === componentId){
-      temp.push({...componentData[i], position})
-      temp.push({content: '', position: position+1, componentType: 'Text', id: data.newId})
-      position += 2
-    }
-    else{
-      temp.push({...componentData[i], position})
-      position++
-    }
-  }
-
-  return {componentData: temp}
+  let index = componentData.findIndex(object => object.id === id )
+  let newData = {content: '', position: index+2, componentType: data.componentType, id: data.newId}
+  componentData.splice(index+1, 0, newData )
+  return {componentData}
 }
 
 

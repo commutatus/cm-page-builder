@@ -58,7 +58,8 @@ class AddComponent extends React.Component{
       case 'Enter':
         if(!e.shiftKey){
           e.preventDefault()
-          this.props.addNewComponent({id: e.currentTarget.dataset.blockId})
+          let componentType =  ['Ulist', 'Olist'].includes(e.currentTarget.dataset.componentType) ? e.currentTarget.dataset.componentType : 'Text'
+          this.props.addNewComponent({id: e.currentTarget.dataset.blockId, componentType })
           break;
         }
       case 'Backspace':
@@ -99,8 +100,8 @@ class AddComponent extends React.Component{
   }
 
   render(){
-    let { showActionBtn } = this.state  
-    // console.log(this.props)
+    let { showActionBtn } = this.state 
+    let { data } = this.props 
     return( 
       <div 
         className="add-component-container" 
@@ -108,8 +109,9 @@ class AddComponent extends React.Component{
         onKeyDown={this.handleKeyDown}
         onClick={this.handleClick}
         data-block-id={this.props.id}
+        data-component-type={data.componentType}
       >
-        {this.props.children}
+        { React.cloneElement(this.props.children, { data }) }
         <CSSTransition
           in={showActionBtn}
           timeout={300}
@@ -125,7 +127,7 @@ class AddComponent extends React.Component{
                 <div data-type="Header2">
                   <i className="cm-h2" />
                 </div>
-                {/* <div data-type="Olist" onClick={this.handleTypeSelect}>
+                <div data-type="Olist" onClick={this.handleTypeSelect}>
                   <i className="cm-numbers" />
                 </div>
                 <div data-type="Ulist" onClick={this.handleTypeSelect}>
@@ -133,7 +135,7 @@ class AddComponent extends React.Component{
                 </div>
                 <div>
                   <i className="cm-page" />
-                </div> */}
+                </div>
                 <div data-type="Upload">
                   <i className="cm-picture" />
                 </div>
