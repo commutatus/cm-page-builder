@@ -17,7 +17,6 @@ export const PageDetails = ({
 	currentOffices,
 	isEditMode
 }) => {
-	console.log(pageComponents);
 	
 	return(
 		<div className="page-root-container">

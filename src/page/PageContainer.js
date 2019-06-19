@@ -2,7 +2,8 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
+//import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
+import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
 import AddComponent from '../components/AddComponent';
@@ -29,17 +30,11 @@ class PageContainer extends React.Component {
 	// 	this.setState({ pageComponents, meta: nextProps.meta })
 	// }
 	
-	// componentDidUpdate(){
-	// 	this.currentListOrder = 1
-	// 	this.checkPageHeight();
-	// 	if(this.newElemPos){
-	// 		document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
-	// 		this.newElemPos = null
-	// 	}
-	// 	if(this.state.actionDomRect){
-	// 		document.addEventListener('mousedown', this.handlePageClick)
-	// 	}
-	// }
+	componentDidUpdate(){
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
+	}
 
 	// handleNonTextComponent = (pageComponents, props) => {
 	// 	if(props.status === 'Edit'){
@@ -84,6 +79,8 @@ class PageContainer extends React.Component {
 	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
+		console.log('target', e.target, editTooltip)
+
 		if(editTooltip && !editTooltip.contains(e.target)){
 			this.setState({actionDomRect: null})
 		}else{
@@ -203,15 +200,21 @@ class PageContainer extends React.Component {
 					nextSibling.firstChild.firstChild.focus()
 				}
 				break;
+			case 'a':
+				if (e.ctrlKey || e.metaKey)
+					this.handleSelection(e)
+					
+				break;				
 		}
 	}
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
-		if(selection.toString()){
+		if(selection){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			this.setState({actionDomRect: dimensions})
+			if (dimensions.width > 1)
+				this.setState({actionDomRect: dimensions})
 		}
 		else{
 			this.currentElemSelection = null
@@ -252,36 +255,43 @@ class PageContainer extends React.Component {
 						isEditMode={this.props.status === 'Edit'}
 					/>
 				</PermissionContext.Provider>
+				<CSSTransition
+					in={actionDomRect && actionDomRect.top && this.props.status === 'Edit' }
+					timeout={300}
+					classNames="dropdown-fade"
+				>
 				{
-					actionDomRect && actionDomRect.top && this.props.status === 'Edit' ?
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
-						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
-						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
-							<i className="cm-italic" />
+					actionDomRect && actionDomRect.top && this.props.status === 'Edit' 
+					?
+						<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
+							<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
+							<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
+								<i className="cm-italic" />
+							</div>
+							<div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
+								<i className="cm-strikethrough" />
+							</div>
+							<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
+								<i className="cm-link" />
+							</div>
+							{/* <div className="divider"></div>
+							<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
+								<i className="cm-h1" />
+							</div>
+							<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
+							<i className="cm-h2" />
+							</div>
+							<div className="tool-btn">
+								<i className="cm-bullets" />
+							</div>
+							<div className="tool-btn">
+								<i className="cm-numbers" />
+							</div> */}
 						</div>
-						<div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
-							<i className="cm-strikethrough" />
-						</div>
-						<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
-							<i className="cm-link" />
-						</div>
-						{/* <div className="divider"></div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
-							<i className="cm-h1" />
-						</div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
-						<i className="cm-h2" />
-						</div>
-						<div className="tool-btn">
-							<i className="cm-bullets" />
-						</div>
-						<div className="tool-btn">
-							<i className="cm-numbers" />
-						</div> */}
-					</div>
 					:
-					''
+					<div/>
 				}
+				</CSSTransition>
 			</div>
 		)
 	}
