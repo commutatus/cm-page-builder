@@ -3,4 +3,6 @@ export const TEXT_INPUT_COMPONENT = [
   'Title',
   'Header1',
   'Header2',  
+  'Ulist',
+  'Olist'
 ]
