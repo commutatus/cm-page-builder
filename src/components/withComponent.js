@@ -1,16 +1,7 @@
 import React from 'react'
 import { PermissionContext } from '../contexts/permission-context';
 
-const getVideoUrl = (url) => {
-	let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
-	if (url.includes('vimeo')) {
-		return `//player.vimeo.com/video/${videoid}`
-	}
-	else if (url.includes('youtube')) {
-		return `https://www.youtube.com/embed/${videoid}`
-	}
-	return ''
-}
+
 const withComponent = (WrappedComponent) => {
 	class withComponent extends React.Component {
 
@@ -86,14 +77,12 @@ const withComponent = (WrappedComponent) => {
 			
 		render () {
 			const { html, file, videoUrl, showMoreOptions, image } = this.state
-			const { id, ...rest } = this.props
 			return (
 				<WrappedComponent
-					{ ...rest }
+					{ ...this.props.data }
 					html={html}
 					handleChange={this._handleChanges}
 					uploadImage={this._uploadImage}
-					id={id}
 					file={file}
 					image={image}
 					videoUrl={videoUrl}
@@ -110,3 +99,15 @@ const withComponent = (WrappedComponent) => {
 }
 
 export default withComponent
+
+
+const getVideoUrl = (url) => {
+	let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
+	if (url.includes('vimeo')) {
+		return `//player.vimeo.com/video/${videoid}`
+	}
+	else if (url.includes('youtube')) {
+		return `https://www.youtube.com/embed/${videoid}`
+	}
+	return ''
+}

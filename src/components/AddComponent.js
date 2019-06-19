@@ -1,8 +1,13 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 import '../styles/components/AddComponent.css'
+import { connect } from 'react-redux';
+import {
+  addNewComponent,
+  updateComponent
+} from '../redux/reducers/appDataReducers'
 
-export class AddComponent extends React.Component{
+class AddComponent extends React.Component{
   constructor(props){
     super(props)
     this.state = {
@@ -21,36 +26,43 @@ export class AddComponent extends React.Component{
     this.setState({showActionBtn: !data})
   }
 
-  getPageComponent = (type) => {
-		let typeName = type.split(' ').join('')
-    let Component = require(`./${typeName}`)[typeName]
-    return(
-        <Component 
-          key={`${type}-${this.props.id}`} 
-          id={this.props.id} 
-          handleUpdate={this.props.handleUpdate}
-          onInputChange={this.handleInput}
-          currentType={this.state.pageComponentType ? this.state.pageComponentType : `Text` }
-          newComponent
-          order={this.props.order}
-          position={this.props.position}
-        />
-    )
+  handleClick = (e) => {
+    if(document.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
+      let currentTarget = e.currentTarget
+      let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
+      this.props.updateComponent({currentTarget, target, action: 'updateComponentType'})
+    }
+    // this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
+    //   if(this.state.pageComponentType === 'Divider'){
+    //     this.props.handleUpdate({component_type: 'Divider', position: this.props.position, content: `divider-${this.props.position}`})
+    //   }
+    // })
   }
-  
-  handleTypeSelect = (e) => {
-    this.setState({pageComponentType: e.currentTarget.dataset.type}, () => {
-      if(this.state.pageComponentType === 'Divider'){
-        this.props.handleUpdate({component_type: 'Divider', position: this.props.position, content: `divider-${this.props.position}`})
-      }
-    })
+
+  handleTypeSelect = () => {}
+
+  handleKeyPress = (e) => {
+    switch (e.key) {
+      case 'Enter':
+        e.preventDefault()
+        this.props.addNewComponent({id: e.target.dataset.blockId})
+        break;
+      default:
+        break;
+    }
   }
 
   render(){
     let { showActionBtn } = this.state  
     return( 
-      <div className="add-component-container" ref={node => this.elem = node}>
-        {this.getPageComponent(this.state.pageComponentType)}
+      <div 
+        className="add-component-container" 
+        ref={node => this.elem = node} 
+        onKeyDown={this.handleKeyPress}
+        onClick={this.handleClick}
+        data-block-id={this.props.id}
+      >
+        {this.props.children}
         <CSSTransition
           in={showActionBtn}
           timeout={300}
@@ -59,7 +71,7 @@ export class AddComponent extends React.Component{
         >
           <React.Fragment>
             {
-              <div className="text-type-tools" style={{display: this.state.html ? 'none' : 'flex'}}>
+              <div className="text-type-tools" data-block-type="component-select-div" style={{display: this.state.html ? 'none' : 'flex'}}>
                 <div data-type="Header1" onClick={this.handleTypeSelect}>
                   <i className="cm-h1" />
                 </div>
@@ -95,3 +107,10 @@ export class AddComponent extends React.Component{
     )
   }
 }
+
+const mapDispatchToProps = {
+  addNewComponent,
+  updateComponent
+}
+
+export default connect(state => state, mapDispatchToProps)(AddComponent)

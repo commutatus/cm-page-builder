@@ -1,8 +1,9 @@
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/components/DragHandle.css';
-
-export default class DragHandle extends React.Component{
+import {connect} from 'react-redux'
+import { removeComponent } from "../redux/reducers/appDataReducers";
+class DragHandle extends React.Component{
   constructor(props){
     super(props)
     this.state = {
@@ -35,9 +36,8 @@ export default class DragHandle extends React.Component{
   handleClick = (e) => {
     switch (e.target.dataset.action) {
       case 'delete':
-        this.props.handleAction('remove-component', this.props.id)
+        this.props.removeComponent({blockId: this.props.id})
         break;
-    
       default:
         break;
     }
@@ -46,7 +46,12 @@ export default class DragHandle extends React.Component{
 
   render(){
     return(
-      <div className="component-dragger" onClick={this.optionHandleClick} id="drag-handle">
+      <div 
+        id="drag-handle" 
+        className="component-dragger" 
+        data-block-id={this.props.id}
+        onClick={this.optionHandleClick} 
+      >
         <i className="cm cm-handle" />
         <CSSTransition
           in={this.state.showMoreOptions}
@@ -70,3 +75,9 @@ export default class DragHandle extends React.Component{
     )
   }
 }
+
+const mapDispatchToProps = {
+  removeComponent
+}
+
+export default connect(state => state, mapDispatchToProps)(DragHandle)
