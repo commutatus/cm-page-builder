@@ -12,21 +12,43 @@ class AddComponent extends React.Component{
     super(props)
     this.state = {
       showActionBtn: true,
-      pageComponentType: props.currentType 
+      // pageComponentType: props.currentType 
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    this.setState({
-      pageComponentType: nextProps.currentType, 
-    })
+  componentDidMount(){
+    let {currentElem, id} = this.props
+    if(currentElem.elemId && id === currentElem.elemId){
+      this.checkAndFocus(id)
+    }
   }
+
+  // componentWillReceiveProps(nextProps){
+  //   this.setState({
+  //     pageComponentType: nextProps.currentType, 
+  //   })
+  // }
+  
+  componentDidUpdate(){
+    let {currentElem, id} = this.props
+    if(currentElem.elemId && id === currentElem.elemId){
+      this.checkAndFocus(id)
+    }
+  }
+
+  checkAndFocus = (id) => {
+    let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
+    if(elem !== document.activeElement){
+      elem.focus()
+    }
+  } 
 
   handleInput = (data) => {
     this.setState({showActionBtn: !data})
   }
 
   handleClick = (e) => {
+    console.log(e.currentTarget)
     if(document.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
@@ -41,7 +63,7 @@ class AddComponent extends React.Component{
 
   handleTypeSelect = () => {}
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     switch (e.key) {
       case 'Enter':
         e.preventDefault()
@@ -54,11 +76,12 @@ class AddComponent extends React.Component{
 
   render(){
     let { showActionBtn } = this.state  
+    // console.log(this.props)
     return( 
       <div 
         className="add-component-container" 
         ref={node => this.elem = node} 
-        onKeyDown={this.handleKeyPress}
+        onKeyDown={this.handleKeyDown}
         onClick={this.handleClick}
         data-block-id={this.props.id}
       >

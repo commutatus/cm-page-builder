@@ -17,6 +17,7 @@ export const PageDetails = ({
 	currentOffices,
 	isEditMode
 }) => {
+	console.log(pageComponents);
 	
 	return(
 		<div className="page-root-container">
@@ -68,7 +69,7 @@ export const PageDetails = ({
 				</div>
 				<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
 				{ 
-					pageComponents && pageComponents.map((component, index) => getPageComponent(component, index))
+					pageComponents.map((component, index) => getPageComponent(component, index))
 				}
 				</div>
 			</div>
