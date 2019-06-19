@@ -229,27 +229,6 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	editComponent = (e, newType) => {
-		e.preventDefault()
-		let {pageComponents} = this.state
-		let type = newType ? newType : e.currentTarget.dataset.type
-		let componentId = this.currentElemSelection ? this.currentElemSelection.elemId : null
-		if(componentId){
-			let isNewComponent = false
-			if(componentId.includes('AddComponent')){
-				componentId = componentId.split('-')[1]
-				isNewComponent = true
-			}
-			pageComponents = pageComponents.map((component, index) => {
-				if(isNewComponent && componentId == index){
-					return({...component, currentType: type})
-				}
-				return({...component, component_type: type}) 
-			})	
-		}
-		this.setState({pageComponents, actionDomRect: null})
-	}
-
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
 		const {appData} = this.props
@@ -259,7 +238,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onKeyUp={this.handelKeyPress}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction, editComponent: this.editComponent}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit' , handleAction: this.handleAction}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}

@@ -1,11 +1,23 @@
 import uuid from 'uuid/v4'
-import { sortDataOnPos } from '../../utils/helpers';
-const ADD_COMPONENT = 'ADD_COMPONENT'
-const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
-const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
+import { SET_CURRENT_ELEM } from './currentElemReducer';
+export const ADD_COMPONENT = 'ADD_COMPONENT'
+export const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
+export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 
 export const addNewComponent = (data) => {
-  return ({type: ADD_COMPONENT, data})
+  return dispatch => {
+    let newId = uuid()
+    console.log(typeof newId, newId)
+    dispatch({
+      type: ADD_COMPONENT, 
+      data: {...data, newId}
+    })
+    console.log(newId)
+    dispatch({
+      type: SET_CURRENT_ELEM,
+      elemId: newId
+    })
+  }
 }
 
 export const removeComponent = (data) => {
@@ -17,7 +29,7 @@ export const updateComponent = (data) => {
 }
 
 const initialState = {
-  componentData: [{id: uuid(), componentType: 'Text', content: '', position: 1}]
+  componentData: [{content: '', position: 1, componentType: 'Text', id: uuid()}]
 }
 
 
@@ -31,7 +43,7 @@ function addComponent(state, data){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      temp.push({content: '', position: position+1, componentType: 'Text', id: uuid()})
+      temp.push({content: '', position: position+1, componentType: 'Text', id: data.newId})
       position += 2
     }
     else{
@@ -39,7 +51,7 @@ function addComponent(state, data){
       position++
     }
   }
-  
+
   return {componentData: temp}
 }
 

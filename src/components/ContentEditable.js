@@ -38,24 +38,6 @@ class ContentEditable extends React.Component{
     }
   }
 
-  // handleKeyDown = (e, handleAction) => {
-  //   if(e.key === 'Backspace'){
-  //     if(!this.elem.innerHTML){
-  //       let prevChild = null
-  //       if(this.elem.parentNode.previousSibling){
-  //         if(this.elem.parentNode.previousSibling.nodeName === 'SPAN'){
-  //           prevChild = this.elem.parentNode.parentNode.previousSibling.childNodes[1].childNodes[1]
-  //         }else{
-  //           prevChild = this.elem.parentNode.previousSibling.firstChild[1]
-  //         }
-  //       }else{
-  //         prevChild = this.elem.parentNode.parentNode.previousSibling.firstChild.firstChild[1]
-  //       }
-  //       prevChild.focus()
-  //       handleAction('remove-component', this.props.id, this.elem)
-  //     }
-  //   }
-  // }
 
   emitChange = (e) => {
     // if(this.props.orderedList){
@@ -72,18 +54,18 @@ class ContentEditable extends React.Component{
     this.props.removeCurrentElem()
   }
 
-  onInputChange = (e) => {
-    var html = this.elem.innerHTML
-    if (this.props.onInputChange) {
-      this.props.onInputChange(html);
-      // this.emitChange(e)
-    }
-  }
+  // onInputChange = (e) => {
+  //   var html = this.elem.innerHTML
+  //   if (this.props.onInputChange) {
+  //     this.props.onInputChange(html);
+  //     // this.emitChange(e)
+  //   }
+  // }
 
 
   handleFocus = (e) => {
     e.persist()
-    this.props.setCurrentElem(e.target)
+    this.props.setCurrentElem(e.target.dataset.id)
     // if(this.props.orderedList){
     //   e.target.parentElement.parentElement.className = "list-span-focus"
     // }
