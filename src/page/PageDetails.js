@@ -21,7 +21,7 @@ export const PageDetails = ({
 	
 	return(
 		<div className="page-root-container">
-			<div className="page-container">
+			<div className="page-container" data-container-block="true">
 				<EmojiIconContainer 
 					handleUpdate={emitUpdate}
 					emoji={meta && meta.emoji}

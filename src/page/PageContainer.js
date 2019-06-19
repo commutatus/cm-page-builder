@@ -143,7 +143,7 @@ class PageContainer extends React.Component {
 	handleMouseUp = (e) => {
 		this.handleSelection(e)
 	}
-	
+
 	handleSelection = (e) => {
 		let selection = window.getSelection()
 		if(selection.toString()){
@@ -167,6 +167,15 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handleClick = (e) => {
+		e.persist()
+		let conElem = document.querySelector(`[data-container-block="true"]`)
+		// debugger
+		if(conElem.offsetHeight < e.pageY){
+			console.log('add component')
+		}
+	}
+
 	render() {
 		const { pageComponents, meta, actionDomRect } = this.state
 		const {appData} = this.props
@@ -174,7 +183,7 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onKeyUp={this.handelKeyPress}
+				onClick={this.handleClick}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
