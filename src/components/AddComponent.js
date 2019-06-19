@@ -125,7 +125,7 @@ class AddComponent extends React.Component{
                 <div data-type="Header2">
                   <i className="cm-h2" />
                 </div>
-                {/* <div data-type="Olist" onClick={this.handleTypeSelect}>
+                <div data-type="Olist" onClick={this.handleTypeSelect}>
                   <i className="cm-numbers" />
                 </div>
                 <div data-type="Ulist" onClick={this.handleTypeSelect}>
@@ -133,7 +133,7 @@ class AddComponent extends React.Component{
                 </div>
                 <div>
                   <i className="cm-page" />
-                </div> */}
+                </div>
                 <div data-type="Upload">
                   <i className="cm-picture" />
                 </div>
