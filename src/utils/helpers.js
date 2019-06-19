@@ -1,3 +1,15 @@
+//Vimeo and youtube validator
+export const getVideoUrl = (url) => {
+	let videoid = url.replace(/(https{0,1}:\/\/){0,1}(www\.){0,1}((youtube.com\/{0,1}(watch\?v=){0,1})|(vimeo.com\/{0,1}))/g, "")
+	if (url.includes('vimeo')) {
+		return `//player.vimeo.com/video/${videoid}`
+	}
+	else if (url.includes('youtube')) {
+		return `https://www.youtube.com/embed/${videoid}`
+	}
+	return ''
+}
+
 
 //sort pageComponents on the basis of pos
 export function sortDataOnPos(data){
