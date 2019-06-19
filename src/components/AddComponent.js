@@ -4,7 +4,7 @@ import '../styles/components/AddComponent.css'
 import { connect } from 'react-redux';
 import {
   addNewComponent,
-  updateComponent,
+  updateComponentType,
   removeComponent
 } from '../redux/reducers/appDataReducers'
 import {
@@ -46,7 +46,7 @@ class AddComponent extends React.Component{
     if(this.elem.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
-      this.props.updateComponent({currentTarget, target, action: 'updateComponentType'})
+      this.props.updateComponentType({currentTarget, target, action: 'updateComponentType'})
     }
   }
 
@@ -157,7 +157,7 @@ class AddComponent extends React.Component{
 
 const mapDispatchToProps = {
   addNewComponent,
-  updateComponent,
+  updateComponentType,
   removeComponent,
   setCurrentElem
 }

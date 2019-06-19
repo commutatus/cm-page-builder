@@ -7,12 +7,9 @@ import withComponent from './withComponent';
 const WrappedHeader2 = (props) => {
   return(
     <ContentEditable 
-      html={props.html}
-      onChange={props.handleChange} 
-      onInputChange={props.onInputChange}
+      {...props}
       placeholder="Header2"
       className="cm-header2"
-      id={props.id}
     />
   )
 }
