@@ -33,6 +33,8 @@ class AddComponent extends React.Component{
     if(currentElem.elemId && id === currentElem.elemId){
       let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
       if(elem !== document.activeElement){
+        // setTimeout(() = )
+        // elem.setSelectionRange(elem.innerHTML.length,elem.innerHTML.length);
         elem.focus()
       }
     }
@@ -46,31 +48,33 @@ class AddComponent extends React.Component{
     if(this.elem.querySelector(`[data-block-type="component-select-div"]`).contains(e.target)){
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
-      this.props.updateComponentType({currentTarget, target, action: 'updateComponentType'})
+      this.props.updateComponentType({blockId: currentTarget.dataset.blockId, type: target.dataset.type, action: 'updateComponentType'})
     }
   }
 
 
   handleKeyDown = (e) => {
-    let {appData, currentElem} = this.props 
+    let {appData, currentElem, data} = this.props 
     let currentElemPos
     switch (e.key) {
       case 'Enter':
         if(!e.shiftKey){
           e.preventDefault()
-          this.props.addNewComponent({id: e.currentTarget.dataset.blockId})
+          let componentType =  ['Ulist', 'Olist'].includes(e.currentTarget.dataset.componentType) ? e.currentTarget.dataset.componentType : 'Text'
+          this.props.addNewComponent({id: e.currentTarget.dataset.blockId, componentType })
           break;
         }
       case 'Backspace':
         if(this.elem.querySelector(`[data-root="true"]`).innerHTML === ''){
-          let newCurrentId = null
-          for(let i in appData.componentData){
-            if(appData.componentData[+i+1] && (appData.componentData[+i+1].id === currentElem.elemId)){
-              newCurrentId = appData.componentData[i].id
-            }
+          if (this.props.data.componentType === 'Ulist' || this.props.data.componentType === 'Olist')
+            this.props.updateComponentType({blockId: e.currentTarget.dataset.blockId, type: 'Text', action: 'updateComponentType'})
+          else {
+            let newCurrentId = null
+            let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
+            newCurrentId = appData.componentData[fromIndex-1].id
+            this.props.removeComponent({blockId: currentElem.elemId})
+            this.props.setCurrentElem(newCurrentId)
           }
-          this.props.removeComponent({blockId: currentElem.elemId})
-          this.props.setCurrentElem(newCurrentId)
         }
         break
       case 'ArrowUp':
@@ -99,8 +103,8 @@ class AddComponent extends React.Component{
   }
 
   render(){
-    let { showActionBtn } = this.state  
-    // console.log(this.props)
+    let { showActionBtn } = this.state 
+    let { data } = this.props 
     return( 
       <div 
         className="add-component-container" 
@@ -108,8 +112,9 @@ class AddComponent extends React.Component{
         onKeyDown={this.handleKeyDown}
         onClick={this.handleClick}
         data-block-id={this.props.id}
+        data-component-type={data.componentType}
       >
-        {this.props.children}
+        { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
         <CSSTransition
           in={showActionBtn}
           timeout={300}
@@ -125,10 +130,10 @@ class AddComponent extends React.Component{
                 <div data-type="Header2">
                   <i className="cm-h2" />
                 </div>
-                <div data-type="Olist" onClick={this.handleTypeSelect}>
+                <div data-type="Olist" >
                   <i className="cm-numbers" />
                 </div>
-                <div data-type="Ulist" onClick={this.handleTypeSelect}>
+                <div data-type="Ulist">
                   <i className="cm-bullets" />
                 </div>
                 <div>

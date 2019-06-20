@@ -13,6 +13,7 @@ const WrappedUlist = (props) =>  {
           placeholder="Bulleted list"
           className="cm-text-block"
           id={props.id}
+          data-component-type={'Ulist'}
           listOrder={<span className="bulleted-dot"></span>}
           unorderedList
         />

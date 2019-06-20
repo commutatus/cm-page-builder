@@ -40,14 +40,14 @@ const initialState = {
 //Accept the current state and data about old elem so we can create a new component as needed.
 function addComponent(state, data){
   const {componentData} = state
-  const {id} = data
+  const {id, componentType} = data
   let temp = []
   let position = 1
   for(let i in componentData){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      temp.push({content: '', position: position+1, componentType: 'Text', id: data.newId})
+      temp.push({content: '', position: position+1, componentType: componentType, id: data.newId})
       position += 2
     }
     else{
@@ -55,17 +55,16 @@ function addComponent(state, data){
       position++
     }
   }
-
   return {componentData: temp}
 }
 
 
 function updateComponentTypeState(state, data){
   let {componentData} = state
-  let {currentTarget, target} = data
+  let {blockId, type} = data
   componentData = componentData.map(component => {
-    if(component.id === currentTarget.dataset.blockId){
-      return ({...component, componentType: target.dataset.type})
+    if(component.id === blockId){
+      return ({...component, componentType: type})
     }else{
       return component
     }

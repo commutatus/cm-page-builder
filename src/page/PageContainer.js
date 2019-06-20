@@ -2,11 +2,12 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
+//import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
+import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
 import AddComponent from '../components/AddComponent';
-
+import '../styles/animations.css'
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -29,17 +30,11 @@ class PageContainer extends React.Component {
 	// 	this.setState({ pageComponents, meta: nextProps.meta })
 	// }
 	
-	// componentDidUpdate(){
-	// 	this.currentListOrder = 1
-	// 	this.checkPageHeight();
-	// 	if(this.newElemPos){
-	// 		document.querySelector(`[data-id=AddComponent-${this.newElemPos}]`).focus()
-	// 		this.newElemPos = null
-	// 	}
-	// 	if(this.state.actionDomRect){
-	// 		document.addEventListener('mousedown', this.handlePageClick)
-	// 	}
-	// }
+	componentDidUpdate(){
+		if(this.state.actionDomRect){
+			document.addEventListener('mousedown', this.handlePageClick)
+		}
+	}
 
 	// handleNonTextComponent = (pageComponents, props) => {
 	// 	if(props.status === 'Edit'){
@@ -84,6 +79,7 @@ class PageContainer extends React.Component {
 	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
+
 		if(editTooltip && !editTooltip.contains(e.target)){
 			this.setState({actionDomRect: null})
 		}else{
@@ -103,37 +99,29 @@ class PageContainer extends React.Component {
 		// 	handleUpdate(data, id, type, key)
 	}
 
-	// _getCurrentOrder = (currentIndex) => {
-		
-	// 	if (typeof this._getCurrentOrder.counter == 'undefined')
-	// 		this._getCurrentOrder.counter = 1
-	// 	if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
-	// 		this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
-	// 		this.newOrder = 0
-	// 	}
-	// 	else 
-	// 		this._getCurrentOrder.counter = 1
-	// 	return this._getCurrentOrder.counter 
-	// }
+	_getCurrentOrder = (currentIndex) => {
+		const { appData } = this.props
+		if (typeof this._getCurrentOrder.counter === 'undefined')
+			this._getCurrentOrder.counter = 1
+		if (currentIndex > 0 && appData.componentData[currentIndex-1] && appData.componentData[currentIndex-1].componentType === `Olist`) {
+			this._getCurrentOrder.counter++
+		}
+		else 
+			this._getCurrentOrder.counter = 1
+		return this._getCurrentOrder.counter 
+	}
 
 	getPageComponent = (data, index) => {
 		let order = 1
 		let typeName = data.componentType
-		// console.log(data, this.props.typeMapping, this.props.typeMapping[data.component_type])
 		let dataId = data.id
-		// if (data.currentType === 'Olist' || data.component_type === `ordered_list`) {
-		// 	order = this.currentListOrder
-		// 	this.currentListOrder++
-		// }else{
-		// 	this.currentListOrder = 1
-		// }
 		if(typeName){
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
-				<AddComponent key={dataId} id={dataId}>
+				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component 
-						data={data}
 						handleUpdate={this.emitUpdate}
+						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
 					/>
 				</AddComponent>
 			)
@@ -143,13 +131,23 @@ class PageContainer extends React.Component {
 	handleMouseUp = (e) => {
 		this.handleSelection(e)
 	}
+	
+	handleKeyPressList = (e) => {
+		switch(e.key){
+			case 'a':
+				if (e.ctrlKey || e.metaKey) 
+					this.handleSelection(e)
+				break;				
+		}
+	}
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
-		if(selection.toString()){
+		if(selection){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			this.setState({actionDomRect: dimensions})
+			if (dimensions.width > 1)
+				this.setState({actionDomRect: dimensions})
 		}
 		else{
 			this.currentElemSelection = null
@@ -176,8 +174,16 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	showTooltip = () => {
+		this.setState({ showTooltip: true })
+	}
+
+	hideTooltip = () => {
+		this.setState({ showTooltip: false })
+	}
+
 	render() {
-		const { pageComponents, meta, actionDomRect } = this.state
+		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
 		return (
 			<div
@@ -199,9 +205,15 @@ class PageContainer extends React.Component {
 						isEditMode={this.props.status === 'Edit'}
 					/>
 				</PermissionContext.Provider>
-				{
-					actionDomRect && actionDomRect.top && this.props.status === 'Edit' ?
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
+				<CSSTransition
+					in={actionDomRect && actionDomRect.top && this.props.status === 'Edit' }
+					timeout={400}
+					classNames="dropdown-fade"
+					onEnter={this.showTooltip}
+					onExited={this.hideTooltip}
+					unmountOnExit
+				>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? {top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left} : {display: 'none'}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
 						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
@@ -226,9 +238,7 @@ class PageContainer extends React.Component {
 							<i className="cm-numbers" />
 						</div> */}
 					</div>
-					:
-					''
-				}
+				</CSSTransition>
 			</div>
 		)
 	}
