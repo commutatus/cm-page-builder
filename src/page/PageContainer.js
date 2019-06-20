@@ -7,7 +7,7 @@ import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
 import AddComponent from '../components/AddComponent';
-
+import '../styles/animations.css'
 class PageContainer extends React.Component {
 
 	constructor(props) {
