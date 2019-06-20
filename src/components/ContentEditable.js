@@ -25,9 +25,22 @@ class ContentEditable extends React.Component{
     this.props.setCurrentElem(this.props.id)
   }
 
+  // Method to position the cursor at the end of the content
+  setCursorToEnd = (elem, pos) => {
+    if(elem.setSelectionRange) {
+      elem.setSelectionRange(pos,pos);
+    }
+    else if (elem.createTextRange) {
+      var range = elem.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', pos);
+      range.moveStart('character', pos);
+      range.select();
+    }
+  }
+
   render() {
     const { placeholder, className, styles, handleMouseUp, listOrder, content } = this.props
-    console.log(this.props)
     return(
       <PermissionContext.Consumer>
         {

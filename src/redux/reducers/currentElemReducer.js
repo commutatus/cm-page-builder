@@ -7,7 +7,6 @@ const initialState = {
 }
 
 export const setCurrentElem = elemId => {
-  console.log(elemId)
   return ({elemId, type: SET_CURRENT_ELEM})
 }
 
