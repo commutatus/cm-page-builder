@@ -33,6 +33,8 @@ class AddComponent extends React.Component{
     if(currentElem.elemId && id === currentElem.elemId){
       let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
       if(elem !== document.activeElement){
+        // setTimeout(() = )
+        // elem.setSelectionRange(elem.innerHTML.length,elem.innerHTML.length);
         elem.focus()
       }
     }
@@ -68,11 +70,8 @@ class AddComponent extends React.Component{
             this.props.updateComponentType({blockId: e.currentTarget.dataset.blockId, type: 'Text', action: 'updateComponentType'})
           else {
             let newCurrentId = null
-            for(let i in appData.componentData){
-              if(appData.componentData[+i+1] && (appData.componentData[+i+1].id === currentElem.elemId)){
-                newCurrentId = appData.componentData[i].id
-              }
-            }
+            let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
+            newCurrentId = appData.componentData[fromIndex-1].id
             this.props.removeComponent({blockId: currentElem.elemId})
             this.props.setCurrentElem(newCurrentId)
           }
@@ -115,7 +114,7 @@ class AddComponent extends React.Component{
         data-block-id={this.props.id}
         data-component-type={data.componentType}
       >
-        { React.cloneElement(this.props.children, { data }) }
+        { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
         <CSSTransition
           in={showActionBtn}
           timeout={300}
@@ -131,10 +130,10 @@ class AddComponent extends React.Component{
                 <div data-type="Header2">
                   <i className="cm-h2" />
                 </div>
-                <div data-type="Olist" onClick={this.handleTypeSelect}>
+                <div data-type="Olist" >
                   <i className="cm-numbers" />
                 </div>
-                <div data-type="Ulist" onClick={this.handleTypeSelect}>
+                <div data-type="Ulist">
                   <i className="cm-bullets" />
                 </div>
                 <div>

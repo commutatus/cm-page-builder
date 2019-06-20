@@ -6,7 +6,7 @@ const withComponent = (WrappedComponent) => {
 		render () {
 			return (
 				<WrappedComponent
-					{ ...this.props.data }
+					{ ...this.props }
 				/>
 			)
 		}

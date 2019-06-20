@@ -99,18 +99,17 @@ class PageContainer extends React.Component {
 		// 	handleUpdate(data, id, type, key)
 	}
 
-	// _getCurrentOrder = (currentIndex) => {
-		
-	// 	if (typeof this._getCurrentOrder.counter == 'undefined')
-	// 		this._getCurrentOrder.counter = 1
-	// 	if (this.state.pageComponents[currentIndex-1] && this.state.pageComponents[currentIndex-1].component_type === `ordered_list`) {
-	// 		this._getCurrentOrder.counter = this.newOrder === 1 ? this.newOrder+1 : this._getCurrentOrder.counter+1
-	// 		this.newOrder = 0
-	// 	}
-	// 	else 
-	// 		this._getCurrentOrder.counter = 1
-	// 	return this._getCurrentOrder.counter 
-	// }
+	_getCurrentOrder = (currentIndex) => {
+		const { appData } = this.props
+		if (typeof this._getCurrentOrder.counter === 'undefined')
+			this._getCurrentOrder.counter = 1
+		if (currentIndex > 0 && appData.componentData[currentIndex-1] && appData.componentData[currentIndex-1].componentType === `Olist`) {
+			this._getCurrentOrder.counter++
+		}
+		else 
+			this._getCurrentOrder.counter = 1
+		return this._getCurrentOrder.counter 
+	}
 
 	getPageComponent = (data, index) => {
 		let order = 1
@@ -122,6 +121,7 @@ class PageContainer extends React.Component {
 				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component 
 						handleUpdate={this.emitUpdate}
+						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
 					/>
 				</AddComponent>
 			)
@@ -178,8 +178,16 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	showTooltip = () => {
+		this.setState({ showTooltip: true })
+	}
+
+	hideTooltip = () => {
+		this.setState({ showTooltip: false })
+	}
+
 	render() {
-		const { pageComponents, meta, actionDomRect } = this.state
+		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
 		return (
 			<div
@@ -203,40 +211,36 @@ class PageContainer extends React.Component {
 				</PermissionContext.Provider>
 				<CSSTransition
 					in={actionDomRect && actionDomRect.top && this.props.status === 'Edit' }
-					timeout={300}
+					timeout={400}
 					classNames="dropdown-fade"
+					onEnter={this.showTooltip}
+					onExited={this.hideTooltip}
 				>
-				{
-					actionDomRect && actionDomRect.top && this.props.status === 'Edit' 
-					?
-						<div className="text-selection-tool" id="cm-text-edit-tooltip" style={{top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left}}>
-							<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
-							<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
-								<i className="cm-italic" />
-							</div>
-							<div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
-								<i className="cm-strikethrough" />
-							</div>
-							<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
-								<i className="cm-link" />
-							</div>
-							{/* <div className="divider"></div>
-							<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
-								<i className="cm-h1" />
-							</div>
-							<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
-							<i className="cm-h2" />
-							</div>
-							<div className="tool-btn">
-								<i className="cm-bullets" />
-							</div>
-							<div className="tool-btn">
-								<i className="cm-numbers" />
-							</div> */}
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? {top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left} : {display: 'none'}}>
+						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
+						<div className="tool-btn" onMouseDown={this.editText} data-action="italic">
+							<i className="cm-italic" />
 						</div>
-					:
-					<div/>
-				}
+						<div className="tool-btn" onMouseDown={this.editText} data-action="strikeThrough">
+							<i className="cm-strikethrough" />
+						</div>
+						<div className="tool-btn" onMouseDown={this.editText} data-action="createLink">
+							<i className="cm-link" />
+						</div>
+						{/* <div className="divider"></div>
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
+							<i className="cm-h1" />
+						</div>
+						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
+						<i className="cm-h2" />
+						</div>
+						<div className="tool-btn">
+							<i className="cm-bullets" />
+						</div>
+						<div className="tool-btn">
+							<i className="cm-numbers" />
+						</div> */}
+					</div>
 				</CSSTransition>
 			</div>
 		)

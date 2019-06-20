@@ -40,13 +40,22 @@ const initialState = {
 //Accept the current state and data about old elem so we can create a new component as needed.
 function addComponent(state, data){
   const {componentData} = state
-  const {id} = data
+  const {id, componentType} = data
   let temp = []
   let position = 1
-  let index = componentData.findIndex(object => object.id === id )
-  let newData = {content: '', position: index+2, componentType: data.componentType, id: data.newId}
-  componentData.splice(index+1, 0, newData )
-  return {componentData}
+  for(let i in componentData){
+    let componentId = componentData[i].id
+    if(id === componentId){
+      temp.push({...componentData[i], position})
+      temp.push({content: '', position: position+1, componentType: componentType, id: data.newId})
+      position += 2
+    }
+    else{
+      temp.push({...componentData[i], position})
+      position++
+    }
+  }
+  return {componentData: temp}
 }
 
 
