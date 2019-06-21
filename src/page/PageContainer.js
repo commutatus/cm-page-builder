@@ -133,20 +133,7 @@ class PageContainer extends React.Component {
 	}
 	
 	handleKeyPressList = (e) => {
-		let elem = e.target
 		switch(e.key){
-			case 'ArrowUp':
-				let prevSibling = elem.parentElement.parentElement.previousElementSibling
-				if(prevSibling){
-					prevSibling.firstChild.firstChild.focus()
-				}
-				break;
-			case 'ArrowDown':
-				let nextSibling = elem.parentElement.parentElement.nextElementSibling
-				if(nextSibling){
-					nextSibling.firstChild.firstChild.focus()
-				}
-				break;
 			case 'a':
 				if (e.ctrlKey || e.metaKey) 
 					this.handleSelection(e)
@@ -178,6 +165,15 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handleClick = (e) => {
+		e.persist()
+		let conElem = document.querySelector(`[data-container-block="true"]`)
+		// debugger
+		if(conElem.offsetHeight < e.pageY){
+			console.log('add component')
+		}
+	}
+
 	showTooltip = () => {
 		this.setState({ showTooltip: true })
 	}
@@ -193,7 +189,7 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onKeyUp={this.handelKeyPress}
+				onClick={this.handleClick}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
@@ -215,6 +211,7 @@ class PageContainer extends React.Component {
 					classNames="dropdown-fade"
 					onEnter={this.showTooltip}
 					onExited={this.hideTooltip}
+					unmountOnExit
 				>
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? {top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left} : {display: 'none'}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
