@@ -8,6 +8,12 @@ import '../styles/global.css'
 import { connect } from 'react-redux';
 import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
+import {
+	addNewComponent
+} from '../redux/reducers/appDataReducers'
+import {
+	setCurrentElem
+} from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
 
@@ -139,20 +145,7 @@ class PageContainer extends React.Component {
 	}
 	
 	handleKeyPressList = (e) => {
-		let elem = e.target
 		switch(e.key){
-			case 'ArrowUp':
-				let prevSibling = elem.parentElement.parentElement.previousElementSibling
-				if(prevSibling){
-					prevSibling.firstChild.firstChild.focus()
-				}
-				break;
-			case 'ArrowDown':
-				let nextSibling = elem.parentElement.parentElement.nextElementSibling
-				if(nextSibling){
-					nextSibling.firstChild.firstChild.focus()
-				}
-				break;
 			case 'a':
 				if (e.ctrlKey || e.metaKey) 
 					this.handleSelection(e)
@@ -184,6 +177,20 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handleClick = (e) => {
+		e.persist()
+		let conElem = document.querySelector(`[data-container-block="true"]`)
+		if(conElem.offsetHeight < e.pageY){
+			let {appData} = this.props
+			let lastElem = appData.componentData[appData.componentData.length-1]
+
+			if(lastElem.componentType !== 'Text' || lastElem.content)
+				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+			else
+				this.props.setCurrentElem(lastElem.id)
+		}
+	}
+
 	showTooltip = () => {
 		this.setState({ showTooltip: true })
 	}
@@ -200,7 +207,7 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onKeyUp={this.handelKeyPress}
+				onClick={this.handleClick}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
@@ -256,13 +263,15 @@ class PageContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	appData: state.appData
+	appData: state.appData,
+	currentElem: state.currentElem
 })
 
 const mapDispatchToProps = {
+	addNewComponent,
+	setCurrentElem
 	initComponents
 }
-
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)

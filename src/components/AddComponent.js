@@ -71,9 +71,11 @@ class AddComponent extends React.Component{
           else {
             let newCurrentId = null
             let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
-            newCurrentId = appData.componentData[fromIndex-1].id
-            this.props.removeComponent({blockId: currentElem.elemId})
-            this.props.setCurrentElem(newCurrentId)
+            if (fromIndex > 0) {
+              newCurrentId = appData.componentData[fromIndex-1].id
+              this.props.removeComponent({blockId: currentElem.elemId})
+              this.props.setCurrentElem(newCurrentId)
+            } 
           }
         }
         break
