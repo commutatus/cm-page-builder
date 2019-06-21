@@ -8,6 +8,12 @@ import '../styles/global.css'
 import { connect } from 'react-redux';
 import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
+import {
+	addNewComponent
+} from '../redux/reducers/appDataReducers'
+import {
+	setCurrentElem
+} from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
 
@@ -174,9 +180,14 @@ class PageContainer extends React.Component {
 	handleClick = (e) => {
 		e.persist()
 		let conElem = document.querySelector(`[data-container-block="true"]`)
-		// debugger
 		if(conElem.offsetHeight < e.pageY){
-			console.log('add component')
+			let {appData} = this.props
+			let lastElem = appData.componentData[appData.componentData.length-1]
+
+			if(lastElem.componentType !== 'Text' || lastElem.content)
+				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+			else
+				this.props.setCurrentElem(lastElem.id)
 		}
 	}
 
@@ -252,13 +263,15 @@ class PageContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	appData: state.appData
+	appData: state.appData,
+	currentElem: state.currentElem
 })
 
 const mapDispatchToProps = {
+	addNewComponent,
+	setCurrentElem
 	initComponents
 }
-
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
