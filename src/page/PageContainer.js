@@ -6,6 +6,7 @@ import {PageDetails} from './PageDetails'
 import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
+import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
 import '../styles/animations.css'
 class PageContainer extends React.Component {
@@ -18,6 +19,11 @@ class PageContainer extends React.Component {
 		}
 		// this.newOrder = 0
 		this.currentListOrder = 1
+	}
+
+	componentWillMount() {
+		if(this.props.pageComponents)
+			this.props.initComponents(this.props.pageComponents)
 	}
 
 	// componentDidMount() {
@@ -189,6 +195,7 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
+		console.log('componentData', appData.componentData)
 		return (
 			<div
 				className="cm-page-builder"
@@ -215,6 +222,7 @@ class PageContainer extends React.Component {
 					classNames="dropdown-fade"
 					onEnter={this.showTooltip}
 					onExited={this.hideTooltip}
+					unmountOnExit
 				>
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? {top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left} : {display: 'none'}}>
 						<div className="bold-tool-btn" onMouseDown={this.editText} data-action="bold">B</div>
@@ -251,4 +259,10 @@ const mapStateToProps = state => ({
 	appData: state.appData
 })
 
-export default connect(mapStateToProps)(PageContainer)
+const mapDispatchToProps = {
+	initComponents
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
