@@ -5,6 +5,7 @@ export const ADD_COMPONENT = 'ADD_COMPONENT'
 export const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
 export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
+export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 
 export const addNewComponent = (data) => {
   return dispatch => {
@@ -18,6 +19,10 @@ export const addNewComponent = (data) => {
       elemId: newId
     })
   }
+}
+
+export const initComponents = (data) => {
+  return ({ type: INIT_COMPONENTS, data })
 }
 
 export const removeComponent = (data) => {
@@ -36,6 +41,12 @@ const initialState = {
   componentData: [{content: '', position: 1, componentType: 'Text', id: uuid()}]
 }
 
+//Accepts the initial components data 
+function initializeComponentsInState(state, data) {
+  let { componentData } = state
+  let newData = data.concat(componentData)
+  return { componentData: newData }
+}
 
 //Accept the current state and data about old elem so we can create a new component as needed.
 function addComponent(state, data){
@@ -109,6 +120,8 @@ function removeComponentFromState(state, data){
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case INIT_COMPONENTS: 
+      return initializeComponentsInState(state, action.data)
     case ADD_COMPONENT:
       return addComponent(state, action.data)
     case UPDATE_COMPONENT_TYPE:
