@@ -6,6 +6,7 @@ import {PageDetails} from './PageDetails'
 import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
+import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
 import {
 	addNewComponent
@@ -26,14 +27,11 @@ class PageContainer extends React.Component {
 		this.currentListOrder = 1
 	}
 
-	componentWillMount(){
-		this.setHeight()
+	componentWillMount() {
+		if(this.props.pageComponents)
+			this.props.initComponents(this.props.pageComponents)
 	}
 
-	setHeight(){
-		document.getElementsByTagName('html')[0].style = 'height: 100%'
-		document.getElementsByTagName('body')[0].style = 'min-height: 100%'
-	}
 	// componentDidMount() {
 	// 	setTimeout(this.checkPageHeight, 1000)
 	// }
@@ -204,6 +202,7 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
+		console.log('componentData', appData.componentData)
 		return (
 			<div
 				className="cm-page-builder"
@@ -271,5 +270,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	addNewComponent,
 	setCurrentElem
+	initComponents
 }
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
