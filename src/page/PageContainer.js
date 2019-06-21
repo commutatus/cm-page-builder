@@ -269,7 +269,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	addNewComponent,
-	setCurrentElem
+	setCurrentElem,
 	initComponents
 }
 
