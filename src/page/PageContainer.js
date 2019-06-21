@@ -7,6 +7,12 @@ import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
 import AddComponent from '../components/AddComponent';
+import {
+	addNewComponent
+} from '../redux/reducers/appDataReducers'
+import {
+	setCurrentElem
+} from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
 
@@ -20,6 +26,14 @@ class PageContainer extends React.Component {
 		this.currentListOrder = 1
 	}
 
+	componentWillMount(){
+		this.setHeight()
+	}
+
+	setHeight(){
+		document.getElementsByTagName('html')[0].style = 'height: 100%'
+		document.getElementsByTagName('body')[0].style = 'min-height: 100%'
+	}
 	// componentDidMount() {
 	// 	setTimeout(this.checkPageHeight, 1000)
 	// }
@@ -168,9 +182,14 @@ class PageContainer extends React.Component {
 	handleClick = (e) => {
 		e.persist()
 		let conElem = document.querySelector(`[data-container-block="true"]`)
-		// debugger
 		if(conElem.offsetHeight < e.pageY){
-			console.log('add component')
+			let {appData} = this.props
+			let lastElem = appData.componentData[appData.componentData.length-1]
+
+			if(lastElem.componentType !== 'Text' || lastElem.content)
+				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+			else
+				this.props.setCurrentElem(lastElem.id)
 		}
 	}
 
@@ -245,7 +264,12 @@ class PageContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	appData: state.appData
+	appData: state.appData,
+	currentElem: state.currentElem
 })
 
-export default connect(mapStateToProps)(PageContainer)
+const mapDispatchToProps = {
+	addNewComponent,
+	setCurrentElem
+}
+export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
