@@ -77,7 +77,7 @@ export class Dropdown extends React.Component{
                             (selectedOption && selectedOption.name) || 
                             (
                               value.status === 'Edit' &&
-                              (this.props.component_type === 'category_id'  ? "Select Background" : "Select Office")
+                              (this.props.component_type === 'category_id'  ? "Select Categories" : "Select Office")
                             )
                           }
                         </div>

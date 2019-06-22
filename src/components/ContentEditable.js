@@ -17,27 +17,22 @@ class ContentEditable extends React.Component{
 
   emitChange = (e) => {
     this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
-    this.props.removeCurrentElem()
   }
 
-  handleFocus = (e) => {
-    e.persist()
-    this.props.setCurrentElem(this.props.id)
-  }
 
   // Method to position the cursor at the end of the content
-  setCursorToEnd = (elem, pos) => {
-    if(elem.setSelectionRange) {
-      elem.setSelectionRange(pos,pos);
-    }
-    else if (elem.createTextRange) {
-      var range = elem.createTextRange();
-      range.collapse(true);
-      range.moveEnd('character', pos);
-      range.moveStart('character', pos);
-      range.select();
-    }
-  }
+  // setCursorToEnd = (elem, pos) => {
+  //   if(elem.setSelectionRange) {
+  //     elem.setSelectionRange(pos,pos);
+  //   }
+  //   else if (elem.createTextRange) {
+  //     var range = elem.createTextRange();
+  //     range.collapse(true);
+  //     range.moveEnd('character', pos);
+  //     range.moveStart('character', pos);
+  //     range.select();
+  //   }
+  // }
 
   render() {
     const { placeholder, className, styles, handleMouseUp, listOrder, content } = this.props
@@ -47,10 +42,6 @@ class ContentEditable extends React.Component{
           (value) => 
             <div className="component-section">
               {listOrder}
-              {
-                className !== 'cm-title' && value.status === 'Edit' &&
-                <DragHandle handleAction={value.handleAction} id={this.props.id}/>
-              }
               <div
                 data-root="true"
                 ref={node => this.elem = node}
