@@ -129,7 +129,7 @@ class AddComponent extends React.Component{
         onInput={this.handleInput}
         onFocus={this.handleFocus}
       >
-        <DragHandle id={data.id}/>
+        {showActionBtn && <DragHandle id={data.id}/>}
         { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
         <CSSTransition
           in={showActionBtn}
