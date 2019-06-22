@@ -14,11 +14,21 @@ import {
 } from '../redux/reducers/appDataReducers'
 
 class ContentEditable extends React.Component{
-
-  emitChange = (e) => {
+  emitChange = (e, context) => {
     this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
+    if (!this.props.componentType)
+      context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
+    else {
+      if (this.props.initial)
+        context.emitUpdate(null, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'createComponent')
+      else
+        context.emitUpdate(this.props.id, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'updateComponent')
+      // else 
+    }
     this.props.removeCurrentElem()
   }
+
+  
 
   handleFocus = (e) => {
     e.persist()
@@ -56,7 +66,7 @@ class ContentEditable extends React.Component{
                 ref={node => this.elem = node}
                 className={classNames(className, value.status.toLowerCase())}
                 onInput={this.onInputChange}
-                onBlur={this.emitChange}
+                onBlur={(e) => this.emitChange(e, value)}
                 onFocus={this.handleFocus}
                 contentEditable={value.status === 'Edit'}
                 placeholder={content || value.status === 'Edit' ? placeholder : ''}
@@ -81,5 +91,4 @@ const mapDispatchToProps = {
   removeCurrentElem,
   updateComponent
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(ContentEditable)

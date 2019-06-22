@@ -27,9 +27,7 @@ export const PageDetails = ({
 				/>
 				<Title 
 					content={meta ? meta.title : ''} 
-					handleUpdate={emitUpdate} 
-					onMouseUp={onMouseUp} 
-					currentType="Title" 
+					onMouseUp={onMouseUp}
 				/>
 				<div className="page-info">
 					{

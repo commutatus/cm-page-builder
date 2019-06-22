@@ -38,7 +38,7 @@ export const updateComponentType = (data) => {
 }
 
 const initialState = {
-  componentData: [{content: '', position: 1, componentType: 'Text', id: uuid()}]
+  componentData: [{content: '', position: 1, componentType: 'Text', id: uuid(), initial: true}]
 }
 
 //Accepts the initial components data 

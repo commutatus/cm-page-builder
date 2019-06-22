@@ -7,6 +7,7 @@ const WrappedUlist = (props) =>  {
   return(
     <div className="cm-u-list">
         <ContentEditable 
+          { ...props }
           html={props.html} 
           onChange={props.handleChange}
           onInputChange={props.onInputChange}
@@ -15,7 +16,6 @@ const WrappedUlist = (props) =>  {
           id={props.id}
           data-component-type={'Ulist'}
           listOrder={<span className="bulleted-dot"></span>}
-          unorderedList
         />
     </div>
   )

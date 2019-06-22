@@ -8,11 +8,13 @@ import '../styles/global.css'
 import { connect } from 'react-redux';
 import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
+// import { bindActionCreators } from 'redux'
 import {
 	addNewComponent
 } from '../redux/reducers/appDataReducers'
 import {
-	setCurrentElem
+	setCurrentElem,
+	updateComponent
 } from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
@@ -30,6 +32,7 @@ class PageContainer extends React.Component {
 	componentWillMount() {
 		if(this.props.pageComponents)
 			this.props.initComponents(this.props.pageComponents)
+		//this.boundActionCreators = bindActionCreators( appActionCreators )
 	}
 
 	// componentDidMount() {
@@ -40,7 +43,7 @@ class PageContainer extends React.Component {
 	// 	let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
 	// 	pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
 	// 	this.setState({ pageComponents, meta: nextProps.meta })
-	// }
+	// } 
 	
 	componentDidUpdate(){
 		if(this.state.actionDomRect){
@@ -100,15 +103,7 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (data, id, type, key) => {
-		// let {handleUpdate} = this.props
-		// let {pageComponents} = this.state
-		// if(data && !id && type !== 'meta'){
-		// 	let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
-		// 	pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
-		// }
-		// this.setState({pageComponents})
-		// if(handleUpdate)
-		// 	handleUpdate(data, id, type, key)
+		this.props.handleUpdate(id, data, type, key)
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -202,14 +197,13 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
-		console.log('componentData', appData.componentData)
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
 				onClick={this.handleClick}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.props.handleUpdate}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
@@ -269,7 +263,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	addNewComponent,
-	setCurrentElem
+	setCurrentElem,
 	initComponents
 }
 

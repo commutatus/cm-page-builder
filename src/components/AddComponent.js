@@ -7,6 +7,7 @@ import {
   updateComponentType,
   removeComponent
 } from '../redux/reducers/appDataReducers'
+import { PermissionContext } from '../contexts/permission-context';
 import {
   setCurrentElem
 } from '../redux/reducers/currentElemReducer'
@@ -22,6 +23,8 @@ class AddComponent extends React.Component{
 
   componentDidMount(){
     this.checkAndFocus(this.props)
+    AddComponent.contextType = PermissionContext
+
   }
   
   componentDidUpdate(){
@@ -62,6 +65,8 @@ class AddComponent extends React.Component{
           e.preventDefault()
           let componentType =  ['Ulist', 'Olist'].includes(e.currentTarget.dataset.componentType) ? e.currentTarget.dataset.componentType : 'Text'
           this.props.addNewComponent({id: e.currentTarget.dataset.blockId, componentType })
+          this.context.emitUpdate(null, { content: e.target.innerHTML, position: this.props.data.position, component_type: this.props.data.componentType }, 'createComponent')
+
           break;
         }
       case 'Backspace':
@@ -168,5 +173,4 @@ const mapDispatchToProps = {
   removeComponent,
   setCurrentElem
 }
-
 export default connect(state => state, mapDispatchToProps)(AddComponent)
