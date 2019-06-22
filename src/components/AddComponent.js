@@ -71,6 +71,7 @@ class AddComponent extends React.Component{
           if (this.props.data.componentType === 'Ulist' || this.props.data.componentType === 'Olist')
             this.props.updateComponentType({blockId: e.currentTarget.dataset.blockId, type: 'Text'})
           else {
+            e.preventDefault()
             let newCurrentId = null
             let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
             newCurrentId = appData.componentData[fromIndex-1].id
@@ -110,6 +111,19 @@ class AddComponent extends React.Component{
 
   handleFocus = (e) => {
     this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
+    this.setCursorToEnd(e) 
+  }
+
+  // Method to position the cursor at the end of the content
+  setCursorToEnd = (e) => {
+    var range = document.createRange();
+    var sel = window.getSelection();
+    if(e.target.innerHTML){
+      range.setStart(e.target.lastChild, e.target.lastChild.length);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
   }
   
   handleBlur = (e) => {
@@ -119,7 +133,6 @@ class AddComponent extends React.Component{
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
-    console.log(this.state)
     return( 
       <PermissionContext.Consumer>
         {
