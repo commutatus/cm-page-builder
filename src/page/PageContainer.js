@@ -12,7 +12,8 @@ import {
 	addNewComponent
 } from '../redux/reducers/appDataReducers'
 import {
-	setCurrentElem
+	setCurrentElem,
+	removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
@@ -31,16 +32,6 @@ class PageContainer extends React.Component {
 		if(this.props.pageComponents)
 			this.props.initComponents(this.props.pageComponents)
 	}
-
-	// componentDidMount() {
-	// 	setTimeout(this.checkPageHeight, 1000)
-	// }
-	
-	// componentWillReceiveProps(nextProps) {
-	// 	let pageComponents = compareAndDiff(this.state.pageComponents, this.getPageComponentList(nextProps))
-	// 	pageComponents = this.handleNonTextComponent(pageComponents, nextProps)
-	// 	this.setState({ pageComponents, meta: nextProps.meta })
-	// }
 	
 	componentDidUpdate(){
 		if(this.state.actionDomRect){
@@ -48,33 +39,6 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	// handleNonTextComponent = (pageComponents, props) => {
-	// 	if(props.status === 'Edit'){
-	// 		let data = []
-	// 		pageComponents.map((component, i) => {
-	// 			data.push(component)
-	// 			if(
-	// 					(['image', 'divider', 'video'].includes(component.component_type)) && 
-	// 					(
-	// 						pageComponents[i+1] && pageComponents[i+1].component_type !== 'AddComponent' || !pageComponents[i+1]
-	// 					)
-	// 				){
-	// 				data.push({content: '', position: i+2, component_type: 'AddComponent', currentType: 'Text'})
-	// 			}
-	// 		})
-	// 		return data
-	// 	}else{
-	// 		return pageComponents
-	// 	}
-	// }
-	
-	// getPageComponentList = (props) => {
-	// 	if(props.status === 'Edit'){
-	// 		return props.pageComponents.length > 0 ? sortDataOnPos(props.pageComponents) : [{content: '', position: 1, component_type: 'AddComponent', currentType: 'Text' }]
-	// 	}else{
-	// 		return sortDataOnPos(props.pageComponents)
-	// 	}
-	// }
 
 	checkPageHeight() {
 		let pageElem = document.getElementById('page-builder');
@@ -188,6 +152,8 @@ class PageContainer extends React.Component {
 				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
 			else
 				this.props.setCurrentElem(lastElem.id)
+		}else{
+			this.props.removeCurrentElem()
 		}
 	}
 
@@ -202,25 +168,25 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
-		console.log('componentData', appData.componentData)
+		let isEdit = this.props.status === 'Edit'
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onClick={this.handleClick}
+				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
-						onMouseUp={this.handleMouseUp}
-						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
 						requestHandler={this.props.requestHandler}
 						pageCategories={this.props.pageCategories}
 						currentOffices={this.props.currentOffices}
-						isEditMode={this.props.status === 'Edit'}
+						isEditMode={isEdit}
+						onMouseUp={isEdit ? this.handleMouseUp : undefined}
+						onKeyDown={isEdit ? this.handleKeyPressList : undefined}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
@@ -269,8 +235,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	addNewComponent,
-	setCurrentElem
-	initComponents
+	setCurrentElem,
+	initComponents,
+	removeCurrentElem
 }
 
 

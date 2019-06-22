@@ -36,11 +36,6 @@ class WrappedUpload extends React.Component{
           value => 
           <div className={`component-section cm-uploader ${value.status.toLowerCase()}`} onClick={() => this.fileInputElem && this.fileInputElem.click()}>
             {
-              value.status === `Edit`
-              &&
-              <DragHandle handleAction={value.handleAction} id={this.props.id} /> 
-            }
-            {
               image
               ?
               <img src={image.url || image.content} width="100%" height="400px" alt={image.filename} />
