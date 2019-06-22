@@ -19,7 +19,8 @@ class AddComponent extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      showActionBtn: false
+      showActionBtn: false,
+      isFocused: false
     }
   }
 
@@ -108,16 +109,17 @@ class AddComponent extends React.Component{
   }
 
   handleFocus = (e) => {
-    this.setState({showActionBtn: e.target.innerHTML === ''})
+    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
   }
   
   handleBlur = (e) => {
-    this.setState({showActionBtn: false})
+    this.setState({showActionBtn: false, isFocused: false})
   }
 
   render(){
     let { data } = this.props
-    let { showActionBtn, showHandle } = this.state
+    let { showActionBtn, showHandle, isFocused } = this.state
+    console.log(this.state)
     return( 
       <PermissionContext.Consumer>
         {
@@ -140,7 +142,7 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {showHandle && <DragHandle id={data.id}/>}
+                {(showHandle || isFocused) && <DragHandle id={data.id}/>}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
                   in={showActionBtn}
