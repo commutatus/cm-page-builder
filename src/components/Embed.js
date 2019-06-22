@@ -23,11 +23,6 @@ class WrappedEmbed extends React.Component{
           (value) => (
             <div className="component-section cm-embed">
               {
-                value.status === `Edit`
-                &&
-                <DragHandle handleAction={value.handleAction} id={this.props.id} /> 
-              }
-              {
                 (content) 
                 ?
                 <iframe title="video-frame" className={`${value.status.toLowerCase()}`} width="100%" height="320px" src={content} />
@@ -35,6 +30,7 @@ class WrappedEmbed extends React.Component{
                 <div className="embed-input-field">
                   <span className="embed-icon"><i className="cm-video" /></span>
                   <input 
+                    data-root="true"
                     placeholder="Paste the URL from Vimeo or YouTube"
                     className="embed-input"
                     onBlur={this.handleEmbed}

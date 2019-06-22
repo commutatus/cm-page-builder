@@ -25,28 +25,7 @@ class ContentEditable extends React.Component{
         context.emitUpdate(this.props.id, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'updateComponent')
       // else 
     }
-    this.props.removeCurrentElem()
-  }
-
-  
-
-  handleFocus = (e) => {
-    e.persist()
-    this.props.setCurrentElem(this.props.id)
-  }
-
-  // Method to position the cursor at the end of the content
-  setCursorToEnd = (elem, pos) => {
-    if(elem.setSelectionRange) {
-      elem.setSelectionRange(pos,pos);
-    }
-    else if (elem.createTextRange) {
-      var range = elem.createTextRange();
-      range.collapse(true);
-      range.moveEnd('character', pos);
-      range.moveStart('character', pos);
-      range.select();
-    }
+   // this.props.removeCurrentElem()
   }
 
   render() {
@@ -57,17 +36,12 @@ class ContentEditable extends React.Component{
           (value) => 
             <div className="component-section">
               {listOrder}
-              {
-                className !== 'cm-title' && value.status === 'Edit' &&
-                <DragHandle handleAction={value.handleAction} id={this.props.id}/>
-              }
               <div
                 data-root="true"
                 ref={node => this.elem = node}
                 className={classNames(className, value.status.toLowerCase())}
                 onInput={this.onInputChange}
-                onBlur={(e) => this.emitChange(e, value)}
-                onFocus={this.handleFocus}
+                onBlur={this.emitChange}
                 contentEditable={value.status === 'Edit'}
                 placeholder={content || value.status === 'Edit' ? placeholder : ''}
                 dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}

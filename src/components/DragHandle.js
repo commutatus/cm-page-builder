@@ -21,7 +21,6 @@ class DragHandle extends React.Component{
 
   closeHandle = (e) => {
     let elemHandle = document.getElementById('drag-handle')
-    // console.log(e.target, elemHandle && !elemHandle.contains(e.target))
     if(elemHandle && !elemHandle.contains(e.target)){
       this.setState({showMoreOptions: false})
     }
