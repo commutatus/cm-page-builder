@@ -168,25 +168,25 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
-		console.log('componentData', appData.componentData)
+		let isEdit = this.props.status === 'Edit'
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onMouseDown={this.handleClick}
+				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
-						onMouseUp={this.handleMouseUp}
-						onKeyDown={this.handleKeyPressList}
 						getPageComponent={this.getPageComponent}
 						requestHandler={this.props.requestHandler}
 						pageCategories={this.props.pageCategories}
 						currentOffices={this.props.currentOffices}
-						isEditMode={this.props.status === 'Edit'}
+						isEditMode={isEdit}
+						onMouseUp={isEdit ? this.handleMouseUp : undefined}
+						onKeyDown={isEdit ? this.handleKeyPressList : undefined}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition

@@ -13,6 +13,7 @@ import {
 } from '../redux/reducers/currentElemReducer'
 import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
+import { PermissionContext } from '../contexts/permission-context';
 
 class AddComponent extends React.Component{
   constructor(props){
@@ -116,58 +117,73 @@ class AddComponent extends React.Component{
 
   render(){
     let { data } = this.props
-    let { showActionBtn } = this.state
+    let { showActionBtn, showHandle } = this.state
     return( 
-      <div 
-        className="add-component-container" 
-        ref={node => this.elem = node} 
-        onKeyDown={this.handleKeyDown}
-        onMouseDown={this.handleClick}
-        data-block-id={this.props.id}
-        data-component-type={data.componentType}
-        onBlur={this.handleBlur}
-        onInput={this.handleInput}
-        onFocus={this.handleFocus}
-      >
-        {showActionBtn && <DragHandle id={data.id}/>}
-        { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
-        <CSSTransition
-          in={showActionBtn}
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-          <div className="text-type-tools" data-block-type="component-select-div" style={{display: showActionBtn && data.componentType !== 'Divider' ? 'flex' : 'none'}}>
-            <div data-type="Header1">
-              <i className="cm-h1" />
-            </div>
-            <div data-type="Header2">
-              <i className="cm-h2" />
-            </div>
-            <div data-type="Olist" >
-              <i className="cm-numbers" />
-            </div>
-            <div data-type="Ulist">
-              <i className="cm-bullets" />
-            </div>
-            <div>
-              <i className="cm-page" />
-            </div>
-            <div data-type="Upload">
-              <i className="cm-picture" />
-            </div>
-            <div data-type="Embed">
-              <i className="cm-video" /> 
-            </div>
-            {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
-              <i className="cm-upload" /> 
-            </div> */}
-            <div data-type="Divider">
-              <i className="cm-divider" />  
-            </div>
-          </div>
-        </CSSTransition>
-      </div>
+      <PermissionContext.Consumer>
+        {
+          value => {
+            const isEdit = value.status === 'Edit'
+            const allActions = isEdit ? {
+              'onMouseDown': this.handleClick,
+              'onKeyDown': this.handleKeyDown,
+              'data-component-type': data.componentType,
+              'onBlur':this.handleBlur,
+              'onInput':this.handleInput,
+              'onFocus':this.handleFocus,
+              'onMouseEnter':() => this.setState({showHandle: true}),
+              'onMouseLeave':() => this.setState({showHandle: false}),
+            } : {}
+            return(
+              <div 
+                ref={node => this.elem = node} 
+                className="add-component-container" 
+                data-block-id={this.props.id}
+                {...allActions}
+              >
+                {showHandle && <DragHandle id={data.id}/>}
+                { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
+                <CSSTransition
+                  in={showActionBtn}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="text-type-tools" data-block-type="component-select-div" style={{display: showActionBtn && data.componentType !== 'Divider' ? 'flex' : 'none'}}>
+                    <div data-type="Header1">
+                      <i className="cm-h1" />
+                    </div>
+                    <div data-type="Header2">
+                      <i className="cm-h2" />
+                    </div>
+                    <div data-type="Olist" >
+                      <i className="cm-numbers" />
+                    </div>
+                    <div data-type="Ulist">
+                      <i className="cm-bullets" />
+                    </div>
+                    <div>
+                      <i className="cm-page" />
+                    </div>
+                    <div data-type="Upload">
+                      <i className="cm-picture" />
+                    </div>
+                    <div data-type="Embed">
+                      <i className="cm-video" /> 
+                    </div>
+                    {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
+                      <i className="cm-upload" /> 
+                    </div> */}
+                    <div data-type="Divider">
+                      <i className="cm-divider" />  
+                    </div>
+                  </div>
+                </CSSTransition>
+              </div>
+            )
+          }
+          
+        }
+      </PermissionContext.Consumer>
     )
   }
 }
