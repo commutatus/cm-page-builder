@@ -25,7 +25,7 @@ class ContentEditable extends React.Component{
       <PermissionContext.Consumer>
         {
           (value) => 
-            <div className="component-section">
+            <div className={classNames("component-section", value.status.toLowerCase())}>
               {listOrder}
               <div
                 data-root="true"

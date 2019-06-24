@@ -39,21 +39,32 @@
         }
     }
 
-    .component-section {
+    .component-section.read {
         display: flex;
         position: relative;
         width: 100%;
-        .component-dragger {
-          position: absolute;
-          top: 10px;
-          left: -30px;
-          font-size: $t4-text;
-          color: #ACADAF;
+        padding-left: 10px;
+    }
+    .component-section.edit {
+        display: flex;
+        position: relative;
+        width: 100%;
+        padding-left: 10px;
+        transition: background-color .2s linear;
+        &:hover {
+            background-color: #f4f5f7;
         }
     }
     .bulleted-dot {
         width: 6px;
         height: 6px;
         border-radius: 50%;
+    }
+    .component-dragger {
+        font-size: $t4-text;
+        color: #ACADAF;
+        align-self: flex-start;
+        margin-top: 5px;
+        cursor: pointer;
     }
 }

@@ -21,7 +21,7 @@ class WrappedEmbed extends React.Component{
       <PermissionContext.Consumer>
         {
           (value) => (
-            <div className="component-section cm-embed">
+            <div className={`component-section cm-embed ${value.status.toLowerCase()}`}>
               {
                 (content) 
                 ?
