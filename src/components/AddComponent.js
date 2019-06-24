@@ -182,9 +182,9 @@ class AddComponent extends React.Component{
                     <div data-type="Ulist">
                       <i className="cm-bullets" />
                     </div>
-                    <div>
+                    {/* <div>
                       <i className="cm-page" />
-                    </div>
+                    </div> */}
                     <div data-type="Upload">
                       <i className="cm-picture" />
                     </div>

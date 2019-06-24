@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4'
+import uuid from 'uuid/v1'
 import { SET_CURRENT_ELEM } from './currentElemReducer';
 
 export const ADD_COMPONENT = 'ADD_COMPONENT'
@@ -9,7 +9,10 @@ export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 
 export const addNewComponent = (data) => {
   return dispatch => {
-    let newId = uuid()
+    let newId = uuid({
+      msecs: new Date().getTime(),
+      nsecs: 5678
+    })
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
