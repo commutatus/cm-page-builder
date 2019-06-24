@@ -38,13 +38,7 @@
   margin: 2px 0;
   padding: 5px;
   color: #A8AAAD;
-  font-size: 16px;
-  transition: background-color .3s linear;
-  cursor: pointer; }
-  .cm-embed .embed-input-field:hover {
-    background-color: #F4F5F7; }
-  .cm-embed .embed-input-field:focus-within {
-    background-color: transparent; }
+  font-size: 16px; }
   .cm-embed .embed-input-field .embed-icon {
     margin-right: 7px; }
   .cm-embed .embed-input-field .embed-input {

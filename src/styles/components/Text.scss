@@ -9,17 +9,17 @@
   @include text-wrapping;
   @include editable-style; 
   font-family: 'Open Sans', sans-serif !important; 
-  background-color: transparent;
-  transition: background-color .3s linear;
-  &:hover {
-    background-color: $gray-bg;
-  }
-  &::placeholder  {
-    color: transparent !important;
-  }
-  &:focus {
-    background-color: transparent;
-  }
+  // background-color: transparent;
+  // transition: background-color .3s linear;
+  // &:hover {
+  //   background-color: $gray-bg;
+  // }
+  // &::placeholder  {
+  //   color: transparent !important;
+  // }
+  // &:focus {
+  //   background-color: transparent;
+  // }
 }
 
 .cm-text-block.read  {

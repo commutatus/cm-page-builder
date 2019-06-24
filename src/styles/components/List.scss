@@ -3,18 +3,18 @@
 .cm-o-list {
     width: 100%;
     padding: 0 5px;
-    transition: background-color .2s linear;
-    &:hover {
-        background: $gray-bg;
-    }
-    &:focus-within {
-        background-color: transparent;
-    }
+    // transition: background-color .2s linear;
+    // &:hover {
+    //     background: $gray-bg;
+    // }
+    // &:focus-within {
+    //     background-color: transparent;
+    // }
     span {
         align-self: center;
         color: $primary-color;
         font-size: $t4-text;
-        margin-right: 10px;
+        margin-right: 5px;
         margin-bottom: 5px;
     }
 }
@@ -23,17 +23,17 @@
     width: 100%;
     padding: 0 5px;
     transition: background-color .2s linear;
-    &:hover {
-        background: $gray-bg;
-    }
-    &:focus-within {
-        background-color: transparent;
-    }
+    // &:hover {
+    //     background: $gray-bg;
+    // }
+    // &:focus-within {
+    //     background-color: transparent;
+    // }
     span {
         align-self: center;
         color: $primary-color;
         font-size: $t4-text;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 }
 

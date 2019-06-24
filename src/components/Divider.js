@@ -7,7 +7,7 @@ export const Divider = (props) => {
     <PermissionContext.Consumer>
     {
       value => 
-      <div className="component-section">
+      <div className={`component-section ${value.status.toLowerCase()}`}>
         <div className={`divider ${value.status.toLowerCase()}`}>
           <div className="sperator"></div>
         </div>
