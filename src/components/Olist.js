@@ -4,10 +4,10 @@ import withComponent from './withComponent'
 import '../styles/components/List.css'
 
 const WrappedOlist = (props) =>  {
-  console.log('all props', props)
   return(
     <div className="cm-o-list">
       <ContentEditable 
+          { ...props }
           html={props.html} 
           onChange={props.handleChange}
           onInputChange={props.onInputChange}

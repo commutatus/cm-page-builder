@@ -26,6 +26,8 @@ class AddComponent extends React.Component{
 
   componentDidMount(){
     this.checkAndFocus(this.props)
+    AddComponent.contextType = PermissionContext
+
   }
   
   componentDidUpdate(){
@@ -74,9 +76,13 @@ class AddComponent extends React.Component{
             e.preventDefault()
             let newCurrentId = null
             let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
-            newCurrentId = appData.componentData[fromIndex-1].id
-            this.props.removeComponent({blockId: currentElem.elemId})
-            this.props.setCurrentElem(newCurrentId)
+            if (fromIndex > 0) {
+              newCurrentId = appData.componentData[fromIndex-1].id
+              this.props.removeComponent({blockId: currentElem.elemId})
+              if (!this.props.data.initial)
+                this.context.emitUpdate(currentElem.elemId, null, 'deleteComponent')
+              this.props.setCurrentElem(newCurrentId)
+            } 
           }
         }
         break
@@ -155,7 +161,7 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {(showHandle || isFocused) && <DragHandle id={data.id}/>}
+                {(showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
                   in={showActionBtn}
@@ -163,7 +169,7 @@ class AddComponent extends React.Component{
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="text-type-tools" data-block-type="component-select-div" style={{display: showActionBtn && data.componentType !== 'Divider' ? 'flex' : 'none'}}>
+                  <div className="text-type-tools" data-block-type="component-select-div" style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}>
                     <div data-type="Header1">
                       <i className="cm-h1" />
                     </div>
@@ -210,5 +216,4 @@ const mapDispatchToProps = {
   setCurrentElem,
   removeCurrentElem
 }
-
 export default connect(state => state, mapDispatchToProps)(AddComponent)

@@ -8,6 +8,7 @@ import '../styles/global.css'
 import { connect } from 'react-redux';
 import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
+// import { bindActionCreators } from 'redux'
 import {
 	addNewComponent
 } from '../redux/reducers/appDataReducers'
@@ -29,14 +30,16 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
-		if(this.props.pageComponents)
+		if(this.props.pageComponents && this.props.status !== `Edit`)
 			this.props.initComponents(this.props.pageComponents)
+		//this.boundActionCreators = bindActionCreators( appActionCreators )
 	}
 	
 	componentDidUpdate(){
 		if(this.state.actionDomRect){
 			document.addEventListener('mousedown', this.handlePageClick)
 		}
+		PageContainer.contextType = PermissionContext
 	}
 
 
@@ -64,15 +67,7 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (data, id, type, key) => {
-		// let {handleUpdate} = this.props
-		// let {pageComponents} = this.state
-		// if(data && !id && type !== 'meta'){
-		// 	let newType = this.props.REVERSE_TYPE_MAP_COMPONENT[data.component_type]
-		// 	pageComponents = pageComponents.map(component => +component.position === +data.position ? {...component, ...data, component_type: newType, currentType: newType} : component)
-		// }
-		// this.setState({pageComponents})
-		// if(handleUpdate)
-		// 	handleUpdate(data, id, type, key)
+		this.props.handleUpdate(id, data, type, key)
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -146,12 +141,15 @@ class PageContainer extends React.Component {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			let lastElem = appData.componentData[appData.componentData.length-1]
-
-			if(lastElem.componentType !== 'Text' || lastElem.content)
-				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
-			else
-				this.props.setCurrentElem(lastElem.id)
+			if (appData.componentData.length > 0) {
+				let lastElem = appData.componentData[appData.componentData.length-1]
+				if(lastElem.componentType !== 'Text' || lastElem.content ) {
+					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+					
+				}
+				else
+					this.props.setCurrentElem(lastElem.id)
+			}
 		}else{
 			this.props.removeCurrentElem()
 		}
@@ -175,7 +173,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit'}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.props.handleUpdate}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
