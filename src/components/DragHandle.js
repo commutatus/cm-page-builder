@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import '../styles/components/DragHandle.css';
 import {connect} from 'react-redux'
 import { removeComponent } from "../redux/reducers/appDataReducers";
+import { PermissionContext } from "../contexts/permission-context"
 class DragHandle extends React.Component{
   constructor(props){
     super(props)
@@ -17,6 +18,7 @@ class DragHandle extends React.Component{
     }else{
       window.removeEventListener('click', this.closeHandle)
     }
+    DragHandle.contextType = PermissionContext
   }
 
   closeHandle = (e) => {
@@ -36,6 +38,8 @@ class DragHandle extends React.Component{
     switch (e.target.dataset.action) {
       case 'delete':
         this.props.removeComponent({blockId: this.props.id})
+        if (!this.props.initial)
+          this.context.emitUpdate(this.props.id, null, `deleteComponent`)
         break;
       default:
         break;

@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames';
-import { PermissionContext } from '../contexts/permission-context';
 import sanitizeHtml from 'sanitize-html'
 import DragHandle from './DragHandle'
 import { connect } from 'react-redux';
@@ -9,19 +8,25 @@ import {
   setCurrentElem,
   removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
+import { PermissionContext } from '../contexts/permission-context';
 import {
-  updateComponent
+  updateComponent, 
+  addNewComponent
 } from '../redux/reducers/appDataReducers'
 
 class ContentEditable extends React.Component{
+
   emitChange = (e, context) => {
-    this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
-    if (!this.props.componentType)
+    this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML, initial: false}})
+    if (!this.props.componentType && e.target.innerHTML) {
       context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
+      this.props.addNewComponent({ componentType: 'Text', initial: true })	
+    }                   // Block to make changes to title of the page
     else {
-      if (this.props.initial)
-        context.emitUpdate(null, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'createComponent')
-      else
+      if (this.props.initial)  {
+        context.emitUpdate(null, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType, client_reference_id: this.props.id }, 'createComponent')
+      }         // Block to create component when a blank component is added
+      else if (e.target.innerHTML)      //Block to update component when changes in content is made
         context.emitUpdate(this.props.id, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'updateComponent')
       // else 
     }
@@ -40,8 +45,8 @@ class ContentEditable extends React.Component{
                 data-root="true"
                 ref={node => this.elem = node}
                 className={classNames(className, value.status.toLowerCase())}
-                onInput={this.onInputChange}
-                onBlur={this.emitChange}
+               // onInput={this.onInputChange}
+                onBlur={(e) => this.emitChange(e, value)}
                 contentEditable={value.status === 'Edit'}
                 placeholder={content || value.status === 'Edit' ? placeholder : ''}
                 dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
@@ -63,6 +68,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setCurrentElem,
   removeCurrentElem,
-  updateComponent
+  updateComponent,
+  addNewComponent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ContentEditable)

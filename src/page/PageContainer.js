@@ -14,11 +14,7 @@ import {
 } from '../redux/reducers/appDataReducers'
 import {
 	setCurrentElem,
-<<<<<<< HEAD
-	updateComponent
-=======
 	removeCurrentElem
->>>>>>> f51ed9f6126312d62063429d7ea5752567564ac4
 } from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
 class PageContainer extends React.Component {
@@ -34,7 +30,7 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
-		if(this.props.pageComponents)
+		if(this.props.pageComponents && this.props.status !== `Edit`)
 			this.props.initComponents(this.props.pageComponents)
 		//this.boundActionCreators = bindActionCreators( appActionCreators )
 	}
@@ -43,6 +39,7 @@ class PageContainer extends React.Component {
 		if(this.state.actionDomRect){
 			document.addEventListener('mousedown', this.handlePageClick)
 		}
+		PageContainer.contextType = PermissionContext
 	}
 
 
@@ -144,12 +141,15 @@ class PageContainer extends React.Component {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			let lastElem = appData.componentData[appData.componentData.length-1]
-
-			if(lastElem.componentType !== 'Text' || lastElem.content)
-				this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
-			else
-				this.props.setCurrentElem(lastElem.id)
+			if (appData.componentData.length > 0) {
+				let lastElem = appData.componentData[appData.componentData.length-1]
+				if(lastElem.componentType !== 'Text' || lastElem.content ) {
+					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+					
+				}
+				else
+					this.props.setCurrentElem(lastElem.id)
+			}
 		}else{
 			this.props.removeCurrentElem()
 		}
@@ -166,10 +166,7 @@ class PageContainer extends React.Component {
 	render() {
 		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
-<<<<<<< HEAD
-=======
 		let isEdit = this.props.status === 'Edit'
->>>>>>> f51ed9f6126312d62063429d7ea5752567564ac4
 		return (
 			<div
 				className="cm-page-builder"
@@ -237,12 +234,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	addNewComponent,
 	setCurrentElem,
-<<<<<<< HEAD
-	initComponents
-=======
 	initComponents,
 	removeCurrentElem
->>>>>>> f51ed9f6126312d62063429d7ea5752567564ac4
 }
 
 

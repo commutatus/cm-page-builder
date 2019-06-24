@@ -38,13 +38,14 @@ export const updateComponentType = (data) => {
 }
 
 const initialState = {
-  componentData: [{content: '', position: 1, componentType: 'Text', id: uuid(), initial: true}]
+  componentData: []
 }
 
 //Accepts the initial components data 
 function initializeComponentsInState(state, data) {
   let { componentData } = state
-  let newData = data.concat(componentData)
+  let newData = []
+  newData = data.concat(componentData)
   return { componentData: newData }
 }
 
@@ -58,7 +59,7 @@ function addComponent(state, data){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      temp.push({content: '', position: position+1, componentType: componentType, id: data.newId})
+      temp.push({content: '', position: position+1, componentType: componentType, id: data.newId, initial: true})
       position += 2
     }
     else{
@@ -66,6 +67,8 @@ function addComponent(state, data){
       position++
     }
   }
+  if (componentData.length === 0)
+    temp.push({content: '', position: 1, componentType: componentType, id: data.newId, initial: true})
   return {componentData: temp}
 }
 
@@ -75,11 +78,12 @@ function updateComponentTypeState(state, data){
   let {blockId, type} = data
   componentData = componentData.map(component => {
     if(component.id === blockId){
-      return ({...component, componentType: type})
+      return ({...component, componentType: type })
     }else{
       return component
     }
   })
+
   return {componentData}
 }
 
@@ -88,7 +92,7 @@ function updateComponentState(state, data){
   let {newState, id} = data
   componentData = componentData.map(component => {
     if(component.id === id){
-      return ({...component, ...newState})
+      return ({...component, ...newState })
     }else{
       return component
     }
