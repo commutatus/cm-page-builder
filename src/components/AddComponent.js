@@ -155,7 +155,7 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {(showHandle || isFocused || true) && <DragHandle id={data.id}/>}
+                {(showHandle || isFocused) && <DragHandle id={data.id}/>}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
                   in={showActionBtn}
