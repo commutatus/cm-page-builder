@@ -66,8 +66,13 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	emitUpdate = (data, id, type, key) => {
-		this.props.handleUpdate(id, data, type, key)
+	emitUpdate = (...args) => {
+		if(this.props.handleUpdate){
+			if(args[2] === 'updateTitle' && this.props.currentOffices.length === 1){
+				args[1].office_id = +this.props.currentOffices[0].id
+			}
+			this.props.handleUpdate(...args)
+		}
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -173,7 +178,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.props.handleUpdate}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
@@ -188,7 +193,7 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
-					in={actionDomRect && actionDomRect.top && this.props.status === 'Edit' }
+					in={actionDomRect && actionDomRect.top && isEdit }
 					timeout={400}
 					classNames="dropdown-fade"
 					onEnter={this.showTooltip}

@@ -35,7 +35,7 @@ export class Dropdown extends React.Component{
   handleClick = (e, selectedOption) => {
     this.setState({selectedOption})
     this.toggleDropdown(e)
-    this.props.handleOptionSelect(selectedOption, null, this.props.type, this.props.component_type)
+    this.props.handleOptionSelect(null, selectedOption, this.props.type, this.props.component_type)
   }
 
   handleChange = (e) => {
@@ -74,7 +74,7 @@ export class Dropdown extends React.Component{
                         <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
                           <span><i className={this.props.component_type === 'category_id' ? 'cm-hashtag' : 'cm-hub'} /></span>
                           {
-                            (selectedOption && selectedOption.name) || 
+                            (selectedOption && selectedOption.name) || (options.length === 1 && options[0].name) || 
                             (
                               value.status === 'Edit' &&
                               (this.props.component_type === 'category_id'  ? "Select Categories" : "Select Office")
