@@ -6,14 +6,14 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: transparent;
-  transition: background-color .3s linear;
-  &:hover {
-    background-color: $gray-bg;
-  }
-  &:focus {
-    background-color: transparent;
-  }
+  // background-color: transparent;
+  // transition: background-color .3s linear;
+  // &:hover {
+  //   background-color: $gray-bg;
+  // }
+  // &:focus {
+  //   background-color: transparent;
+  // }
 }
 
 .cm-header1.read {
@@ -28,14 +28,14 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: transparent;
-  transition: background-color .3s linear;
-  &:hover {
-    background-color: $gray-bg;
-  }
-  &:focus {
-    background-color: transparent;
-  }
+  // background-color: transparent;
+  // transition: background-color .3s linear;
+  // &:hover {
+  //   background-color: $gray-bg;
+  // }
+  // &:focus {
+  //   background-color: transparent;
+  // }
 }
 
 .cm-header2.read {
@@ -50,14 +50,14 @@
   padding: 4px 2px;
   @include editable-style;
   @include text-wrapping;
-  background-color: transparent;
-  transition: background-color .3s linear;
-  &:hover {
-    background-color: $gray-bg;
-  }
-  &:focus {
-    background-color: transparent;
-  }
+  // background-color: transparent;
+  // transition: background-color .3s linear;
+  // &:hover {
+  //   background-color: $gray-bg;
+  // }
+  // &:focus {
+  //   background-color: transparent;
+  // }
 }
 
 .cm-header3.read {

@@ -157,7 +157,7 @@ class AddComponent extends React.Component{
             return(
               <div 
                 ref={node => this.elem = node} 
-                className="add-component-container" 
+                className="widget-container" 
                 data-block-id={this.props.id}
                 {...allActions}
               >
