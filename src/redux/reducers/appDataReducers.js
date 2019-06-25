@@ -1,4 +1,6 @@
-import uuid from 'uuid/v1'
+import uuid from 'uuid/v5'
+import moment from 'moment'
+
 import { SET_CURRENT_ELEM } from './currentElemReducer';
 
 export const ADD_COMPONENT = 'ADD_COMPONENT'
@@ -7,12 +9,13 @@ export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 
+//Created using CLI
+const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
+
 export const addNewComponent = (data) => {
   return dispatch => {
-    let newId = uuid({
-      msecs: new Date().getTime(),
-      nsecs: 5678
-    })
+    let newId = uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE)
+    console.log(newId)
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
