@@ -178,7 +178,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit', emitUpdate: this.emitUpdate}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
