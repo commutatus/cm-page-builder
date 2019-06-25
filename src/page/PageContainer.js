@@ -146,15 +146,15 @@ class PageContainer extends React.Component {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			// if (appData.componentData.length > 0) {
-			// 	let lastElem = appData.componentData[appData.componentData.length-1]
-			// 	if(lastElem.componentType !== 'Text' || lastElem.content ) {
-			// 		this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+			if (appData.componentData.length > 0) {
+				let lastElem = appData.componentData[appData.componentData.length-1]
+				if(lastElem.componentType !== 'Text' || lastElem.content ) {
+					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
 					
-			// 	}
-			// 	else
-			// 		this.props.setCurrentElem(lastElem.id)
-			// }
+				}
+				else
+					this.props.setCurrentElem(lastElem.id)
+			}
 		}else{
 			this.props.removeCurrentElem()
 		}
