@@ -47,6 +47,7 @@ class AddComponent extends React.Component{
 
   //Change the component type.
   handleClick = (e) => {
+    e.stopPropagation()
     this.props.setCurrentElem(this.props.id)
     let comSelDiv = this.elem.querySelector(`[data-block-type="component-select-div"]`)
     if(comSelDiv && comSelDiv.contains(e.target)){
@@ -123,7 +124,7 @@ class AddComponent extends React.Component{
 
   handleFocus = (e) => {
     this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
-    this.setCursorToEnd(e) 
+    this.setCursorToEnd(e)
   }
 
   // Method to position the cursor at the end of the content
