@@ -15,7 +15,6 @@ const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
 export const addNewComponent = (data) => {
   return dispatch => {
     let newId = uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE)
-    console.log(newId)
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
