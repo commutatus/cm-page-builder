@@ -11,8 +11,12 @@ import {
 
 class WrappedEmbed extends React.Component{
 
-  handleEmbed = (e) => {
-    this.props.updateComponent({id: this.props.id, newState: {content: getVideoUrl(e.target.value)}})
+  handleEmbed = (e, context) => {
+    if (this.props.initial)
+      context.emitUpdate(null, {client_reference_id: this.props.id, content: getVideoUrl(e.target.value), position: this.props.position, component_type: this.props.componentType}, 'createComponent')
+    else
+      context.emitUpdate(this.props.id, {content: getVideoUrl(e.target.value), position: this.props.position, component_type: this.props.componentType}, 'updateComponent')
+    this.props.updateComponent({id: this.props.id, newState: {content: getVideoUrl(e.target.value), initial: false}})
   }
 
   render(){
@@ -33,7 +37,7 @@ class WrappedEmbed extends React.Component{
                     data-root="true"
                     placeholder="Paste the URL from Vimeo or YouTube"
                     className="embed-input"
-                    onBlur={this.handleEmbed}
+                    onBlur={(e) => this.handleEmbed(e, value)}
                   />
                 </div>
               }

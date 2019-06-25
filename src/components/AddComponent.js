@@ -53,6 +53,12 @@ class AddComponent extends React.Component{
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
       this.props.updateComponentType({blockId: currentTarget.dataset.blockId, type: target.dataset.type})
+      if (target.dataset.type === `Divider`) {
+        if(this.props.data.initial)
+          this.context.emitUpdate(null, { component_type: target.dataset.type, position: this.props.data.position }, 'createComponent')
+        else
+          this.context.emitUpdate(this.props.data.id, { component_type: target.dataset.type, position: this.props.data.position }, 'updateComponent')
+      }
     }
   }
 

@@ -108,6 +108,7 @@ function updateComponentState(state, data){
 function removeComponentFromState(state, data){
   if(state.componentData.length > 1){
     const {componentData} = state
+    console.log('remove', componentData, data)
     const {blockId} = data
     let temp = []
     let position = 1

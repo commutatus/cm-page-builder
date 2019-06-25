@@ -30,7 +30,7 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
-		if(this.props.pageComponents && this.props.status !== `Edit`)
+		if(this.props.pageComponents)
 			this.props.initComponents(this.props.pageComponents)
 		//this.boundActionCreators = bindActionCreators( appActionCreators )
 	}
@@ -68,9 +68,9 @@ class PageContainer extends React.Component {
 
 	emitUpdate = (...args) => {
 		if(this.props.handleUpdate){
-			if(args[2] === 'updateTitle' && this.props.currentOffices.length === 1){
-				args[1].office_id = +this.props.currentOffices[0].id
-			}
+			// if(args[2] === 'updateTitle' && this.props.currentOffices.length === 1){
+			// 	args[1].office_id = +this.props.currentOffices[0].id
+			// }
 			this.props.handleUpdate(...args)
 		}
 	}
@@ -146,15 +146,15 @@ class PageContainer extends React.Component {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			if (appData.componentData.length > 0) {
-				let lastElem = appData.componentData[appData.componentData.length-1]
-				if(lastElem.componentType !== 'Text' || lastElem.content ) {
-					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+			// if (appData.componentData.length > 0) {
+			// 	let lastElem = appData.componentData[appData.componentData.length-1]
+			// 	if(lastElem.componentType !== 'Text' || lastElem.content ) {
+			// 		this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
 					
-				}
-				else
-					this.props.setCurrentElem(lastElem.id)
-			}
+			// 	}
+			// 	else
+			// 		this.props.setCurrentElem(lastElem.id)
+			// }
 		}else{
 			this.props.removeCurrentElem()
 		}
@@ -169,7 +169,7 @@ class PageContainer extends React.Component {
 	}
 
 	render() {
-		const { pageComponents, meta, actionDomRect, showTooltip } = this.state
+		const { meta, actionDomRect, showTooltip } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
