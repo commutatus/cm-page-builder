@@ -26,7 +26,7 @@ export class EmojiIconContainer extends React.Component{
   onEmojiClick = (data, e) => {
     e.preventDefault()
     this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
-    this.props.handleUpdate(null, {...data}, 'meta', 'emoji')
+    this.props.handleUpdate(null, {...data}, 'emoji')
   }
   
   openEmojiPopup = (e) => {

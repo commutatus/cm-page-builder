@@ -2,7 +2,7 @@
 
 .page-root-container {
     max-width: 710px;
-    margin: 10px auto 60px; 
+    margin: 10px auto 0; 
     .page-container {
         width: 100%;
         .page-info {
@@ -55,12 +55,10 @@
             background-color: #f4f5f7;
         }
     }
-    .bulleted-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-    }
     .component-dragger {
+        position: absolute;
+        top: 0;
+        left: -30px;
         font-size: $t4-text;
         color: #ACADAF;
         align-self: flex-start;
