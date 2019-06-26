@@ -14,17 +14,19 @@ export class EmojiIconContainer extends React.Component{
       showPopup: false
     }
     this.jsemoji = new JSEMOJI();
-    this.jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-emojione-64/';
+    this.jsemoji.img_sets.apple.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-apple-16/';
+    this.jsemoji.img_sets.apple.sheet = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-apple-sheets-16/';
+    this.jsemoji.use_sheet = true;
   }
 
   componentDidMount(){
-    this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji && this.props.emoji.colons || ':smile:')
+    this.elem.innerHTML = this.jsemoji.replace_colons(this.props.emoji && this.props.emoji.colons || ':notebook_with_decorative_cover:')
   }
 
   onEmojiClick = (data, e) => {
     e.preventDefault()
     this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
-    this.props.handleUpdate({...data}, null, 'emoji')
+    this.props.handleUpdate(null, {...data}, 'meta', 'emoji')
   }
   
   openEmojiPopup = (e) => {
@@ -56,7 +58,7 @@ export class EmojiIconContainer extends React.Component{
                 <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
                 {
                   showPopup &&
-                  <Picker set='emojione' onClick={this.onEmojiClick}/>
+                  <Picker set='apple' onClick={this.onEmojiClick} showPreview={false} />
                 }
               </div>
             )
