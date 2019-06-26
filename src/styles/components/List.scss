@@ -2,14 +2,6 @@
 
 .cm-o-list {
     width: 100%;
-    padding: 0 5px;
-    // transition: background-color .2s linear;
-    // &:hover {
-    //     background: $gray-bg;
-    // }
-    // &:focus-within {
-    //     background-color: transparent;
-    // }
     span {
         align-self: center;
         color: $primary-color;
@@ -21,14 +13,6 @@
 
 .list-span-focus {
     width: 100%;
-    padding: 0 5px;
-    transition: background-color .2s linear;
-    // &:hover {
-    //     background: $gray-bg;
-    // }
-    // &:focus-within {
-    //     background-color: transparent;
-    // }
     span {
         align-self: center;
         color: $primary-color;
@@ -39,19 +23,11 @@
 
 .cm-u-list {
     width: 100%;
-    padding: 0 5px;
-    transition: background-color .2s linear;
-    &:hover {
-        background: $gray-bg;
-    }
-    &:focus-within {
-        background-color: transparent;
-    }
    .bulleted-dot {
         align-self: center;
-        width: 6px;
-        height: 6px;
+        margin-bottom: 5px;
         margin-right: 10px;
+        padding: 3px;
         background-color: $primary-color;
         border-radius: 50%; 
    }
