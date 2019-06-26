@@ -14,7 +14,9 @@ export class EmojiIconContainer extends React.Component{
       showPopup: false
     }
     this.jsemoji = new JSEMOJI();
-    this.jsemoji.img_sets.emojione.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-emojione-64/';
+    this.jsemoji.img_sets.apple.path = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-apple-64/';
+    this.jsemoji.img_sets.apple.sheet = 'https://cdn.jsdelivr.net/gh/iamcal/emoji-data@19299c91bc87374118f06b2760f1ced69d714ab1/img-apple-sheets-64/';
+    this.jsemoji.use_sheet = true;
   }
 
   componentDidMount(){

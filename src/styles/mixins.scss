@@ -12,6 +12,7 @@
 
 @mixin text-wrapping {
   width: 100%;
+  min-height: 20px;
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -26,7 +27,7 @@
   caret-color: $primary-color;
   -webkit-text-fill-color:black;
   &:hover {
-    cursor: pointer;
+    cursor: text;
   }
   &:empty{
     -webkit-text-fill-color: #9EA0A4;
