@@ -20,7 +20,8 @@ class AddComponent extends React.Component{
     super(props)
     this.state = {
       showActionBtn: false,
-      isFocused: false
+      isFocused: false,
+      showHandle:false
     }
   }
 
@@ -28,6 +29,12 @@ class AddComponent extends React.Component{
     this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
 
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.data.componentType !== this.props.data.componentType){
+      this.setState({isFocused: false, showHandle: false})
+    }
   }
   
   componentDidUpdate(){
