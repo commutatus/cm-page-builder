@@ -17,7 +17,7 @@ export const removeCurrentElem = () => {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_ELEM:
-      return ({elemId: action.elemId})
+      return ({...state, elemId: action.elemId, prevSelectedElemId: state.elemId})
     case REMOVE_CURRENT_ELEM:
       return ({elemId: null, prevSelectedElemId: state.elemId || state.prevSelectedElemId})
     default:

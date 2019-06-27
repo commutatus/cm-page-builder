@@ -144,7 +144,7 @@ class PageContainer extends React.Component {
 			let {appData} = this.props
 			// if (appData.componentData.length > 0) {
 				let lastElem = appData.componentData[appData.componentData.length-1]
-				if(lastElem.componentType !== 'Text' || lastElem.content ) {
+				if(!lastElem || lastElem.componentType !== 'Text' || lastElem.content ) {
 					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
 				}
 				else

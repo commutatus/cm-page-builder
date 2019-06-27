@@ -16,6 +16,8 @@ import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
 
+//A higher order component for the generic components to handle there functionalily.
+
 class AddComponent extends React.Component{
   constructor(props){
     super(props)
@@ -74,7 +76,16 @@ class AddComponent extends React.Component{
   // handle key action and navigation
   handleKeyDown = (e) => {
     let {appData, currentElem, data} = this.props 
-    let currentElemPos
+    //Intialize all the elem
+    let currentElemPos = -1, 
+        elemRect = null, 
+        caretRect = null, 
+        computedStyles = null, 
+        elemPad = undefined, 
+        elemMar = undefined, 
+        extraHeight = undefined
+    
+    //All the key events related to the component are handled here.   
     switch (e.key) {
       case 'Enter':
         if(!e.shiftKey){
@@ -102,17 +113,14 @@ class AddComponent extends React.Component{
         }
         break
       case 'ArrowUp':
-        e.persist()
-        let elemRect = e.target.getBoundingClientRect()
-        let caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
-        let computedStyles = window.getComputedStyle(e.target)
-        let elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
-        let elemBor = computedStyles.getPropertyValue('border-top').replace('px', '')
-        let elemMar = computedStyles.getPropertyValue('margin: -top').replace('px', '')
-        let extraHeight = Number(elemPad + elemMar)
-        // debugger
-        if(elemRect.top === (caretRect.top - extraHeight -  1)){
-          console.log('going ups')
+        elemRect = e.target.getBoundingClientRect()
+        caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
+        computedStyles = window.getComputedStyle(e.target)
+        elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
+        elemMar = computedStyles.getPropertyValue('margin-top').replace('px', '')
+        extraHeight = (+elemPad) + (+elemMar)
+        if((caretRect.x === 0 && caretRect.y === 0) || elemRect.top === (caretRect.top - extraHeight + 1)){
+          e.preventDefault()
           currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
           while(currentElemPos > 0){
             if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos-1].componentType)){
@@ -124,13 +132,22 @@ class AddComponent extends React.Component{
         }
         break
       case 'ArrowDown':
-          currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
-          while(currentElemPos < appData.componentData.length - 1){
-            if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos+1].componentType)){
-              this.props.setCurrentElem(appData.componentData[currentElemPos+1].id)
-              break
+          elemRect = e.target.getBoundingClientRect()
+          caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
+          computedStyles = window.getComputedStyle(e.target)
+          elemPad = computedStyles.getPropertyValue("padding-bottom").replace('px', '')
+          elemMar = computedStyles.getPropertyValue('margin-bottom').replace('px', '')
+          extraHeight = (+elemPad) + (+elemMar)
+          if((caretRect.x === 0 && caretRect.y === 0) || elemRect.bottom === (caretRect.bottom + extraHeight - 1)){
+            e.preventDefault()
+            currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
+            while(currentElemPos < appData.componentData.length - 1){
+              if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos+1].componentType)){
+                this.props.setCurrentElem(appData.componentData[currentElemPos+1].id)
+                break
+              }
+              currentElemPos++
             }
-            currentElemPos++
           }
           break
       default:
@@ -142,9 +159,23 @@ class AddComponent extends React.Component{
     this.setState({showActionBtn: e.target.innerHTML === ''})
   }
 
+
+  // handles the focus and set the cursor to right position.
   handleFocus = (e) => {
+    e.persist()
+    let {appData, currentElem} = this.props
     this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
-    this.setCursorToEnd(e)
+    let prevElemPos, currElemPos
+    for(let i in appData.componentData){
+      if(appData.componentData[i].id === currentElem.elemId){
+        currElemPos = +i
+      }
+      if(appData.componentData[i].id === currentElem.prevSelectedElemId){
+        prevElemPos = +i
+      }
+    }
+    if(currElemPos < prevElemPos)
+      this.setCursorToEnd(e)
   }
 
   // Method to position the cursor at the end of the content
@@ -159,6 +190,7 @@ class AddComponent extends React.Component{
     }
   }
   
+  //handle the blur of the element
   handleBlur = (e) => {
     this.setState({showActionBtn: false, isFocused: false})
   }
