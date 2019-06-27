@@ -6,17 +6,10 @@
     align-items: center;
     width: 100%;
     margin: 2px 0;
-    padding: 5px;
+    padding: 2px;
     color: $light-text;
     font-size: $t6-text;
-    // transition: background-color .3s linear;
-    // cursor: pointer;
-    // &:hover {
-    //   background-color: $gray-bg;
-    // }
-    // &:focus-within {
-    //   background-color: transparent;
-    // }
+    cursor: pointer;
     .embed-icon {
       margin-right: 7px;
     }
@@ -25,6 +18,7 @@
       font-size: $t6-text;
       border: none;
       background-color: transparent;
+      cursor: pointer;
       &::placeholder {
         color: $light-text;
         font-size: $t4-text;
