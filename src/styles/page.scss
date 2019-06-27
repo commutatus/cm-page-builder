@@ -57,8 +57,10 @@
     }
     .component-dragger {
         position: absolute;
-        top: 0;
-        left: -30px;
+        top: 8px;
+        left: -24px;
+        margin: 10px;
+        margin-top: 0px;
         font-size: $t4-text;
         color: #ACADAF;
         align-self: flex-start;

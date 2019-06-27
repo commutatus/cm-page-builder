@@ -11,10 +11,14 @@ export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 
 //Created using CLI
 const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
+function createID(){
+  return uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE) 
+}
 
 export const addNewComponent = (data) => {
   return dispatch => {
-    let newId = uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE)
+    //Try not to change it as the application may not work properly and can create inconsistency in the database.
+    let newId = createID()
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
@@ -27,7 +31,14 @@ export const addNewComponent = (data) => {
 }
 
 export const initComponents = (data) => {
-  return ({ type: INIT_COMPONENTS, data })
+  return dispatch => {
+    if(data.length > 0){
+      dispatch(({ type: INIT_COMPONENTS, data }))
+    }
+    else{
+      dispatch({ type: ADD_COMPONENT })
+    }
+  }
 }
 
 export const removeComponent = (data) => {
@@ -52,7 +63,7 @@ function initializeComponentsInState(state, data) {
 }
 
 //Accept the current state and data about old elem so we can create a new component as needed.
-function addComponent(state, data){
+function addComponent(state, data = {}){
   const {componentData} = state
   const {id, componentType} = data
   let temp = []
@@ -105,7 +116,6 @@ function updateComponentState(state, data){
 function removeComponentFromState(state, data){
   if(state.componentData.length > 1){
     const {componentData} = state
-    console.log('remove', componentData, data)
     const {blockId} = data
     let temp = []
     let position = 1
@@ -121,7 +131,7 @@ function removeComponentFromState(state, data){
     }
     return ({componentData: temp})
   }else{
-    return state
+    return initialState
   }
 }
 
