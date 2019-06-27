@@ -66,7 +66,7 @@ export const PageDetails = ({
 				</div>
 				<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
 				{ 
-					pageComponents.map((component, index) => getPageComponent(component, index))
+					pageComponents && pageComponents.map((component, index) => getPageComponent(component, index))
 				}
 				</div>
 			</div>

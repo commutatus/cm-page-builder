@@ -2,13 +2,11 @@ import React from 'react'
 import '../styles/page.css'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-//import { sortDataOnPos, compareAndDiff } from '../utils/helpers';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/global.css'
 import { connect } from 'react-redux';
 import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
-// import { bindActionCreators } from 'redux'
 import {
 	addNewComponent
 } from '../redux/reducers/appDataReducers'
@@ -25,14 +23,12 @@ class PageContainer extends React.Component {
 			meta: props.meta,
 			actionDomRect: null
 		}
-		// this.newOrder = 0
 		this.currentListOrder = 1
 	}
 
 	componentWillMount() {
 		if(this.props.pageComponents)
 			this.props.initComponents(this.props.pageComponents)
-		//this.boundActionCreators = bindActionCreators( appActionCreators )
 	}
 	
 	componentDidUpdate(){
@@ -67,7 +63,6 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (...args) => {
-		console.log(args)
 		if(this.props.handleUpdate){
 			if(args[2] === 'updateTitle' && this.props.currentOffices.length === 1){
 				args[1].office_id = +this.props.currentOffices[0].id
@@ -147,14 +142,14 @@ class PageContainer extends React.Component {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			if (appData.componentData.length > 0) {
+			// if (appData.componentData.length > 0) {
 				let lastElem = appData.componentData[appData.componentData.length-1]
 				if(lastElem.componentType !== 'Text' || lastElem.content ) {
 					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
 				}
 				else
 					this.props.setCurrentElem(lastElem.id)
-			}
+			// }
 		}else{
 			this.props.removeCurrentElem()
 		}

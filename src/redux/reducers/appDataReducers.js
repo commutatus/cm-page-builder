@@ -11,11 +11,14 @@ export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 
 //Created using CLI
 const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
+function createID(){
+  return uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE) 
+}
 
 export const addNewComponent = (data) => {
   return dispatch => {
     //Try not to change it as the application may not work properly and can create inconsistency in the database.
-    let newId = uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE) 
+    let newId = createID()
     dispatch({
       type: ADD_COMPONENT, 
       data: {...data, newId}
@@ -29,8 +32,10 @@ export const addNewComponent = (data) => {
 
 export const initComponents = (data) => {
   return dispatch => {
-    dispatch(({ type: INIT_COMPONENTS, data }))
-    if(data && data.length === 0){
+    if(data.length > 0){
+      dispatch(({ type: INIT_COMPONENTS, data }))
+    }
+    else{
       dispatch({ type: ADD_COMPONENT })
     }
   }
@@ -114,7 +119,6 @@ function updateComponentState(state, data){
 function removeComponentFromState(state, data){
   if(state.componentData.length > 1){
     const {componentData} = state
-    console.log('remove', componentData, data)
     const {blockId} = data
     let temp = []
     let position = 1
@@ -130,7 +134,7 @@ function removeComponentFromState(state, data){
     }
     return ({componentData: temp})
   }else{
-    return state
+    return initialState
   }
 }
 
