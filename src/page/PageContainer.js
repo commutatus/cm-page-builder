@@ -118,13 +118,29 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	getScrollOffsets = () => {
+		var w = window;
+
+		// This works for all browsers except IE versions 8 and before
+		if (w.pageXOffset != null) return {x: w.pageXOffset, y:w.pageYOffset};
+		// For IE (or any browser) in Standards mode
+		var d = w.document;
+		if (document.compatMode == "CSS1Compat")
+		return {x:d.documentElement.scrollLeft, y:d.documentElement.scrollTop};
+		// For browsers in Quirks mode
+		return { x: d.body.scrollLeft, y: d.body.scrollTop };
+	}
+
 	handleSelection = (e) => {
 		let selection = window.getSelection()
 		if(selection){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			if (dimensions.width > 1)
-				this.setState({actionDomRect: dimensions})
+			if (dimensions.width > 1) {
+				let scrollOffsets = this.getScrollOffsets()
+				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height, left: dimensions.left+scrollOffsets.x }
+				this.setState({actionDomRect})
+			}
 		}
 		else{
 			this.currentElemSelection = null
@@ -184,7 +200,7 @@ class PageContainer extends React.Component {
 	}
 
 	render() {
-		const { meta, actionDomRect, showTooltip, activeFormatting } = this.state
+		const { meta, actionDomRect, activeFormatting } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
@@ -215,7 +231,7 @@ class PageContainer extends React.Component {
 					onExited={this.hideTooltip}
 					unmountOnExit
 				>
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? {top: actionDomRect.top - actionDomRect.height, left: actionDomRect.left} : {display: 'none'}}>
+					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
 						<div className={ activeFormatting === `bold` ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={this.editText} data-action="bold">B</div>
 						<div className={ activeFormatting === `italic` ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />

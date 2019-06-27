@@ -64,7 +64,7 @@ export const PageDetails = ({
 					 </React.Fragment>
 					}
 				</div>
-				<div className="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
+				<div className="component-list" id="component-list" onMouseUp={onMouseUp} onKeyDown={onKeyDown}>
 				{ 
 					pageComponents.map((component, index) => getPageComponent(component, index))
 				}
