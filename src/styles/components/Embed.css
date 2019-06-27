@@ -36,16 +36,18 @@
   align-items: center;
   width: 100%;
   margin: 2px 0;
-  padding: 5px;
+  padding: 2px;
   color: #A8AAAD;
-  font-size: 16px; }
+  font-size: 16px;
+  cursor: pointer; }
   .cm-embed .embed-input-field .embed-icon {
     margin-right: 7px; }
   .cm-embed .embed-input-field .embed-input {
     width: 100%;
     font-size: 16px;
     border: none;
-    background-color: transparent; }
+    background-color: transparent;
+    cursor: pointer; }
     .cm-embed .embed-input-field .embed-input::placeholder {
       color: #A8AAAD;
       font-size: 14px; }

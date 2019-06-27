@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
 import '../styles/components/AddComponent.css'
 import { connect } from 'react-redux';
@@ -20,7 +21,8 @@ class AddComponent extends React.Component{
     super(props)
     this.state = {
       showActionBtn: false,
-      isFocused: false
+      isFocused: false,
+      showHandle:false
     }
   }
 
@@ -28,6 +30,12 @@ class AddComponent extends React.Component{
     this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
 
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.data.componentType !== this.props.data.componentType){
+      this.setState({isFocused: false, showHandle: false})
+    }
   }
   
   componentDidUpdate(){
@@ -94,13 +102,25 @@ class AddComponent extends React.Component{
         }
         break
       case 'ArrowUp':
-        currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
-        while(currentElemPos > 0){
-          if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos-1].componentType)){
-            this.props.setCurrentElem(appData.componentData[currentElemPos-1].id)
-            break
+        e.persist()
+        let elemRect = e.target.getBoundingClientRect()
+        let caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
+        let computedStyles = window.getComputedStyle(e.target)
+        let elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
+        let elemBor = computedStyles.getPropertyValue('border-top').replace('px', '')
+        let elemMar = computedStyles.getPropertyValue('margin: -top').replace('px', '')
+        let extraHeight = Number(elemPad + elemMar)
+        // debugger
+        if(elemRect.top === (caretRect.top - extraHeight -  1)){
+          console.log('going ups')
+          currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
+          while(currentElemPos > 0){
+            if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos-1].componentType)){
+              this.props.setCurrentElem(appData.componentData[currentElemPos-1].id)
+              break
+            }
+            currentElemPos--
           }
-          currentElemPos--
         }
         break
       case 'ArrowDown':
