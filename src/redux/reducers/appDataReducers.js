@@ -28,7 +28,12 @@ export const addNewComponent = (data) => {
 }
 
 export const initComponents = (data) => {
-  return ({ type: INIT_COMPONENTS, data })
+  return dispatch => {
+    dispatch(({ type: INIT_COMPONENTS, data }))
+    if(data && data.length === 0){
+      dispatch({ type: ADD_COMPONENT })
+    }
+  }
 }
 
 export const removeComponent = (data) => {
@@ -49,14 +54,14 @@ const initialState = {
 
 //Accepts the initial components data 
 function initializeComponentsInState(state, data) {
-  let { componentData } = state
-  let newData = []
-  newData = data.concat(componentData)
+  // let { componentData } = state
+  // let newData = []
+  // newData = data.concat(componentData)
   return { componentData: data }
 }
 
 //Accept the current state and data about old elem so we can create a new component as needed.
-function addComponent(state, data){
+function addComponent(state, data = {}){
   const {componentData} = state
   const {id, componentType} = data
   let temp = []
