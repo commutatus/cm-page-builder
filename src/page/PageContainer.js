@@ -135,9 +135,23 @@ class PageContainer extends React.Component {
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			document.execCommand('insertHTML', false, `<a href="${link}" rel="noopener noreferrer" target="_blank" contenteditable="false">${window.getSelection()}</a>`)
+			this._createLink(link)
 		}else{
 			document.execCommand(action)
+		}
+	}
+
+	_createLink = (link) => {
+		let sel, range
+		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
+			range = sel.getRangeAt(0)
+			let a = document.createElement('a')
+			a.href = link
+			let text = document.createTextNode(window.getSelection().toString())
+			a.appendChild(text)
+			a.contentEditable = false
+			range.deleteContents();
+			range.insertNode(a);
 		}
 	}
 

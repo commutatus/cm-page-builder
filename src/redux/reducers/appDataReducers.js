@@ -48,10 +48,7 @@ const initialState = {
 
 //Accepts the initial components data 
 function initializeComponentsInState(state, data) {
-  let { componentData } = state
-  let newData = []
-  newData = data.concat(componentData)
-  return { componentData: newData }
+  return { componentData: data }
 }
 
 //Accept the current state and data about old elem so we can create a new component as needed.
