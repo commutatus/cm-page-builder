@@ -48,9 +48,6 @@ const initialState = {
 
 //Accepts the initial components data 
 function initializeComponentsInState(state, data) {
-  let { componentData } = state
-  let newData = []
-  newData = data.concat(componentData)
   return { componentData: data }
 }
 
