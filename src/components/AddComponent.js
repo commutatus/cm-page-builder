@@ -35,8 +35,8 @@ class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    if(nextProps.data.componentType !== this.props.data.componentType){
-      this.setState({isFocused: false, showHandle: false})
+    if((nextProps.data.componentType !== this.props.data.componentType) || this.context.status === 'Read' ){
+      this.setState({isFocused: false, showHandle: false, showActionBtn: false})
     }
   }
   
