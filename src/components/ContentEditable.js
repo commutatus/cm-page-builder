@@ -20,7 +20,7 @@ class ContentEditable extends React.Component{
     this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML, initial: false}})
     if (!this.props.componentType && e.target.innerHTML) {
       context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
-      this.props.addNewComponent({ componentType: 'Text', initial: true })	
+      //this.props.addNewComponent({ componentType: 'Text', initial: true })	
     }                   // Block to make changes to title of the page
     else {
       if (this.props.initial)  {
