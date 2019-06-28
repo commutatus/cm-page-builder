@@ -35,8 +35,8 @@ class AddComponent extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    if((nextProps.data.componentType !== this.props.data.componentType) || this.context.status === 'Read' ){
-      this.setState({isFocused: false, showHandle: false, showActionBtn: false})
+    if(nextProps.data.componentType !== this.props.data.componentType){
+      this.setState({isFocused: false, showHandle: false})
     }
   }
   
@@ -198,6 +198,7 @@ class AddComponent extends React.Component{
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
+    const isEdit = this.context.status === 'Edit'
     return( 
       <PermissionContext.Consumer>
         {
@@ -220,10 +221,10 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {(showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
+                {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
-                  in={showActionBtn}
+                  in={isEdit && showActionBtn}
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
