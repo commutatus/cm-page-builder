@@ -74,7 +74,7 @@ export class Dropdown extends React.Component{
                         <div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
                           <span><i className={this.props.component_type === 'category_id' ? 'cm-hashtag' : 'cm-hub'} /></span>
                           {
-                            (selectedOption && selectedOption.name) || (options[0].name) || 
+                            (selectedOption && selectedOption.name)  || 
                             (
                               value.status === 'Edit' &&
                               (this.props.component_type === 'category_id'  ? "Select Categories" : "Select Office")
