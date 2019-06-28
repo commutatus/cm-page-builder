@@ -118,8 +118,11 @@ class AddComponent extends React.Component{
         computedStyles = window.getComputedStyle(e.target)
         elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
         elemMar = computedStyles.getPropertyValue('margin-top').replace('px', '')
-        extraHeight = (+elemPad) + (+elemMar)
-        if((caretRect.x === 0 && caretRect.y === 0) || elemRect.top === (caretRect.top - extraHeight + 1)){
+        extraHeight = (+elemPad) 
+        if((caretRect.x === 0 && caretRect.y === 0) ||  // when no text is there
+            (elemRect.top === (caretRect.top - extraHeight)) || // is not a text component
+            (elemRect.top === (caretRect.top - extraHeight - 1)) // is a text component
+        ){
           e.preventDefault()
           currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
           while(currentElemPos > 0){
@@ -137,8 +140,11 @@ class AddComponent extends React.Component{
           computedStyles = window.getComputedStyle(e.target)
           elemPad = computedStyles.getPropertyValue("padding-bottom").replace('px', '')
           elemMar = computedStyles.getPropertyValue('margin-bottom').replace('px', '')
-          extraHeight = (+elemPad) + (+elemMar)
-          if((caretRect.x === 0 && caretRect.y === 0) || elemRect.bottom === (caretRect.bottom + extraHeight - 1)){
+          extraHeight = (+elemPad)
+          if((caretRect.x === 0 && caretRect.y === 0) || 
+              (elemRect.bottom === (caretRect.bottom - extraHeight)) ||
+              (elemRect.bottom === (caretRect.bottom + extraHeight + 1))
+          ){
             e.preventDefault()
             currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
             while(currentElemPos < appData.componentData.length - 1){
@@ -198,6 +204,7 @@ class AddComponent extends React.Component{
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
+    const isEdit = this.context.status === 'Edit'
     return( 
       <PermissionContext.Consumer>
         {
@@ -220,10 +227,10 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {(showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
+                {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
-                  in={showActionBtn}
+                  in={isEdit && showActionBtn}
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
