@@ -63,7 +63,7 @@ class PageContainer extends React.Component {
 
 	emitUpdate = (...args) => {
 		if(this.props.handleUpdate){
-			if(args[2] === 'updateTitle' && this.props.currentOffices.length === 1){
+			if(args[2] === 'updateTitle'){
 				args[1].office_id = +this.props.currentOffices[0].id
 			}
 			this.props.handleUpdate(...args)
