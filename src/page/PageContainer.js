@@ -27,8 +27,7 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
-		if(this.props.pageComponents)
-			this.props.initComponents(this.props.pageComponents)
+		this.props.initComponents(this.props.pageComponents)
 	}
 	
 	componentDidUpdate(){
@@ -145,26 +144,33 @@ class PageContainer extends React.Component {
 	editText = (e) => {
 		e.preventDefault()
 		let action = e.currentTarget.dataset.action
+		console.log('selection', window.getSelection())
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			this._createLink(link)
+			document.execCommand('insertHTML', true, `<a href=${link} contenteditable="true" target="_blank">${window.getSelection().toString()}</a>`)
+
+			//this._createLink(link)
 		}else{
 			document.execCommand(action)
 		}
-		this.setState(state => ({ activeFormatting: state.activeFormatting === action ? null : action }))
+		this.setState(state => ({ activeFormatting: state.activeFormatting === action ? null : action, }))
 	}
 
 	_createLink = (link) => {
 		let sel, range
 		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
-			range = sel.getRangeAt(0)
-			let a = document.createElement('a')
-			a.href = link
-			let text = document.createTextNode(window.getSelection().toString())
-			a.appendChild(text)
-			a.contentEditable = false
-			range.deleteContents();
-			range.insertNode(a);
+			range = sel.getRangeAt(0);
+			range.collapse(true);
+			var anchor = document.createElement("a") 
+			anchor.href = link
+			anchor.contentEditable = "false"
+			anchor.appendChild( document.createTextNode(window.getSelection().toString()) );
+			range.insertNode(anchor);
+			// Move the caret immediately after the inserted span
+			range.setStartAfter(anchor)
+			range.collapse(true);
+			sel.removeAllRanges();
+			sel.addRange(range);
 		}
 	}
 
@@ -175,10 +181,10 @@ class PageContainer extends React.Component {
 			let {appData} = this.props
 			// if (appData.componentData.length > 0) {
 				let lastElem = appData.componentData[appData.componentData.length-1]
-				if(!lastElem || lastElem.componentType !== 'Text' || lastElem.content ) {
-					this.props.addNewComponent({id: lastElem.id, componentType: 'Text'})
+				if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
+					this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
 				}
-				else
+				else if (lastElem)
 					this.props.setCurrentElem(lastElem.id)
 			// }
 		}else{

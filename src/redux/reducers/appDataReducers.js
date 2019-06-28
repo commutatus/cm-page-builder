@@ -32,12 +32,8 @@ export const addNewComponent = (data) => {
 
 export const initComponents = (data) => {
   return dispatch => {
-    if(data.length > 0){
       dispatch(({ type: INIT_COMPONENTS, data }))
-    }
-    else{
-      dispatch({ type: ADD_COMPONENT })
-    }
+     // dispatch({ type: ADD_COMPONENT })
   }
 }
 
@@ -59,7 +55,7 @@ const initialState = {
 
 //Accepts the initial components data 
 function initializeComponentsInState(state, data) {
-  return { componentData: data }
+  return { componentData: data ? data : [] }
 }
 
 //Accept the current state and data about old elem so we can create a new component as needed.
