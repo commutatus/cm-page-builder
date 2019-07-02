@@ -47,6 +47,7 @@ class ContentEditable extends React.Component{
                 className={classNames(className, value.status.toLowerCase())}
                 onBlur={(e) => this.emitChange(e, value)}
                 contentEditable={value.status === 'Edit'}
+                onSelect={value.handleSelection}
                 placeholder={content || value.status === 'Edit' ? placeholder : ''}
                 dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
                 styles={styles}
