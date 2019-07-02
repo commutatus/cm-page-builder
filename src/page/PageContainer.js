@@ -145,15 +145,20 @@ class PageContainer extends React.Component {
 
 	editText = (e) => {
 		let { activeFormatting } = this.state
-		e.preventDefault()
+		//e.preventDefault()
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
-			let link = prompt('Enter a link')
-			document.execCommand('insertHTML', true, `<a href=${link} contenteditable="true" target="_blank">${window.getSelection().toString()}</a>`)
+			if (!activeFormatting.includes(`createLink`)) {
+				let link = prompt('Enter a link')
+				document.execCommand('insertHTML', true, `<a href=${link} contenteditable="false" target="_blank">${window.getSelection().toString()}</a>`)	
+			}
+			else
+				document.execCommand("unlink", false, false);
 		}else
 			document.execCommand(action)
-		if (activeFormatting.includes(action))
-			activeFormatting.remove(action)
+		let index = activeFormatting.indexOf(action)
+		if (index > -1)
+			activeFormatting.splice(index, 1)
 		else
 			activeFormatting.push(action)
 		this.setState({ activeFormatting })
