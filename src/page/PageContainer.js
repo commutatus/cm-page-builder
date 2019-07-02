@@ -15,13 +15,15 @@ import {
 	removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import '../styles/animations.css'
+import { node } from 'prop-types';
 class PageContainer extends React.Component {
 
 	constructor(props) {
 		super(props)
 		this.state = {
 			meta: props.meta,
-			actionDomRect: null
+			actionDomRect: null,
+			activeFormatting: []
 		}
 		this.currentListOrder = 1
 	}
@@ -142,18 +144,50 @@ class PageContainer extends React.Component {
 	}
 
 	editText = (e) => {
+		let { activeFormatting } = this.state
 		e.preventDefault()
 		let action = e.currentTarget.dataset.action
-		console.log('selection', window.getSelection())
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
 			document.execCommand('insertHTML', true, `<a href=${link} contenteditable="true" target="_blank">${window.getSelection().toString()}</a>`)
-
-			//this._createLink(link)
-		}else{
+		}else
 			document.execCommand(action)
-		}
-		this.setState(state => ({ activeFormatting: state.activeFormatting === action ? null : action, }))
+		if (activeFormatting.includes(action))
+			activeFormatting.remove(action)
+		else
+			activeFormatting.push(action)
+		this.setState({ activeFormatting })
+	}
+
+	handleRangeSelection = (e) => {
+		let {activeFormatting} = this.state
+		activeFormatting = []
+		let node = e.target
+		while(node.firstChild) {
+			node = node.firstChild
+			switch(node.nodeName) {
+				case `A`:
+					if (!activeFormatting.includes(`createLink`))
+						activeFormatting.push(`createLink`)
+					break
+				case `B`:
+					if (!activeFormatting.includes(`bold`))
+						activeFormatting.push(`bold`)					
+					break
+				case `I`:
+					if (!activeFormatting.includes(`italic`))
+						activeFormatting.push(`italic`)						
+					break
+				case `STRIKE`:
+					if (!activeFormatting.includes(`strikeThrough`))
+						activeFormatting.push(`strikeThrough`)						
+					break
+				default:
+					this.setState({ activeFormatting: [] })
+					break
+			}
+		} 
+		this.setState({ activeFormatting })
 	}
 
 	_createLink = (link) => {
@@ -210,7 +244,7 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onMouseDown={isEdit ? this.handleClick : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit', emitUpdate: this.emitUpdate}}> 
+				<PermissionContext.Provider value={{status: this.props.status || 'Edit', emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
@@ -233,14 +267,14 @@ class PageContainer extends React.Component {
 					unmountOnExit
 				>
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
-						<div className={ activeFormatting === `bold` ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={this.editText} data-action="bold">B</div>
-						<div className={ activeFormatting === `italic` ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
+						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={this.editText} data-action="bold">B</div>
+						<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
 						</div>
-						<div className={  activeFormatting === `strikeThrough` ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="strikeThrough">
+						<div className={  activeFormatting.includes(`strikeThrough`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="strikeThrough">
 							<i className="cm-strikethrough" />
 						</div>
-						<div className={  activeFormatting === `createLink` ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="createLink">
+						<div className={  activeFormatting.includes(`createLink`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="createLink">
 							<i className="cm-link" />
 						</div>
 						{/* <div className="divider"></div>
