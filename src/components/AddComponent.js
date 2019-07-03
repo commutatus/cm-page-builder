@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import {
   addNewComponent,
   updateComponentType,
+  updateComponent,
   removeComponent
 } from '../redux/reducers/appDataReducers'
 import {
   setCurrentElem,
-  removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
@@ -31,33 +31,47 @@ class AddComponent extends React.Component{
   componentDidMount(){
     this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
-
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.data.componentType !== this.props.data.componentType){
-      this.setState({isFocused: false, showHandle: false})
-    }
-  }
-  
-  componentDidUpdate(){
+  componentDidUpdate(oldProps, oldState){
     this.checkAndFocus(this.props)
+    this.checkBlurAndEmitUpdate(oldProps, this.props)
   }
 
   // For newly created component to change the focus
   checkAndFocus = (props) => {
     let {currentElem, id} = props
+    let {isFocused} = this.state
+    //Compare the old and the new element to check focused has changed or not
     if(currentElem.elemId && id === currentElem.elemId){
-      let elem = document.querySelector(`[data-block-id="${id}"] [data-root="true"]`)
-      if(elem && elem !== document.activeElement){
-        elem.focus()
+      //Get the dom not if it has changed
+      let elem = ReactDOM.findDOMNode(this).querySelector(`[data-root="true"]`)
+      //check if focused or not
+      if(!isFocused){
+        this.setState({showActionBtn: true, isFocused: true})
       }
+      //if current state is focus the element
+    }
+    else{
+      //when focus is removed doesn't show the handle and the btns
+      if(this.state.showActionBtn || this.state.isFocused)
+        this.setState({showActionBtn: false, isFocused: false})
+    }
+  }
+
+  checkBlurAndEmitUpdate = (oldProps, props) => {
+    let {currentElem} = props
+    if(currentElem.prevSelectedElemId !== oldProps.currentElem.prevSelectedElemId){
+      let el = document.querySelector(`[data-block-id="${currentElem.prevSelectedElemId}"] [data-root="true"] `)
+      if(el)
+        this.props.updateComponent({id: currentElem.prevSelectedElemId, newState: {content: el.innerHTML, initial: false}})
     }
   }
 
   //Change the component type.
-  handleClick = (e) => {
+  handleMouseUp = (e) => {
     e.stopPropagation()
+    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
     this.props.setCurrentElem(this.props.id)
     let comSelDiv = this.elem.querySelector(`[data-block-type="component-select-div"]`)
     if(comSelDiv && comSelDiv.contains(e.target)){
@@ -165,12 +179,10 @@ class AddComponent extends React.Component{
     this.setState({showActionBtn: e.target.innerHTML === ''})
   }
 
-
   // handles the focus and set the cursor to right position.
   handleFocus = (e) => {
     e.persist()
     let {appData, currentElem} = this.props
-    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
     let prevElemPos, currElemPos
     for(let i in appData.componentData){
       if(appData.componentData[i].id === currentElem.elemId){
@@ -195,23 +207,24 @@ class AddComponent extends React.Component{
       sel.addRange(range);
     }
   }
-  
-  //handle the blur of the element
+
   handleBlur = (e) => {
-    this.setState({showActionBtn: false, isFocused: false})
+    // 
+
   }
 
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
     const isEdit = this.context.status === 'Edit'
+    // console.log(this.state)
     return( 
       <PermissionContext.Consumer>
         {
           value => {
             const isEdit = value.status === 'Edit'
             const allActions = isEdit ? {
-              'onMouseDown': this.handleClick,
+              'onMouseUp': this.handleMouseUp,
               'onKeyDown': this.handleKeyDown,
               'data-component-type': data.componentType,
               'onBlur':this.handleBlur,
@@ -280,6 +293,6 @@ const mapDispatchToProps = {
   updateComponentType,
   removeComponent,
   setCurrentElem,
-  removeCurrentElem
+  updateComponent
 }
 export default connect(state => state, mapDispatchToProps)(AddComponent)

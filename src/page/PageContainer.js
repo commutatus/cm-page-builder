@@ -1,20 +1,24 @@
 import React from 'react'
-import '../styles/page.css'
+import Sortable from 'sortablejs'
+import { CSSTransition } from 'react-transition-group';
+import { connect } from 'react-redux';
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
-import { CSSTransition } from 'react-transition-group';
-import '../styles/global.css'
-import { connect } from 'react-redux';
-import { initComponents } from '../redux/reducers/appDataReducers'
 import AddComponent from '../components/AddComponent';
 import {
-	addNewComponent
+	initComponents,
+	addNewComponent,
+	updatePosition
 } from '../redux/reducers/appDataReducers'
 import {
 	setCurrentElem,
 	removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
+
+import '../styles/global.css'
+import '../styles/page.css'
 import '../styles/animations.css'
+
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -28,6 +32,20 @@ class PageContainer extends React.Component {
 
 	componentWillMount() {
 		this.props.initComponents(this.props.pageComponents)
+	}
+
+	componentDidMount() {
+		if(!this.dragContext){
+			let el = document.getElementById('component-list')
+			this.dragContext = Sortable.create(el, {
+				name: 'componentList',
+				handle: ".component-dragger",
+				onEnd: (e) => {
+					let {newIndex, oldIndex} = e
+					this.props.updatePosition({oldIndex, newIndex})
+				}
+			})
+		}
 	}
 	
 	componentDidUpdate(){
@@ -144,10 +162,9 @@ class PageContainer extends React.Component {
 	editText = (e) => {
 		e.preventDefault()
 		let action = e.currentTarget.dataset.action
-		console.log('selection', window.getSelection())
 		if(action === 'createLink'){
 			let link = prompt('Enter a link')
-			document.execCommand('insertHTML', true, `<a href=${link} contenteditable="true" target="_blank">${window.getSelection().toString()}</a>`)
+			document.execCommand('insertHTML', false, `<a href=${link} contenteditable="true" target="_blank">${window.getSelection().toString()}</a>`)
 
 			//this._createLink(link)
 		}else{
@@ -203,12 +220,12 @@ class PageContainer extends React.Component {
 	render() {
 		const { meta, actionDomRect, activeFormatting } = this.state
 		const {appData} = this.props
-		let isEdit = this.props.status === 'Edit'
+		let isEdit = this.props.status === 'Edit' || 'Edit'
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onMouseDown={isEdit ? this.handleClick : undefined}
+				onClick={isEdit ? this.handleClick : undefined}
 			>
 				<PermissionContext.Provider value={{status: this.props.status || 'Edit', emitUpdate: this.emitUpdate}}> 
 					<PageDetails 
@@ -272,7 +289,8 @@ const mapDispatchToProps = {
 	addNewComponent,
 	setCurrentElem,
 	initComponents,
-	removeCurrentElem
+	removeCurrentElem,
+	updatePosition
 }
 
 

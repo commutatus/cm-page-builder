@@ -53,7 +53,7 @@ class DragHandle extends React.Component{
         id="drag-handle" 
         className="component-dragger" 
         data-block-id={this.props.id}
-        onClick={this.optionHandleClick} 
+        onClick={this.optionHandleClick}
       >
         <i className="cm cm-handle" />
         <CSSTransition

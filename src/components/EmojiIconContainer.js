@@ -1,5 +1,4 @@
 import React from 'react'
-import EmojiPicker from 'emoji-picker-react'
 import JSEMOJI from 'emoji-js';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'

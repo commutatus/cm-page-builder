@@ -8,6 +8,7 @@ export const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
 export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 export const INIT_COMPONENTS = 'INIT_COMPONENTS'
+export const UPDATE_POS = 'UPDATE_POS'
 
 //Created using CLI
 const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
@@ -28,6 +29,10 @@ export const addNewComponent = (data) => {
       elemId: newId
     })
   }
+}
+
+export const updatePosition = (data) => {
+  return({type: UPDATE_POS, data})
 }
 
 export const initComponents = (data) => {
@@ -125,10 +130,21 @@ function removeComponentFromState(state, data){
         position++
       }
     }
-    return ({componentData: temp})
+    return ({...state, componentData: temp})
   }else{
     return initialState
   }
+}
+
+function updateComponentPos(state, {newIndex, oldIndex}) {
+  let newData = []
+  let elem = state.componentData[oldIndex]
+  newData = state.componentData.filter((d, i) => i !== oldIndex)
+  newData.splice(newIndex, 0, elem)	
+  return ({
+    ...state, 
+    componentData: newData.map((d, i) => ({...d, position: i+1}))
+  })
 }
 
 export default (state = initialState, action) => {
@@ -141,6 +157,8 @@ export default (state = initialState, action) => {
       return updateComponentTypeState(state, action.data)
     case UPDATE_COMPONENT:
       return updateComponentState(state, action.data)
+    case UPDATE_POS:
+      return updateComponentPos(state, action.data)
     case REMOVE_COMPONENT:
       return removeComponentFromState(state, action.data)
     default:
