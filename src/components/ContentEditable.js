@@ -70,6 +70,7 @@ class ContentEditable extends React.Component{
           styles={styles}
           //onMouseUp={handleMouseUp}
           data-gramm_editor="false"
+          onSelect={context.handleSelection}
         />
       </div>
     )
