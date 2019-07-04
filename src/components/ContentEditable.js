@@ -1,15 +1,12 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import classNames from 'classnames';
 import sanitizeHtml from 'sanitize-html'
-import DragHandle from './DragHandle'
 import { connect } from 'react-redux';
 import {
   setCurrentElem,
 } from '../redux/reducers/currentElemReducer'
 import { PermissionContext } from '../contexts/permission-context';
 import {
-  updateComponent, 
   addNewComponent
 } from '../redux/reducers/appDataReducers'
 
@@ -32,7 +29,8 @@ class ContentEditable extends React.Component{
   setFocus = () => {
     if(this.props.currentElem.elemId === this.props.id){
       setTimeout(() => {
-        this.elem.focus()
+        if(this.elem)
+          this.elem.focus()
       }, 0)
     }
   }
@@ -40,17 +38,7 @@ class ContentEditable extends React.Component{
   emitChange = (e, context) => {
     if (!this.props.componentType && e.target.innerHTML) {
       context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
-      //this.props.addNewComponent({ componentType: 'Text', initial: true })	
     }                   // Block to make changes to title of the page
-    else {
-      if (this.props.initial)  {
-        context.emitUpdate(null, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType, client_reference_id: this.props.id }, 'createComponent')
-      }         // Block to create component when a blank component is added
-      else if (e.target.innerHTML)      //Block to update component when changes in content is made
-        context.emitUpdate(this.props.id, { content: e.target.innerHTML, position: this.props.position, component_type: this.props.componentType }, 'updateComponent')
-      // else 
-    }
-   // this.props.removeCurrentElem()
   }
 
   render() {
@@ -63,7 +51,7 @@ class ContentEditable extends React.Component{
           data-root="true"
           ref={node => this.elem = node}
           className={classNames(className, context.status.toLowerCase())}
-          // onBlur={(e) => this.emitChange(e, context)}
+          onBlur={(e) => this.emitChange(e, context)}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
@@ -83,7 +71,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   setCurrentElem,
-  updateComponent,
   addNewComponent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ContentEditable)

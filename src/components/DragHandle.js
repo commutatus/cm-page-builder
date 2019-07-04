@@ -38,8 +38,6 @@ class DragHandle extends React.Component{
     switch (e.target.dataset.action) {
       case 'delete':
         this.props.removeComponent({blockId: this.props.id})
-        if (!this.props.initial)
-          this.context.emitUpdate(this.props.id, null, `deleteComponent`)
         break;
       default:
         break;

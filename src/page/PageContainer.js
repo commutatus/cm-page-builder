@@ -1,5 +1,6 @@
 import React from 'react'
 import Sortable from 'sortablejs'
+import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { PermissionContext } from '../contexts/permission-context';
@@ -14,7 +15,6 @@ import {
 	setCurrentElem,
 	removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
-
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
@@ -31,7 +31,19 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
+		this.initWindowVar(this.props)
 		this.props.initComponents(this.props.pageComponents)
+	}
+
+	componentWillReceiveProps(newProps){
+		this.initWindowVar(newProps)
+	}
+
+	initWindowVar(props){
+		window.cmPageBuilder = {
+			handleUpdate: props.handleUpdate,
+			pid: props.meta && props.meta.id
+		}
 	}
 
 	componentDidMount() {
@@ -80,6 +92,7 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (...args) => {
+		console.log(args)
 		if(this.props.handleUpdate){
 			// if(args[2] === 'updateTitle'){
 			// 	args[1].office_id = +this.props.currentOffices[0].id
@@ -101,7 +114,6 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let order = 1
 		let typeName = data.componentType
 		let dataId = data.id
 		if(typeName){
@@ -229,19 +241,15 @@ class PageContainer extends React.Component {
 		}
 	}
 
-	handleClick = (e) => {
+	handleMouseUp = (e) => {
 		e.persist()
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
-			// if (appData.componentData.length > 0) {
-				let lastElem = appData.componentData[appData.componentData.length-1]
-				if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
-					this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
-				}
-				else if (lastElem)
-					this.props.setCurrentElem(lastElem.id)
-			// }
+			let lastElem = appData.componentData[appData.componentData.length-1]
+			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
+				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
+			}
 		}else{
 			this.props.removeCurrentElem()
 		}
@@ -258,14 +266,14 @@ class PageContainer extends React.Component {
 	render() {
 		const { meta, actionDomRect, activeFormatting } = this.state
 		const {appData} = this.props
-		let isEdit = this.props.status === 'Edit' || 'Edit'
+		let isEdit = this.props.status === 'Edit'
 		return (
 			<div
 				className="cm-page-builder"
 				id="page-builder"
-				onClick={isEdit ? this.handleClick : undefined}
+				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status || 'Edit', emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
@@ -331,5 +339,8 @@ const mapDispatchToProps = {
 	updatePosition
 }
 
+PageContainer.propTypes = {
+	handleUpdate: PropTypes.func.isRequired
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)

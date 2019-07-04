@@ -33,9 +33,12 @@ class AddComponent extends React.Component{
     AddComponent.contextType = PermissionContext
   }
 
-  componentDidUpdate(oldProps, oldState){
+  componentWillReceiveProps(newProps){
+    this.checkBlurAndEmitUpdate(this.props, newProps)
+  }
+
+  componentDidUpdate(){
     this.checkAndFocus(this.props)
-    this.checkBlurAndEmitUpdate(oldProps, this.props)
   }
 
   // For newly created component to change the focus
@@ -64,7 +67,7 @@ class AddComponent extends React.Component{
     if(currentElem.prevSelectedElemId !== oldProps.currentElem.prevSelectedElemId){
       let el = document.querySelector(`[data-block-id="${currentElem.prevSelectedElemId}"] [data-root="true"] `)
       if(el)
-        this.props.updateComponent({id: currentElem.prevSelectedElemId, newState: {content: el.innerHTML, initial: false}})
+        this.props.updateComponent({id: currentElem.prevSelectedElemId, newState: {content: el.innerHTML}})
     }
   }
 
@@ -78,12 +81,6 @@ class AddComponent extends React.Component{
       let currentTarget = e.currentTarget
       let target = e.target.nodeName === 'I' ? e.target.parentNode : e.target
       this.props.updateComponentType({blockId: currentTarget.dataset.blockId, type: target.dataset.type})
-      if (target.dataset.type === `Divider`) {
-        if(this.props.data.initial)
-          this.context.emitUpdate(null, { component_type: target.dataset.type, position: this.props.data.position }, 'createComponent')
-        else
-          this.context.emitUpdate(this.props.data.id, { component_type: target.dataset.type, position: this.props.data.position }, 'updateComponent')
-      }
     }
   }
 
@@ -119,10 +116,10 @@ class AddComponent extends React.Component{
             if (fromIndex > 0) {
               newCurrentId = appData.componentData[fromIndex-1].id
               this.props.removeComponent({blockId: currentElem.elemId})
-              if (!this.props.data.initial)
-                this.context.emitUpdate(currentElem.elemId, null, 'deleteComponent')
               this.props.setCurrentElem(newCurrentId)
-            } 
+            }else{
+              this.props.updateComponent({blockId: appData.componentData[0].id, newState: {content: ''}})
+            }
           }
         }
         break
@@ -240,7 +237,7 @@ class AddComponent extends React.Component{
                 data-block-id={this.props.id}
                 {...allActions}
               >
-                {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} initial={data.initial}/>}
+                {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}
                 { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
                 <CSSTransition
                   in={isEdit && showActionBtn}
@@ -248,7 +245,10 @@ class AddComponent extends React.Component{
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="text-type-tools" data-block-type="component-select-div" style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}>
+                  <div className="text-type-tools" 
+                    data-block-type="component-select-div" 
+                    style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}
+                  >
                     <div data-type="Header1">
                       <i className="cm-h1" />
                     </div>
