@@ -34,6 +34,10 @@ class DragHandle extends React.Component{
     this.setState({showMoreOptions: !this.state.showMoreOptions})
   }
 
+  componentWillUnmount(){
+    window.removeEventListener('click', this.closeHandle)
+  }
+
   handleClick = (e) => {
     switch (e.target.dataset.action) {
       case 'delete':
