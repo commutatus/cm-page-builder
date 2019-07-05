@@ -64,3 +64,6 @@ typings/
 
 #css 
 src/**/*.css
+
+#npm packages version definitions
+package-lock.json
