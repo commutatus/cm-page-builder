@@ -34,12 +34,14 @@ class DragHandle extends React.Component{
     this.setState({showMoreOptions: !this.state.showMoreOptions})
   }
 
+  componentWillUnmount(){
+    window.removeEventListener('click', this.closeHandle)
+  }
+
   handleClick = (e) => {
     switch (e.target.dataset.action) {
       case 'delete':
         this.props.removeComponent({blockId: this.props.id})
-        if (!this.props.initial)
-          this.context.emitUpdate(this.props.id, null, `deleteComponent`)
         break;
       default:
         break;
@@ -53,7 +55,7 @@ class DragHandle extends React.Component{
         id="drag-handle" 
         className="component-dragger" 
         data-block-id={this.props.id}
-        onClick={this.optionHandleClick} 
+        onClick={this.optionHandleClick}
       >
         <i className="cm cm-handle" />
         <CSSTransition

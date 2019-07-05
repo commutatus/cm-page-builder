@@ -8,11 +8,12 @@ export const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
 export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 export const INIT_COMPONENTS = 'INIT_COMPONENTS'
+export const UPDATE_POS = 'UPDATE_POS'
 
 //Created using CLI
 const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
 function createID(){
-  return uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}`, CUSTOM_NAMESPACE) 
+  return uuid(`${moment().format('DDMMYYYY')}-${window.performance.now()}-${window.cmPageBuilder.pid}`, CUSTOM_NAMESPACE) 
 }
 
 export const addNewComponent = (data) => {
@@ -28,6 +29,10 @@ export const addNewComponent = (data) => {
       elemId: newId
     })
   }
+}
+
+export const updatePosition = (data) => {
+  return({type: UPDATE_POS, data})
 }
 
 export const initComponents = (data) => {
@@ -64,11 +69,13 @@ function addComponent(state, data = {}){
   const {id, componentType} = data
   let temp = []
   let position = 1
+  let newCom = null
   for(let i in componentData){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      temp.push({content: '', position: position+1, componentType: componentType, id: data.newId, initial: true})
+      newCom = {content: '', position: position+1, componentType: componentType, id: data.newId}
+      temp.push(newCom)
       position += 2
     }
     else{
@@ -76,8 +83,11 @@ function addComponent(state, data = {}){
       position++
     }
   }
-  if (componentData.length === 0)
-    temp.push({content: '', position: 1, componentType: componentType, id: data.newId, initial: true})
+  if (componentData.length === 0){
+    newCom = {content: '', position: 1, componentType: componentType, id: data.newId}
+    temp.push(newCom)
+  }
+  emitUpdate(newCom, 'add')
   return {componentData: temp}
 }
 
@@ -92,7 +102,7 @@ function updateComponentTypeState(state, data){
       return component
     }
   })
-
+  emitUpdate({id: blockId, componentType: type}, 'update')
   return {componentData}
 }
 
@@ -106,6 +116,7 @@ function updateComponentState(state, data){
       return component
     }
   })
+  emitUpdate({id, ...newState}, 'update')
   return {componentData}
 }
 
@@ -118,6 +129,7 @@ function removeComponentFromState(state, data){
     for(let i in componentData){
       let componentId = componentData[i].id
       if(blockId === componentId){
+        // isInital = componentData[i].initial
         continue
       }
       else{
@@ -125,9 +137,63 @@ function removeComponentFromState(state, data){
         position++
       }
     }
-    return ({componentData: temp})
+    // if(!isInitial){
+      emitUpdate({id: blockId}, 'remove')
+    // }
+    return ({...state, componentData: temp})
+    
   }else{
     return initialState
+  }
+}
+
+function updateComponentPos(state, {newIndex, oldIndex}) {
+  let newData = []
+  let elem = state.componentData[oldIndex]
+  newData = state.componentData.filter((d, i) => i !== oldIndex)
+  newData.splice(newIndex, 0, elem)	
+  emitUpdate({id: state.componentData[oldIndex].id, position: newIndex+1}, 'update')
+  return ({
+    ...state, 
+    componentData: newData.map((d, i) => ({...d, position: i+1}))
+  })
+}
+
+function emitUpdate(data, type){
+  // console.log(data, type)
+  // return
+  switch(type){
+    case 'add':
+      window.cmPageBuilder.handleUpdate(
+        null, 
+        { 
+          content: data.content, 
+          position: data.position, 
+          component_type: data.componentType, 
+          client_reference_id: data.id
+        }, 
+        'createComponent'
+      )
+      break
+      case 'update':
+        window.cmPageBuilder.handleUpdate(
+          data.id, 
+          { 
+            content: data.content, 
+            position: data.position, 
+            component_type: data.componentType,
+            component_attachment: data.component_attachment
+          }, 
+          'updateComponent'
+        )
+      break;
+      case 'remove':
+        window.cmPageBuilder.handleUpdate(
+          data.id,
+          null,
+          'deleteComponent'
+        )
+
   }
 }
 
@@ -141,6 +207,8 @@ export default (state = initialState, action) => {
       return updateComponentTypeState(state, action.data)
     case UPDATE_COMPONENT:
       return updateComponentState(state, action.data)
+    case UPDATE_POS:
+      return updateComponentPos(state, action.data)
     case REMOVE_COMPONENT:
       return removeComponentFromState(state, action.data)
     default:
