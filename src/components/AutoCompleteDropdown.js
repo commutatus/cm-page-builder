@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import '../styles/components/Dropdown.css';
 import { CSSTransition } from 'react-transition-group';
-import { debounce } from 'throttle-debounce';
 
 export class AutoCompleteDropdown extends React.Component{
 

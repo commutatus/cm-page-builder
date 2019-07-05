@@ -2,6 +2,7 @@ import React from 'react'
 import ContentEditable from './ContentEditable'
 import withComponent from './withComponent'
 import '../styles/components/List.css'
+import '../styles/components/Text.css'
 
 const WrappedUlist = (props) =>  {
   return(
