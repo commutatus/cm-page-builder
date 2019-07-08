@@ -181,9 +181,10 @@ class PageContainer extends React.Component {
 	}
 
 	editText = (e) => {
+		e.stopPropagation()
 		let { activeFormatting } = this.state
-		//e.preventDefault()
 		let action = e.currentTarget.dataset.action
+		console.log('current action', action)
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
@@ -198,10 +199,12 @@ class PageContainer extends React.Component {
 			activeFormatting.splice(index, 1)
 		else
 			activeFormatting.push(action)
+		console.log('active', activeFormatting)
 		this.setState({ activeFormatting })
 	}
 
 	handleRangeSelection = (e) => {
+		e.stopPropagation()
 		let {activeFormatting} = this.state
 		activeFormatting = []
 		let node = e.target
@@ -260,6 +263,7 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { meta, actionDomRect, activeFormatting } = this.state
+		console.log('state', activeFormatting)
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
