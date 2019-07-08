@@ -31,6 +31,7 @@ class WrappedUpload extends React.Component{
   render() {
     let {component_attachment} = this.props
     let {context} = this
+    let isEdit = context.status === 'Edit'
     return(
       <div className={`component-section cm-uploader ${context.status.toLowerCase()}`} onClick={() => this.fileInputElem && this.fileInputElem.click()}>
         {
@@ -38,6 +39,7 @@ class WrappedUpload extends React.Component{
           ?
           <img src={component_attachment.url || component_attachment.content} width="100%" height="400px" alt={component_attachment.filename} />
           :
+          isEdit &&
           <React.Fragment>
             <span><i className="cm-upload" /></span>
             Click to upload file

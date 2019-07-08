@@ -23,6 +23,7 @@ class WrappedEmbed extends React.Component{
   render(){
     let {content} = this.props
     let { context } = this
+    let isEdit = context.status === 'Edit'
     return(
       <div className={`component-section cm-embed ${context.status.toLowerCase()}`}>
         {
@@ -30,6 +31,7 @@ class WrappedEmbed extends React.Component{
           ?
           <iframe title="video-frame" className={`${context.status.toLowerCase()}`} width="100%" height="320px" src={content} />
           :
+          isEdit && 
           <div className="embed-input-field">
             <span className="embed-icon"><i className="cm-video" /></span>
             <input 
