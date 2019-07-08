@@ -33,7 +33,10 @@ class WrappedUpload extends React.Component{
     let {context} = this
     let isEdit = context.status === 'Edit'
     return(
-      <div className={`component-section cm-uploader ${context.status.toLowerCase()}`} onClick={() => this.fileInputElem && this.fileInputElem.click()}>
+      <div 
+        className={`component-section ${!isEdit && !component_attachment ? "" :'cm-uploader'} ${context.status.toLowerCase()}`} 
+        onClick={() => this.fileInputElem && this.fileInputElem.click()}
+      >
         {
           component_attachment
           ?
