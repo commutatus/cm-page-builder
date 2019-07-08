@@ -130,7 +130,16 @@ class PageContainer extends React.Component {
 	}
 
 	handleMouseUp = (e) => {
+		e.persist()
 		this.handleSelection(e)
+		let conElem = document.querySelector(`[data-container-block="true"]`)
+		if(conElem.offsetHeight < e.pageY){
+			let {appData} = this.props
+			let lastElem = appData.componentData[appData.componentData.length-1]
+			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
+				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
+			}
+		}
 	}
 	
 	handleKeyPressList = (e) => {
@@ -238,20 +247,6 @@ class PageContainer extends React.Component {
 			range.collapse(true);
 			sel.removeAllRanges();
 			sel.addRange(range);
-		}
-	}
-
-	handleMouseUp = (e) => {
-		e.persist()
-		let conElem = document.querySelector(`[data-container-block="true"]`)
-		if(conElem.offsetHeight < e.pageY){
-			let {appData} = this.props
-			let lastElem = appData.componentData[appData.componentData.length-1]
-			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
-				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
-			}
-		}else{
-			this.props.removeCurrentElem()
 		}
 	}
 

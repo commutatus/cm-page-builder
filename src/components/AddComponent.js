@@ -73,7 +73,7 @@ class AddComponent extends React.Component{
 
   //Change the component type.
   handleMouseUp = (e) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
     this.props.setCurrentElem(this.props.id)
     let comSelDiv = this.elem.querySelector(`[data-block-type="component-select-div"]`)
