@@ -37,7 +37,7 @@ class WrappedUpload extends React.Component{
         {
           component_attachment
           ?
-          <img src={component_attachment.url || component_attachment.content} width="100%" height="400px" alt={component_attachment.filename} />
+          <img src={component_attachment.url || component_attachment.content} width="100%" alt={component_attachment.filename} />
           :
           isEdit &&
           <React.Fragment>
