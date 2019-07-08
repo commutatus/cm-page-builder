@@ -25,7 +25,7 @@ class WrappedEmbed extends React.Component{
     let { context } = this
     let isEdit = context.status === 'Edit'
     return(
-      <div className={`component-section cm-embed ${context.status.toLowerCase()}`}>
+      <div className={`component-section cm-embed ${context.status.toLowerCase()} ${!content ? '' : 'hover-effect-none'}`}>
         {
           (content) 
           ?
