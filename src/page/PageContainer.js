@@ -92,7 +92,6 @@ class PageContainer extends React.Component {
 	}
 
 	emitUpdate = (...args) => {
-		console.log(args)
 		if(this.props.handleUpdate){
 			// if(args[2] === 'updateTitle'){
 			// 	args[1].office_id = +this.props.currentOffices[0].id
@@ -184,7 +183,6 @@ class PageContainer extends React.Component {
 		e.stopPropagation()
 		let { activeFormatting } = this.state
 		let action = e.currentTarget.dataset.action
-		console.log('current action', action)
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
@@ -199,7 +197,6 @@ class PageContainer extends React.Component {
 			activeFormatting.splice(index, 1)
 		else
 			activeFormatting.push(action)
-		console.log('active', activeFormatting)
 		this.setState({ activeFormatting })
 	}
 
@@ -263,7 +260,6 @@ class PageContainer extends React.Component {
 
 	render() {
 		const { meta, actionDomRect, activeFormatting } = this.state
-		console.log('state', activeFormatting)
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
