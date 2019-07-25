@@ -8,7 +8,7 @@ const WrappedHeader2 = (props) => {
   return(
     <ContentEditable 
       {...props}
-      placeholder="Header"
+      placeholder="Subheading"
       className="cm-header2"
     />
   )

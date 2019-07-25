@@ -236,13 +236,13 @@ class AddComponent extends React.Component{
               'onFocus':this.handleFocus,
               'onMouseEnter':() => this.setState({showHandle: true}),
               'onMouseLeave':() => this.setState({showHandle: false}),
-              'style':this.handleInlineStyles(data.componentType)
             } : {}
             return(
               <div 
                 ref={node => this.elem = node} 
                 className="widget-container" 
                 data-block-id={this.props.id}
+                style={this.handleInlineStyles(data.componentType)}
                 {...allActions}
               >
                 {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}
