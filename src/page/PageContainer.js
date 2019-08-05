@@ -175,8 +175,8 @@ class PageContainer extends React.Component {
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
-				// document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
-				document.execCommand(action, false, link)
+				document.execCommand('insertHTML', true, `<a href=//${link} target="_blank">${window.getSelection().toString()}</a>`)	
+				//document.execCommand(action, false, link)
 			}
 			else
 				document.execCommand("unlink", false, false);
