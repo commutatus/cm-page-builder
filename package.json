@@ -68,6 +68,7 @@
     "is-data-descriptor": "^2.0.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
+    "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-transition-group": "^4.0.1",
     "redux": "^4.0.1",

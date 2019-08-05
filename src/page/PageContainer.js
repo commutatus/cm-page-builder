@@ -18,6 +18,7 @@ import {
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -83,9 +84,8 @@ class PageContainer extends React.Component {
 	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
-
 		if(editTooltip && !editTooltip.contains(e.target)){
-			this.setState({actionDomRect: null})
+			this.setState({actionDomRect: null, activeFormatting: []})
 		}else{
 			document.removeEventListener('mousedown', this.handlePageClick)
 		}
@@ -130,7 +130,7 @@ class PageContainer extends React.Component {
 
 	handleMouseUp = (e) => {
 		e.persist()
-		this.handleSelection(e)
+		setTimeout(() => this.handleSelection(e), 10)         // To handle asynchronous behaviour of selection and mouseUp / mouseDown event
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
@@ -142,10 +142,11 @@ class PageContainer extends React.Component {
 	}
 	
 	handleKeyPressList = (e) => {
+		e.persist()
 		switch(e.key){
 			case 'a':
-				if (e.ctrlKey || e.metaKey) 
-					this.handleSelection(e)
+				if (e.ctrlKey || e.metaKey ) 
+					setTimeout(() => this.handleSelection(e), 10)  // To handle asynchronous behaviour of selection and keyPress event
 				break;				
 		}
 	}
@@ -165,12 +166,12 @@ class PageContainer extends React.Component {
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
-		if(selection){
+		if(selection && selection.rangeCount > 0){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
 			if (dimensions.width > 1) {
 				let scrollOffsets = this.getScrollOffsets()
-				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height, left: dimensions.left+scrollOffsets.x }
+				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
 				this.setState({actionDomRect})
 			}
 		}
@@ -180,17 +181,19 @@ class PageContainer extends React.Component {
 	}
 
 	editText = (e) => {
-		e.stopPropagation()
+		e.preventDefault()
 		let { activeFormatting } = this.state
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
-				document.execCommand('insertHTML', true, `<a href=${link} contenteditable="false" target="_blank">${window.getSelection().toString()}</a>`)	
+				// document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
+				document.execCommand(action, false, link)
 			}
 			else
 				document.execCommand("unlink", false, false);
-		}else
+		}
+		else
 			document.execCommand(action)
 		let index = activeFormatting.indexOf(action)
 		if (index > -1)
@@ -200,13 +203,29 @@ class PageContainer extends React.Component {
 		this.setState({ activeFormatting })
 	}
 
+	getSelectedNode = (e) => {					// To get the parent node of the selected DOM element so that all the slected tags can be detected
+		if (document.selection)
+			return document.selection.createRange().parentElement();
+		else
+		{
+			var selection = window.getSelection();
+			if (selection.rangeCount > 0) {
+				let parent = selection.getRangeAt(0).startContainer.parentNode;
+				while (parent.parentNode && parent.parentNode !== e.target) {
+					parent = parent.parentNode
+				}
+				return parent
+			}
+			return null
+		}
+	}
+
 	handleRangeSelection = (e) => {
 		e.stopPropagation()
 		let {activeFormatting} = this.state
 		activeFormatting = []
-		let node = e.target
-		while(node.firstChild) {
-			node = node.firstChild
+		let node = this.getSelectedNode(e)
+		while(node) {
 			switch(node.nodeName) {
 				case `A`:
 					if (!activeFormatting.includes(`createLink`))
@@ -228,27 +247,10 @@ class PageContainer extends React.Component {
 					this.setState({ activeFormatting: [] })
 					break
 			}
+			node = node.firstChild
 		} 
 		this.setState({ activeFormatting })
-	}
-
-	_createLink = (link) => {
-		let sel, range
-		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
-			range = sel.getRangeAt(0);
-			range.collapse(true);
-			var anchor = document.createElement("a") 
-			anchor.href = link
-			anchor.contentEditable = "false"
-			anchor.appendChild( document.createTextNode(window.getSelection().toString()) );
-			range.insertNode(anchor);
-			// Move the caret immediately after the inserted span
-			range.setStartAfter(anchor)
-			range.collapse(true);
-			sel.removeAllRanges();
-			sel.addRange(range);
-		}
-	}
+	} 
 
 	showTooltip = () => {
 		this.setState({ showTooltip: true })

@@ -210,6 +210,13 @@ class AddComponent extends React.Component{
 
   }
 
+  handleInlineStyles = (type)=> {
+   let styles = {
+    margin: (type === 'Header1') ? '32px 0px 4px 0px' : (type==='Header2') ? '16px 0px 4px 0px' : ''
+   }
+   return styles
+  }
+
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
@@ -235,6 +242,7 @@ class AddComponent extends React.Component{
                 ref={node => this.elem = node} 
                 className="widget-container" 
                 data-block-id={this.props.id}
+                style={this.handleInlineStyles(data.componentType)}
                 {...allActions}
               >
                 {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}

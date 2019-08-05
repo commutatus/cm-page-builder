@@ -75,3 +75,14 @@
     opacity: 0.2;
   }
 }
+
+.hover-effect-none {
+  padding: 0;
+  &:hover {
+    background-color: transparent !important;
+  }
+}
+
+.link-underline {
+  text-decoration: underline;
+}
