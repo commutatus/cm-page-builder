@@ -54,7 +54,7 @@
     font-size: $t8-text;
     font-weight: $bold-text;
     padding: 5px;
-    margin: 0 4px;
+    margin: 2px 4px;
     color: $white;
     line-height: 13px;
     cursor: pointer;
@@ -64,7 +64,7 @@
     font-size: $t8-text;
     font-weight: $bold-text;
     padding: 5px;
-    margin: 0 4px;
+    margin: 2px 4px;
     color: $white;
     line-height: 13px;
     cursor: pointer;
@@ -81,4 +81,8 @@
   &:hover {
     background-color: transparent !important;
   }
+}
+
+.link-underline {
+  text-decoration: underline;
 }

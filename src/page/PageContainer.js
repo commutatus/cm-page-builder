@@ -83,16 +83,14 @@ class PageContainer extends React.Component {
 	
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
-
 		if(editTooltip && !editTooltip.contains(e.target)){
-			this.setState({actionDomRect: null})
+			this.setState({actionDomRect: null, activeFormatting: []})
 		}else{
 			document.removeEventListener('mousedown', this.handlePageClick)
 		}
 	}
 
 	emitUpdate = (...args) => {
-		console.log(args)
 		if(this.props.handleUpdate){
 			// if(args[2] === 'updateTitle'){
 			// 	args[1].office_id = +this.props.currentOffices[0].id
@@ -130,15 +128,14 @@ class PageContainer extends React.Component {
 	}
 
 	handleMouseUp = (e) => {
-		this.handleSelection(e)
-	}
-	
-	handleKeyPressList = (e) => {
-		switch(e.key){
-			case 'a':
-				if (e.ctrlKey || e.metaKey) 
-					this.handleSelection(e)
-				break;				
+		e.persist()
+		let conElem = document.querySelector(`[data-container-block="true"]`)
+		if(conElem.offsetHeight < e.pageY){
+			let {appData} = this.props
+			let lastElem = appData.componentData[appData.componentData.length-1]
+			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
+				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
+			}
 		}
 	}
 
@@ -157,12 +154,12 @@ class PageContainer extends React.Component {
 
 	handleSelection = (e) => {
 		let selection = window.getSelection()
-		if(selection){
+		if(selection && selection.rangeCount > 0){
 			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
 			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
 			if (dimensions.width > 1) {
 				let scrollOffsets = this.getScrollOffsets()
-				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height, left: dimensions.left+scrollOffsets.x }
+				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
 				this.setState({actionDomRect})
 			}
 		}
@@ -172,17 +169,19 @@ class PageContainer extends React.Component {
 	}
 
 	editText = (e) => {
+		e.preventDefault()
 		let { activeFormatting } = this.state
-		//e.preventDefault()
 		let action = e.currentTarget.dataset.action
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
-				document.execCommand('insertHTML', true, `<a href=${link} contenteditable="false" target="_blank">${window.getSelection().toString()}</a>`)	
+				// document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
+				document.execCommand(action, false, link)
 			}
 			else
 				document.execCommand("unlink", false, false);
-		}else
+		}
+		else
 			document.execCommand(action)
 		let index = activeFormatting.indexOf(action)
 		if (index > -1)
@@ -192,13 +191,30 @@ class PageContainer extends React.Component {
 		this.setState({ activeFormatting })
 	}
 
+	getSelectedNode = (e) => {					// To get the parent node of the selected DOM element so that all the slected tags can be detected
+		if (document.selection)
+			return document.selection.createRange().parentElement();
+		else
+		{
+			var selection = window.getSelection();
+			if (selection.rangeCount > 0) {
+				let parent = selection.getRangeAt(0).startContainer.parentNode;
+				if (parent !== e.target)
+					while (parent.parentNode && parent.parentNode !== e.target) {
+						parent = parent.parentNode
+					}
+				return parent
+			}
+			return null
+		}
+	}
+
 	handleRangeSelection = (e) => {
 		let {activeFormatting} = this.state
 		activeFormatting = []
-		let node = e.target
-		while(node.firstChild) {
-			node = node.firstChild
-			switch(node.nodeName) {
+		let node = this.getSelectedNode(e)
+		while(node) {
+			switch(node.nodeName ) {
 				case `A`:
 					if (!activeFormatting.includes(`createLink`))
 						activeFormatting.push(`createLink`)
@@ -219,41 +235,10 @@ class PageContainer extends React.Component {
 					this.setState({ activeFormatting: [] })
 					break
 			}
+			node = node.firstChild
 		} 
-		this.setState({ activeFormatting })
-	}
-
-	_createLink = (link) => {
-		let sel, range
-		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
-			range = sel.getRangeAt(0);
-			range.collapse(true);
-			var anchor = document.createElement("a") 
-			anchor.href = link
-			anchor.contentEditable = "false"
-			anchor.appendChild( document.createTextNode(window.getSelection().toString()) );
-			range.insertNode(anchor);
-			// Move the caret immediately after the inserted span
-			range.setStartAfter(anchor)
-			range.collapse(true);
-			sel.removeAllRanges();
-			sel.addRange(range);
-		}
-	}
-
-	handleMouseUp = (e) => {
-		e.persist()
-		let conElem = document.querySelector(`[data-container-block="true"]`)
-		if(conElem.offsetHeight < e.pageY){
-			let {appData} = this.props
-			let lastElem = appData.componentData[appData.componentData.length-1]
-			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
-				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
-			}
-		}else{
-			this.props.removeCurrentElem()
-		}
-	}
+		this.setState({ activeFormatting, currentType: e.target.getAttribute("placeholder") })
+	} 
 
 	showTooltip = () => {
 		this.setState({ showTooltip: true })
@@ -264,7 +249,7 @@ class PageContainer extends React.Component {
 	}
 
 	render() {
-		const { meta, actionDomRect, activeFormatting } = this.state
+		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
@@ -272,6 +257,7 @@ class PageContainer extends React.Component {
 				className="cm-page-builder"
 				id="page-builder"
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
+				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
 				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
 					<PageDetails 
@@ -284,7 +270,6 @@ class PageContainer extends React.Component {
 						currentOffices={this.props.currentOffices}
 						isEditMode={isEdit}
 						onMouseUp={isEdit ? this.handleMouseUp : undefined}
-						onKeyDown={isEdit ? this.handleKeyPressList : undefined}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
@@ -296,7 +281,7 @@ class PageContainer extends React.Component {
 					unmountOnExit
 				>
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
-						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={this.editText} data-action="bold">B</div>
+						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
 						<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
 						</div>

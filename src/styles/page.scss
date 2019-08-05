@@ -44,6 +44,11 @@
         position: relative;
         width: 100%;
         padding-left: 10px;
+        a {
+            text-decoration: underline;
+            color: #037EF3;
+            cursor: pointer;
+          }
     }
     .component-section.edit {
         display: flex;
@@ -54,6 +59,11 @@
         &:hover {
             background-color: #f4f5f7;
         }
+        a {
+            text-decoration: underline;
+            color: #037EF3;
+            cursor: pointer;
+          }
     }
     .component-dragger {
         position: absolute;

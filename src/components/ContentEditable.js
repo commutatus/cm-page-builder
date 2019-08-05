@@ -56,7 +56,6 @@ class ContentEditable extends React.Component{
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
           styles={styles}
-          //onMouseUp={handleMouseUp}
           data-gramm_editor="false"
           onSelect={context.handleSelection}
         />
