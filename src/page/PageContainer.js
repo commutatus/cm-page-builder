@@ -18,7 +18,6 @@ import {
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -258,7 +257,7 @@ class PageContainer extends React.Component {
 				className="cm-page-builder"
 				id="page-builder"
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
-				onSelect={this.handleSelection}
+				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
 				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
 					<PageDetails 
