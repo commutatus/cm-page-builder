@@ -175,6 +175,9 @@ class PageContainer extends React.Component {
 		if(action === 'createLink'){
 			if (!activeFormatting.includes(`createLink`)) {
 				let link = prompt('Enter a link')
+				let url = link ? link.split('//')[0] : ''
+				if (url && (url !== 'http:' && url !== 'https:' ))
+					link = "http://"+link
 				document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
 				//document.execCommand(action, false, link)
 			}
