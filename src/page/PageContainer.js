@@ -130,7 +130,6 @@ class PageContainer extends React.Component {
 
 	handleMouseUp = (e) => {
 		e.persist()
-		setTimeout(() => this.handleSelection(e), 10)         // To handle asynchronous behaviour of selection and mouseUp / mouseDown event
 		let conElem = document.querySelector(`[data-container-block="true"]`)
 		if(conElem.offsetHeight < e.pageY){
 			let {appData} = this.props
@@ -138,16 +137,6 @@ class PageContainer extends React.Component {
 			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {
 				this.props.addNewComponent({id: lastElem && lastElem.id, componentType: 'Text'})
 			}
-		}
-	}
-	
-	handleKeyPressList = (e) => {
-		e.persist()
-		switch(e.key){
-			case 'a':
-				if (e.ctrlKey || e.metaKey ) 
-					setTimeout(() => this.handleSelection(e), 10)  // To handle asynchronous behaviour of selection and keyPress event
-				break;				
 		}
 	}
 
@@ -211,9 +200,10 @@ class PageContainer extends React.Component {
 			var selection = window.getSelection();
 			if (selection.rangeCount > 0) {
 				let parent = selection.getRangeAt(0).startContainer.parentNode;
-				while (parent.parentNode && parent.parentNode !== e.target) {
-					parent = parent.parentNode
-				}
+				if (parent !== e.target)
+					while (parent.parentNode && parent.parentNode !== e.target) {
+						parent = parent.parentNode
+					}
 				return parent
 			}
 			return null
@@ -221,12 +211,11 @@ class PageContainer extends React.Component {
 	}
 
 	handleRangeSelection = (e) => {
-		e.stopPropagation()
 		let {activeFormatting} = this.state
 		activeFormatting = []
 		let node = this.getSelectedNode(e)
 		while(node) {
-			switch(node.nodeName) {
+			switch(node.nodeName ) {
 				case `A`:
 					if (!activeFormatting.includes(`createLink`))
 						activeFormatting.push(`createLink`)
@@ -249,7 +238,7 @@ class PageContainer extends React.Component {
 			}
 			node = node.firstChild
 		} 
-		this.setState({ activeFormatting })
+		this.setState({ activeFormatting, currentType: e.target.getAttribute("placeholder") })
 	} 
 
 	showTooltip = () => {
@@ -261,7 +250,7 @@ class PageContainer extends React.Component {
 	}
 
 	render() {
-		const { meta, actionDomRect, activeFormatting } = this.state
+		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
@@ -269,6 +258,7 @@ class PageContainer extends React.Component {
 				className="cm-page-builder"
 				id="page-builder"
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
+				onSelect={this.handleSelection}
 			>
 				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
 					<PageDetails 
@@ -281,7 +271,6 @@ class PageContainer extends React.Component {
 						currentOffices={this.props.currentOffices}
 						isEditMode={isEdit}
 						onMouseUp={isEdit ? this.handleMouseUp : undefined}
-						onKeyDown={isEdit ? this.handleKeyPressList : undefined}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
@@ -293,7 +282,7 @@ class PageContainer extends React.Component {
 					unmountOnExit
 				>
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
-						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={this.editText} data-action="bold">B</div>
+						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
 						<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
 							<i className="cm-italic" />
 						</div>

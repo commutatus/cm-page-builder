@@ -20,11 +20,6 @@
   // &:focus {
   //   background-color: transparent;
   // }
-  a {
-    text-decoration: underline;
-    color: #037EF3;
-    cursor: pointer;
-  }
 }
 
 .cm-text-block.read  {
@@ -34,9 +29,4 @@
   line-height: 24px;
   @include text-wrapping;
   font-family: 'Open Sans', sans-serif !important; 
-  a {
-    text-decoration: underline;
-    color: #037EF3;
-    cursor: pointer;
-  }
 }
