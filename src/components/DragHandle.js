@@ -58,7 +58,7 @@ class DragHandle extends React.Component{
         onClick={this.optionHandleClick}
         style={{cursor: 'grab'}}
       >
-        <i className="cm cm-handle" />
+        <i className="cm cm-icon-handle" />
         <CSSTransition
           in={this.state.showMoreOptions}
           timeout={300}
@@ -70,7 +70,7 @@ class DragHandle extends React.Component{
               this.state.showMoreOptions &&
               <div className="showmore-popup" onClick={this.handleClick}>
                 <div data-action="delete" className="more-option">
-                <span><i className="cm-trash" /></span>
+                <span><i className="cm-icon-trash" /></span>
                 <span>Delete</span>
                 </div>
               </div>

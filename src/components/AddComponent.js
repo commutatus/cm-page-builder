@@ -258,31 +258,31 @@ class AddComponent extends React.Component{
                     style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}
                   >
                     <div data-type="Header1">
-                      <i className="cm-h1" />
+                      <i className="cm-icon-h1" />
                     </div>
                     <div data-type="Header2">
-                      <i className="cm-h2" />
+                      <i className="cm-icon-h2" />
                     </div>
                     <div data-type="Olist" >
-                      <i className="cm-numbers" />
+                      <i className="cm-icon-numbers" />
                     </div>
                     <div data-type="Ulist">
-                      <i className="cm-bullets" />
+                      <i className="cm-icon-bullets" />
                     </div>
                     {/* <div>
-                      <i className="cm-page" />
+                      <i className="cm-icon-page" />
                     </div> */}
                     <div data-type="Upload">
-                      <i className="cm-picture" />
+                      <i className="cm-icon-picture" />
                     </div>
                     <div data-type="Embed">
-                      <i className="cm-video" /> 
+                      <i className="cm-icon-video" /> 
                     </div>
                     {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
-                      <i className="cm-upload" /> 
+                      <i className="cm-icon-upload" /> 
                     </div> */}
                     <div data-type="Divider">
-                      <i className="cm-divider" />  
+                      <i className="cm-icon-divider" />  
                     </div>
                   </div>
                 </CSSTransition>
