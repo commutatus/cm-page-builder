@@ -286,13 +286,13 @@ class PageContainer extends React.Component {
 					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
 						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
 						<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
-							<i className="cm-italic" />
+							<i className="cm-icon-italic" />
 						</div>
 						<div className={  activeFormatting.includes(`strikeThrough`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="strikeThrough">
-							<i className="cm-strikethrough" />
+							<i className="cm-icon-strikethrough" />
 						</div>
 						<div className={  activeFormatting.includes(`createLink`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="createLink">
-							<i className="cm-link" />
+							<i className="cm-icon-link" />
 						</div>
 						{/* <div className="divider"></div>
 						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
