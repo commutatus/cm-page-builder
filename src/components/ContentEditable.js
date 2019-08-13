@@ -51,7 +51,6 @@ class ContentEditable extends React.Component{
           data-root="true"
           ref={node => this.elem = node}
           className={classNames(className, context.status.toLowerCase())}
-          onBlur={(e) => this.emitChange(e, context)}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
