@@ -59,12 +59,18 @@ class PageContainer extends React.Component {
 			})
 		}
 	}
-	
-	componentDidUpdate(){
+
+	componentDidUpdate(prevProps){
 		if(this.state.actionDomRect){
 			document.addEventListener('mousedown', this.handlePageClick)
 		}
 		PageContainer.contextType = PermissionContext
+
+		let data = this.props.appData.componentData
+
+		if(prevProps.appData.componentData !== data) {
+			this.props.updateComponentData(data)
+		}
 	}
 
 
@@ -80,7 +86,7 @@ class PageContainer extends React.Component {
 			}
 		}
 	}
-	
+
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
 		if(editTooltip && !editTooltip.contains(e.target)){
@@ -95,8 +101,11 @@ class PageContainer extends React.Component {
 			// if(args[2] === 'updateTitle'){
 			// 	args[1].office_id = +this.props.currentOffices[0].id
 			// }
+			// console.log("TEST HERE")
 			this.props.handleUpdate(...args)
 		}
+
+
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -106,9 +115,9 @@ class PageContainer extends React.Component {
 		if (currentIndex > 0 && appData.componentData[currentIndex-1] && appData.componentData[currentIndex-1].componentType === `Olist`) {
 			this._getCurrentOrder.counter++
 		}
-		else 
+		else
 			this._getCurrentOrder.counter = 1
-		return this._getCurrentOrder.counter 
+		return this._getCurrentOrder.counter
 	}
 
 	getPageComponent = (data, index) => {
@@ -118,7 +127,7 @@ class PageContainer extends React.Component {
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
 				<AddComponent key={dataId} id={dataId} data={data}>
-					<Component 
+					<Component
 						handleUpdate={this.emitUpdate}
 						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
 					/>
@@ -178,7 +187,7 @@ class PageContainer extends React.Component {
 				let url = link ? link.split('//')[0] : ''
 				if (url && (url !== 'http:' && url !== 'https:' ))
 					link = "http://"+link
-				document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
+				document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)
 				//document.execCommand(action, false, link)
 			}
 			else
@@ -224,24 +233,24 @@ class PageContainer extends React.Component {
 					break
 				case `B`:
 					if (!activeFormatting.includes(`bold`))
-						activeFormatting.push(`bold`)					
+						activeFormatting.push(`bold`)
 					break
 				case `I`:
 					if (!activeFormatting.includes(`italic`))
-						activeFormatting.push(`italic`)						
+						activeFormatting.push(`italic`)
 					break
 				case `STRIKE`:
 					if (!activeFormatting.includes(`strikeThrough`))
-						activeFormatting.push(`strikeThrough`)						
+						activeFormatting.push(`strikeThrough`)
 					break
 				default:
 					this.setState({ activeFormatting: [] })
 					break
 			}
 			node = node.firstChild
-		} 
+		}
 		this.setState({ activeFormatting, currentType: e.target.getAttribute("placeholder") })
-	} 
+	}
 
 	showTooltip = () => {
 		this.setState({ showTooltip: true })
@@ -262,8 +271,8 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
-					<PageDetails 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}>
+					<PageDetails
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
@@ -314,10 +323,10 @@ class PageContainer extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	appData: state.appData,
-	currentElem: state.currentElem
-})
+const mapStateToProps = state => {
+	return {appData: state.appData,
+	currentElem: state.currentElem}
+}
 
 const mapDispatchToProps = {
 	addNewComponent,
@@ -327,8 +336,29 @@ const mapDispatchToProps = {
 	updatePosition
 }
 
+const TYPE_MAP_COMPONENT = {
+	header: 'Header1',
+	sub_header: 'Header2',
+	ordered_list: 'Olist',
+	unordered_list: 'Ulist',
+	text: 'Text',
+	page_link: 'Text',
+	video: 'Embed',
+	file: 'Upload',
+	image: 'Upload',
+	divider: 'Divider'
+}
+
 PageContainer.propTypes = {
 	handleUpdate: PropTypes.func.isRequired
 }
+
+PageContainer.defaultProps = {
+	status: 'Edit',
+	updateComponentData: (data) => {},
+	typeMapping: TYPE_MAP_COMPONENT,
+	// This method basically reverses the keys and the values of the provided type mapping constant
+	REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT).reduce((acc, key) => ({ ...acc, [TYPE_MAP_COMPONENT[key]]: key }), {})
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
