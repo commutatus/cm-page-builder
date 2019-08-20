@@ -282,6 +282,9 @@ class PageContainer extends React.Component {
 						currentOffices={this.props.currentOffices}
 						isEditMode={isEdit}
 						onMouseUp={isEdit ? this.handleMouseUp : undefined}
+						showTitle = {this.props.showTitle}
+						showEmoji = {this.props.showEmoji}
+						showPageInfo = {this.props.showPageInfo}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
@@ -358,7 +361,11 @@ PageContainer.defaultProps = {
 	updateComponentData: (data) => {},
 	typeMapping: TYPE_MAP_COMPONENT,
 	// This method basically reverses the keys and the values of the provided type mapping constant
-	REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT).reduce((acc, key) => ({ ...acc, [TYPE_MAP_COMPONENT[key]]: key }), {})
+	REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT)
+		.reduce((acc, key) => ({ ...acc, [TYPE_MAP_COMPONENT[key]]: key }), {}),
+	showTitle: false,
+	showEmoji: false,
+	showPageInfo: false
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
