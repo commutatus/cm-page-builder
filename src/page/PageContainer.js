@@ -68,7 +68,7 @@ class PageContainer extends React.Component {
 
 		let data = this.props.appData.componentData
 
-		if(prevProps.appData.componentData !== data) {
+		if(JSON.stringify(prevProps.appData.componentData) !== JSON.stringify(data)) {
 			this.props.updateComponentData(data)
 		}
 	}
