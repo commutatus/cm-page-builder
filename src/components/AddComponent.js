@@ -16,6 +16,7 @@ import {
 import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
+import {setCursorToEnd} from '../utils/helpers'
 
 //A higher order component for the generic components to handle there functionalily.
 
@@ -176,23 +177,11 @@ class AddComponent extends React.Component{
       }
     }
     if(currElemPos < prevElemPos)
-      this.setCursorToEnd(e)
+      setCursorToEnd(e)
   }
 
   onMouseDown = (e) => {
     this.props.setCurrentElem(this.props.id)
-  }
-
-  // Method to position the cursor at the end of the content
-  setCursorToEnd = (e) => {
-    var range = document.createRange();
-    var sel = window.getSelection();
-    if(e.target.innerHTML){
-      range.setStart(e.target.lastChild, e.target.lastChild.length);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
   }
 
   handleBlur = (e) => {

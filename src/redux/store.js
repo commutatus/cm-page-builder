@@ -9,6 +9,6 @@ const logger = createLogger({
 export const store = compose(
 	applyMiddleware(
     thunk, 
-    // logger
+    logger
   )
 )(createStore)(appReducers) //reducers

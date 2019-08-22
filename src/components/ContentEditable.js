@@ -4,11 +4,13 @@ import sanitizeHtml from 'sanitize-html'
 import { connect } from 'react-redux';
 import {
   setCurrentElem,
+  removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import { PermissionContext } from '../contexts/permission-context';
 import {
   addNewComponent
 } from '../redux/reducers/appDataReducers'
+import {setCursorToEnd} from '../utils/helpers'
 
 class ContentEditable extends React.Component{
   
@@ -41,8 +43,17 @@ class ContentEditable extends React.Component{
     }                   // Block to make changes to title of the page
   }
 
+  handleMouseUp = (e) => {
+    !this.props.componentType && this.props.setCurrentElem(this.props.id)
+  }
+  
+  handleFocus = (e) => {
+    e.persist()
+    !this.props.componentType && setCursorToEnd(e)
+  }
+
   render() {
-    const { placeholder, className, styles, handleMouseUp, listOrder, content } = this.props
+    const { placeholder, className, styles, listOrder, content } = this.props
     const {context} = this
     return(
       <div className={classNames("component-section", context.status.toLowerCase())}>
@@ -51,6 +62,9 @@ class ContentEditable extends React.Component{
           data-root="true"
           ref={node => this.elem = node}
           className={classNames(className, context.status.toLowerCase())}
+          onMouseUp={this.handleMouseUp}
+          onFocus={this.handleFocus}
+          onBlur={this.emitUpdate}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
@@ -69,6 +83,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   setCurrentElem,
-  addNewComponent
+  removeCurrentElem,
+  addNewComponent,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ContentEditable)
