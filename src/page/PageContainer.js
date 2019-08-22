@@ -272,7 +272,7 @@ class PageContainer extends React.Component {
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
-					in={actionDomRect && actionDomRect.top && isEdit }
+					in={actionDomRect && actionDomRect.top && isEdit && currentType !== "Title of the page"}
 					timeout={400}
 					classNames="dropdown-fade"
 					onEnter={this.showTooltip}
