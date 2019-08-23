@@ -11,10 +11,6 @@ import {
 	addNewComponent,
 	updatePosition
 } from '../redux/reducers/appDataReducers'
-import {
-	setCurrentElem,
-	removeCurrentElem
-} from '../redux/reducers/currentElemReducer'
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
@@ -262,7 +258,7 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
@@ -321,9 +317,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	addNewComponent,
-	setCurrentElem,
 	initComponents,
-	removeCurrentElem,
 	updatePosition
 }
 
