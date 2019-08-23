@@ -70,7 +70,7 @@ class ContentEditable extends React.Component{
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
           styles={styles}
           data-gramm_editor="false"
-          onSelect={context.handleSelection}
+        //  onSelect={context.handleSelection}
         />
       </div>
     )
