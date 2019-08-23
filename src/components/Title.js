@@ -7,6 +7,7 @@ const WrappedTitle = (props) => {
     return(
       <ContentEditable 
         {...props}
+        id="page-title"
         placeholder="Title of the page"
         className="cm-title"
       />

@@ -7,14 +7,16 @@ import {
   addNewComponent,
   updateComponentType,
   updateComponent,
-  removeComponent
+  removeComponent,
 } from '../redux/reducers/appDataReducers'
 import {
   setCurrentElem,
+  removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
+import {setCursorToEnd} from '../utils/helpers'
 
 //A higher order component for the generic components to handle there functionalily.
 
@@ -31,10 +33,6 @@ class AddComponent extends React.Component{
   componentDidMount(){
     this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
-  }
-
-  componentWillReceiveProps(newProps){
-    this.checkBlurAndEmitUpdate(this.props, newProps)
   }
 
   componentDidUpdate(){
@@ -62,20 +60,9 @@ class AddComponent extends React.Component{
     }
   }
 
-  checkBlurAndEmitUpdate = (oldProps, props) => {
-    let {currentElem} = props
-    if(currentElem.prevSelectedElemId !== oldProps.currentElem.prevSelectedElemId){
-      let el = document.querySelector(`[data-block-id="${currentElem.prevSelectedElemId}"] [data-root="true"] `)
-      if(el)
-        this.props.updateComponent({id: currentElem.prevSelectedElemId, newState: {content: el.innerHTML}})
-    }
-  }
-
   //Change the component type.
   handleMouseUp = (e) => {
-    // e.stopPropagation()
     this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
-    this.props.setCurrentElem(this.props.id)
     let comSelDiv = this.elem.querySelector(`[data-block-type="component-select-div"]`)
     if(comSelDiv && comSelDiv.contains(e.target)){
       let currentTarget = e.currentTarget
@@ -190,24 +177,15 @@ class AddComponent extends React.Component{
       }
     }
     if(currElemPos < prevElemPos)
-      this.setCursorToEnd(e)
+      setCursorToEnd(e)
   }
 
-  // Method to position the cursor at the end of the content
-  setCursorToEnd = (e) => {
-    var range = document.createRange();
-    var sel = window.getSelection();
-    if(e.target.innerHTML){
-      range.setStart(e.target.lastChild, e.target.lastChild.length);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
+  onMouseDown = (e) => {
+    this.props.setCurrentElem(this.props.id)
   }
 
   handleBlur = (e) => {
-    // 
-
+    this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
   handleInlineStyles = (type)=> {
@@ -229,6 +207,7 @@ class AddComponent extends React.Component{
             const isEdit = value.status === 'Edit'
             const allActions = isEdit ? {
               'onMouseUp': this.handleMouseUp,
+              'onMouseDown': this.onMouseDown,
               'onKeyDown': this.handleKeyDown,
               'data-component-type': data.componentType,
               'onBlur':this.handleBlur,
@@ -301,6 +280,7 @@ const mapDispatchToProps = {
   updateComponentType,
   removeComponent,
   setCurrentElem,
+  removeCurrentElem,
   updateComponent
 }
 export default connect(state => state, mapDispatchToProps)(AddComponent)
