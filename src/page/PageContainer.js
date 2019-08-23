@@ -162,6 +162,7 @@ class PageContainer extends React.Component {
 		else{
 			this.currentElemSelection = null
 		}
+		this.handleRangeSelection(e)
 	}
 
 	editText = (e) => {
@@ -251,6 +252,8 @@ class PageContainer extends React.Component {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
+		console.log('current', currentType)
+
 		return (
 			<div
 				className="cm-page-builder"
@@ -258,7 +261,7 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate }}> 
 					<PageDetails 
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
