@@ -50,16 +50,17 @@
     "npm-watch": "^0.3.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
-    "webpack-dev-server": "^3.3.1",
-    "webpack-node-externals": "^1.6.0",
     "webpack": "^4.1.1",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
   "dependencies": {
+    "activestorage": "^5.2.3",
     "classnames": "^2.2.6",
     "emoji-js": "^3.4.1",
     "emoji-mart": "^2.11.1",

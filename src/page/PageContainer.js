@@ -129,7 +129,8 @@ class PageContainer extends React.Component {
 				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component
 						handleUpdate={this.emitUpdate}
-						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
+						order={data.componentType === `Olist` && this._getCurrentOrder(index)}						
+						useDirectStorageUpload = {this.props.useDirectStorageUpload}
 					/>
 				</AddComponent>
 			)
@@ -327,8 +328,10 @@ class PageContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-	return {appData: state.appData,
-	currentElem: state.currentElem}
+	return {
+		appData: state.appData,
+		currentElem: state.currentElem
+	}
 }
 
 const mapDispatchToProps = {
@@ -365,7 +368,8 @@ PageContainer.defaultProps = {
 		.reduce((acc, key) => ({ ...acc, [TYPE_MAP_COMPONENT[key]]: key }), {}),
 	showTitle: false,
 	showEmoji: false,
-	showPageInfo: false
+	showPageInfo: false,
+	useDirectStorageUpload: false
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)

@@ -18,7 +18,8 @@ export const PageDetails = ({
 	isEditMode,
 	showTitle,
 	showEmoji,
-	showPageInfo
+	showPageInfo,
+	useDirectStorageUpload
 }) => {
 
 	return(
