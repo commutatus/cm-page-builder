@@ -125,7 +125,7 @@ class PageContainer extends React.Component {
 				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component
 						handleUpdate={this.emitUpdate}
-						order={data.componentType === `Olist` && this._getCurrentOrder(index)}						
+						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
 						useDirectStorageUpload = {this.props.useDirectStorageUpload}
 					/>
 				</AddComponent>
@@ -268,13 +268,8 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
-<<<<<<< HEAD
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate, handleSelection: this.handleRangeSelection}}>
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}>
 					<PageDetails
-=======
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
-					<PageDetails 
->>>>>>> origin
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
