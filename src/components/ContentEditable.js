@@ -64,13 +64,13 @@ class ContentEditable extends React.Component{
           className={classNames(className, context.status.toLowerCase())}
           onMouseUp={this.handleMouseUp}
           onFocus={this.handleFocus}
-          onBlur={this.emitUpdate}
+          onBlur={e => this.emitChange(e, context)}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
           styles={styles}
           data-gramm_editor="false"
-        //  onSelect={context.handleSelection}
+          onSelect={context.handleSelection}
         />
       </div>
     )
