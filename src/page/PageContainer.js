@@ -159,19 +159,22 @@ class PageContainer extends React.Component {
 	}
 
 	handleSelection = (e) => {
-		let selection = window.getSelection()
-		if(selection && selection.rangeCount > 0){
-			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			if (dimensions.width > 1) {
-				let scrollOffsets = this.getScrollOffsets()
-				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
-				this.setState({actionDomRect})
+		if (e.target.getAttribute('placeholder') !== `Title of the page`) {
+			let selection = window.getSelection()
+			if(selection && selection.rangeCount > 0){
+				let dimensions = selection.getRangeAt(0).getBoundingClientRect()
+				this.currentElemSelection = {elemId: e.target.dataset.id, selection}
+				if (dimensions.width > 1) {
+					let scrollOffsets = this.getScrollOffsets()
+					let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
+					this.setState({actionDomRect})
+				}
+			}
+			else{
+				this.currentElemSelection = null
 			}
 		}
-		else{
-			this.currentElemSelection = null
-		}
+		this.handleRangeSelection(e)
 	}
 
 	editText = (e) => {
@@ -268,7 +271,8 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}>
+
+				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
 					<PageDetails
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
