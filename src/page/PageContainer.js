@@ -149,18 +149,20 @@ class PageContainer extends React.Component {
 	}
 
 	handleSelection = (e) => {
-		let selection = window.getSelection()
-		if(selection && selection.rangeCount > 0){
-			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			if (dimensions.width > 1) {
-				let scrollOffsets = this.getScrollOffsets()
-				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
-				this.setState({actionDomRect})
+		if (e.target.getAttribute('placeholder') !== `Title of the page`) {
+			let selection = window.getSelection()
+			if(selection && selection.rangeCount > 0){
+				let dimensions = selection.getRangeAt(0).getBoundingClientRect()
+				this.currentElemSelection = {elemId: e.target.dataset.id, selection}
+				if (dimensions.width > 1) {
+					let scrollOffsets = this.getScrollOffsets()
+					let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
+					this.setState({actionDomRect})
+				}
 			}
-		}
-		else{
-			this.currentElemSelection = null
+			else{
+				this.currentElemSelection = null
+			}
 		}
 		this.handleRangeSelection(e)
 	}
@@ -252,8 +254,6 @@ class PageContainer extends React.Component {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
-		console.log('current', currentType)
-
 		return (
 			<div
 				className="cm-page-builder"
