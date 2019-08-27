@@ -83,9 +83,9 @@ function addComponent(state, data = {}){
       position++
     }
   }
-  if (componentData.length === 0){
+  if (componentData.length === 0 || !data.id){
     newCom = {content: '', position: 1, componentType: componentType, id: data.newId}
-    temp.push(newCom)
+    temp.unshift(newCom)
   }
   emitUpdate(newCom, 'add')
   return {componentData: temp}
@@ -160,7 +160,6 @@ function updateComponentPos(state, {newIndex, oldIndex}) {
 }
 
 function emitUpdate(data, type){
-  // console.log(data, type)
   // return
   switch(type){
     case 'add':
