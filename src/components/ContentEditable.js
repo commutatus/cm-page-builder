@@ -30,10 +30,8 @@ class ContentEditable extends React.Component{
     
   setFocus = () => {
     if(this.props.currentElem.elemId === this.props.id){
-      setTimeout(() => {
-        if(this.elem)
-          this.elem.focus()
-      }, 0)
+      if(this.elem)
+        this.elem.focus()
     }
   }
 

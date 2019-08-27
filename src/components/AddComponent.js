@@ -185,7 +185,8 @@ class AddComponent extends React.Component{
   }
 
   handleBlur = (e) => {
-    this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
+    if(this.props.data.componentType !== 'Embed')
+      this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
   handleInlineStyles = (type)=> {

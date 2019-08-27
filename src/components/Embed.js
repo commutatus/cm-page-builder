@@ -38,7 +38,7 @@ class WrappedEmbed extends React.Component{
               data-root="true"
               placeholder="Paste the URL from Vimeo or YouTube"
               className="embed-input"
-              onBlur={(e) => this.handleEmbed(e, context)}
+              onBlur={(e) => this.handleEmbed(e)}
             />
           </div>
         }
