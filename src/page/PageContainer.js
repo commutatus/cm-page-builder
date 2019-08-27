@@ -55,12 +55,18 @@ class PageContainer extends React.Component {
 			})
 		}
 	}
-	
-	componentDidUpdate(){
+
+	componentDidUpdate(prevProps){
 		if(this.state.actionDomRect){
 			document.addEventListener('mousedown', this.handlePageClick)
 		}
 		PageContainer.contextType = PermissionContext
+
+		let data = this.props.appData.componentData
+
+		if(JSON.stringify(prevProps.appData.componentData) !== JSON.stringify(data)) {
+			this.props.updateComponentData(data)
+		}
 	}
 
 
@@ -76,7 +82,7 @@ class PageContainer extends React.Component {
 			}
 		}
 	}
-	
+
 	handlePageClick = (e) => {
 		let editTooltip = document.getElementById('cm-text-edit-tooltip')
 		if(editTooltip && !editTooltip.contains(e.target)){
@@ -91,8 +97,11 @@ class PageContainer extends React.Component {
 			// if(args[2] === 'updateTitle'){
 			// 	args[1].office_id = +this.props.currentOffices[0].id
 			// }
+			// console.log("TEST HERE")
 			this.props.handleUpdate(...args)
 		}
+
+
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -102,9 +111,9 @@ class PageContainer extends React.Component {
 		if (currentIndex > 0 && appData.componentData[currentIndex-1] && appData.componentData[currentIndex-1].componentType === `Olist`) {
 			this._getCurrentOrder.counter++
 		}
-		else 
+		else
 			this._getCurrentOrder.counter = 1
-		return this._getCurrentOrder.counter 
+		return this._getCurrentOrder.counter
 	}
 
 	getPageComponent = (data, index) => {
@@ -114,9 +123,10 @@ class PageContainer extends React.Component {
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
 				<AddComponent key={dataId} id={dataId} data={data}>
-					<Component 
+					<Component
 						handleUpdate={this.emitUpdate}
 						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
+						useDirectStorageUpload = {this.props.useDirectStorageUpload}
 					/>
 				</AddComponent>
 			)
@@ -149,19 +159,22 @@ class PageContainer extends React.Component {
 	}
 
 	handleSelection = (e) => {
-		let selection = window.getSelection()
-		if(selection && selection.rangeCount > 0){
-			let dimensions = selection.getRangeAt(0).getBoundingClientRect()
-			this.currentElemSelection = {elemId: e.target.dataset.id, selection}
-			if (dimensions.width > 1) {
-				let scrollOffsets = this.getScrollOffsets()
-				let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
-				this.setState({actionDomRect})
+		if (e.target.getAttribute('placeholder') !== `Title of the page`) {
+			let selection = window.getSelection()
+			if(selection && selection.rangeCount > 0){
+				let dimensions = selection.getRangeAt(0).getBoundingClientRect()
+				this.currentElemSelection = {elemId: e.target.dataset.id, selection}
+				if (dimensions.width > 1) {
+					let scrollOffsets = this.getScrollOffsets()
+					let actionDomRect = { top: dimensions.top+scrollOffsets.y - dimensions.height - 10, left: dimensions.left+scrollOffsets.x }
+					this.setState({actionDomRect})
+				}
+			}
+			else{
+				this.currentElemSelection = null
 			}
 		}
-		else{
-			this.currentElemSelection = null
-		}
+		this.handleRangeSelection(e)
 	}
 
 	editText = (e) => {
@@ -174,7 +187,7 @@ class PageContainer extends React.Component {
 				let url = link ? link.split('//')[0] : ''
 				if (url && (url !== 'http:' && url !== 'https:' ))
 					link = "http://"+link
-				document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)	
+				document.execCommand('insertHTML', true, `<a href=${link} target="_blank">${window.getSelection().toString()}</a>`)
 				//document.execCommand(action, false, link)
 			}
 			else
@@ -220,24 +233,24 @@ class PageContainer extends React.Component {
 					break
 				case `B`:
 					if (!activeFormatting.includes(`bold`))
-						activeFormatting.push(`bold`)					
+						activeFormatting.push(`bold`)
 					break
 				case `I`:
 					if (!activeFormatting.includes(`italic`))
-						activeFormatting.push(`italic`)						
+						activeFormatting.push(`italic`)
 					break
 				case `STRIKE`:
 					if (!activeFormatting.includes(`strikeThrough`))
-						activeFormatting.push(`strikeThrough`)						
+						activeFormatting.push(`strikeThrough`)
 					break
 				default:
 					this.setState({ activeFormatting: [] })
 					break
 			}
 			node = node.firstChild
-		} 
+		}
 		this.setState({ activeFormatting, currentType: e.target.getAttribute("placeholder") })
-	} 
+	}
 
 	showTooltip = () => {
 		this.setState({ showTooltip: true })
@@ -258,8 +271,9 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
+
 				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
-					<PageDetails 
+					<PageDetails
 						pageComponents={appData.componentData}
 						emitUpdate={this.emitUpdate}
 						meta={meta}
@@ -269,6 +283,9 @@ class PageContainer extends React.Component {
 						currentOffices={this.props.currentOffices}
 						isEditMode={isEdit}
 						onMouseUp={isEdit ? this.handleMouseUp : undefined}
+						showTitle = {this.props.showTitle}
+						showEmoji = {this.props.showEmoji}
+						showPageInfo = {this.props.showPageInfo}
 					/>
 				</PermissionContext.Provider>
 				<CSSTransition
@@ -310,10 +327,12 @@ class PageContainer extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	appData: state.appData,
-	currentElem: state.currentElem
-})
+const mapStateToProps = state => {
+	return {
+		appData: state.appData,
+		currentElem: state.currentElem
+	}
+}
 
 const mapDispatchToProps = {
 	addNewComponent,
@@ -321,8 +340,34 @@ const mapDispatchToProps = {
 	updatePosition
 }
 
+const TYPE_MAP_COMPONENT = {
+	header: 'Header1',
+	sub_header: 'Header2',
+	ordered_list: 'Olist',
+	unordered_list: 'Ulist',
+	text: 'Text',
+	page_link: 'Text',
+	video: 'Embed',
+	file: 'Upload',
+	image: 'Upload',
+	divider: 'Divider'
+}
+
 PageContainer.propTypes = {
 	handleUpdate: PropTypes.func.isRequired
 }
+
+PageContainer.defaultProps = {
+	status: 'Edit',
+	updateComponentData: (data) => {},
+	typeMapping: TYPE_MAP_COMPONENT,
+	// This method basically reverses the keys and the values of the provided type mapping constant
+	REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT)
+		.reduce((acc, key) => ({ ...acc, [TYPE_MAP_COMPONENT[key]]: key }), {}),
+	showTitle: false,
+	showEmoji: false,
+	showPageInfo: false,
+	useDirectStorageUpload: false
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
