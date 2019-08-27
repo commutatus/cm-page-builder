@@ -52,6 +52,14 @@ class ContentEditable extends React.Component{
     !this.props.componentType && setCursorToEnd(e)
   }
 
+  handleNewLine = (e) => {
+    if(e.keyCode === 13 && this.props.id === `page-title`) {
+      e.preventDefault()
+      this.props.addNewComponent({ id: undefined, componentType: 'Text' })
+      return false
+    }
+  }
+
   render() {
     const { placeholder, className, styles, listOrder, content } = this.props
     const {context} = this
@@ -71,6 +79,7 @@ class ContentEditable extends React.Component{
           styles={styles}
           data-gramm_editor="false"
           onSelect={context.handleSelection}
+          onKeyDown={this.handleNewLine}
         />
       </div>
     )
