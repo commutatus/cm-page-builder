@@ -40,11 +40,6 @@ class AddComponent extends React.Component{
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    console.log((this.props.id !== nextProps.id) ||
-    (this.state.showHandle !== nextState.showHandle) ||
-    (this.state.showActionBtn !== nextState.showActionBtn) ||
-    (this.state.isFocused !== nextState.isFocused));
-    
     return (
       (this.props.id !== nextProps.id) ||
       (this.state.showHandle !== nextState.showHandle) ||
