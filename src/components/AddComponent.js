@@ -28,11 +28,11 @@ class AddComponent extends React.Component{
       isFocused: false,
       showHandle:false
     }
+    AddComponent.contextType = PermissionContext
   }
 
   componentWillMount(){
     this.checkAndFocus(this.props)
-    AddComponent.contextType = PermissionContext
   }
 
   componentWillReceiveProps(nextProps){
@@ -56,7 +56,7 @@ class AddComponent extends React.Component{
     if(currentElem.elemId && id === currentElem.elemId){
       //check if focused or not
       if(!isFocused){
-        this.setState({showActionBtn: true, isFocused: true})
+        this.setState({isFocused: true})
       }
     }
     else{
@@ -166,7 +166,7 @@ class AddComponent extends React.Component{
   }
 
   handleInput = (e) => {
-    this.setState({showActionBtn: e.target.innerHTML === ''})
+    this.setState({showActionBtn: e.target.innerHTML === '' && !e.target.value})
   }
 
   // handles the focus and set the cursor to right position.
@@ -186,7 +186,7 @@ class AddComponent extends React.Component{
       setCursorToEnd(e)
   }
 
-  onMouseDown = (e) => {
+  handleMouseDown = (e) => {
     let handle = document.getElementById('drag-handle')
     if(!(handle && handle.contains(e.target)))
       this.props.setCurrentElem(this.props.id)
@@ -211,7 +211,7 @@ class AddComponent extends React.Component{
     const isEdit = this.context.status === 'Edit'
     const allActions = isEdit ? {
       'onMouseUp': this.handleMouseUp,
-      'onMouseDown': this.onMouseDown,
+      'onMouseDown': this.handleMouseDown,
       'onKeyDown': this.handleKeyDown,
       'data-component-type': data.componentType,
       'onBlur':this.handleBlur,
