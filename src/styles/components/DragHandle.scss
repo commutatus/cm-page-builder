@@ -1,33 +1,54 @@
 @import '../imports';
 
-.showmore-popup {
+.component-dragger {
   position: absolute;
-  left: -160px;
-  top: 18px;
-  box-sizing: border-box;
-  width: 170px;
-  padding: 5px 10px;		
-  border-radius: 2px;	
-  background-color: $white;	
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
-  z-index: 10;
-  .more-option {
-    display: flex;
-    align-items: center;
-    margin: 5px 0;
-    padding: 7px 10px;
-    transition: background-color .2s linear;
+  top: 8px;
+  left: -60px;
+  min-width: 50px;
+  margin: 10px;
+  display: flex;
+  justify-content: space-around;
+  font-size: $t4-text;
+  color: #ACADAF;
+  margin-top: 5px;
+  cursor: pointer;
+  .delete-btn{
     cursor: pointer;
-    &:hover {
-      background-color: #f4f4f4;
-    }
-    span:nth-child(1) {
-      font-size: $t4-text;
-    }
-    span:nth-child(2) {
-      margin-left: 10px;
-      color: #4A4A4A;	
-      font-size: $t4-text;
+    margin: 2px;
+  }
+  .handle-icon{
+    margin: 2px;
+    cursor: grab;
+  }
+  .showmore-popup {
+    position: absolute;
+    left: -160px;
+    top: 18px;
+    box-sizing: border-box;
+    width: 170px;
+    padding: 5px 10px;		
+    border-radius: 2px;	
+    background-color: $white;	
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+    z-index: 10;
+    .more-option {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      padding: 7px 10px;
+      transition: background-color .2s linear;
+      cursor: pointer;
+      &:hover {
+        background-color: #f4f4f4;
+      }
+      span:nth-child(1) {
+        font-size: $t4-text;
+      }
+      span:nth-child(2) {
+        margin-left: 10px;
+        color: #4A4A4A;	
+        font-size: $t4-text;
+      }
     }
   }
 }
