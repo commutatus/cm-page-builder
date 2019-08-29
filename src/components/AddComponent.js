@@ -30,13 +30,27 @@ class AddComponent extends React.Component{
     }
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
   }
 
-  componentDidUpdate(){
-    this.checkAndFocus(this.props)
+  componentWillReceiveProps(nextProps){
+    this.checkAndFocus(nextProps)
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    console.log((this.props.id !== nextProps.id) ||
+    (this.state.showHandle !== nextState.showHandle) ||
+    (this.state.showActionBtn !== nextState.showActionBtn) ||
+    (this.state.isFocused !== nextState.isFocused));
+    
+    return (
+      (this.props.id !== nextProps.id) ||
+      (this.state.showHandle !== nextState.showHandle) ||
+      (this.state.showActionBtn !== nextState.showActionBtn) ||
+      (this.state.isFocused !== nextState.isFocused)
+    )
   }
 
   // For newly created component to change the focus
@@ -184,7 +198,7 @@ class AddComponent extends React.Component{
   }
 
   handleBlur = (e) => {
-    if(this.props.data.componentType !== 'Embed')
+    if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
       this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 

@@ -39,7 +39,6 @@ class DragHandle extends React.Component{
   }
 
   handleClick = (e) => {
-    console.log(e.target)
     switch (e.target.dataset.action) {
       case 'delete':
         this.props.removeComponent({blockId: this.props.id})
