@@ -31,7 +31,7 @@ class DragHandle extends React.Component{
   optionHandleClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    this.setState({showMoreOptions: !this.state.showMoreOptions})
+    // this.setState({showMoreOptions: !this.state.showMoreOptions})
   }
 
   componentWillUnmount(){
@@ -56,6 +56,7 @@ class DragHandle extends React.Component{
         className="component-dragger" 
         data-block-id={this.props.id}
         onClick={this.optionHandleClick}
+        onMouseUp={(e) => e.stopPropagation()}
         style={{cursor: 'grab'}}
       >
         <div 

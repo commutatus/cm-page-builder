@@ -68,7 +68,6 @@ class AddComponent extends React.Component{
 
   //Change the component type.
   handleMouseUp = (e) => {
-    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
     let comSelDiv = this.elem.querySelector(`[data-block-type="component-select-div"]`)
     if(comSelDiv && comSelDiv.contains(e.target)){
       let currentTarget = e.currentTarget
@@ -172,6 +171,7 @@ class AddComponent extends React.Component{
   // handles the focus and set the cursor to right position.
   handleFocus = (e) => {
     e.persist()
+    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
     let {appData, currentElem} = this.props
     let prevElemPos, currElemPos
     for(let i in appData.componentData){
