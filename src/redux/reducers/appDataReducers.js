@@ -35,10 +35,17 @@ export const updatePosition = (data) => {
   return({type: UPDATE_POS, data})
 }
 
-export const initComponents = (data) => {
+export const initComponents = (data = []) => {
   return dispatch => {
-      dispatch(({ type: INIT_COMPONENTS, data }))
-     // dispatch({ type: ADD_COMPONENT })
+    let newId = createID()
+    dispatch({ 
+      type: INIT_COMPONENTS, 
+      data: data.length === 0 ?  [{content: '', position: 1, componentType: 'Text', id: newId}] : data
+    })
+    dispatch({
+      type: SET_CURRENT_ELEM,
+      elemId: data.length === 0 ? newId : null
+    })
   }
 }
 

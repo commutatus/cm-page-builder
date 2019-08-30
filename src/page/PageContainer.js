@@ -28,7 +28,8 @@ class PageContainer extends React.Component {
 
 	componentWillMount() {
 		this.initWindowVar(this.props)
-		this.props.initComponents(this.props.pageComponents)
+		if(!this.props.newPage)
+			this.props.initComponents(this.props.pageComponents)
 	}
 
 	componentWillReceiveProps(newProps){
@@ -264,6 +265,7 @@ class PageContainer extends React.Component {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
+		console.log()
 		return (
 			<div
 				className="cm-page-builder"
