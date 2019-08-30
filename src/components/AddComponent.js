@@ -28,15 +28,24 @@ class AddComponent extends React.Component{
       isFocused: false,
       showHandle:false
     }
-  }
-
-  componentDidMount(){
-    this.checkAndFocus(this.props)
     AddComponent.contextType = PermissionContext
   }
 
-  componentDidUpdate(){
+  componentWillMount(){
     this.checkAndFocus(this.props)
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.checkAndFocus(nextProps)
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    return (
+      (this.props.id !== nextProps.id) ||
+      (this.state.showHandle !== nextState.showHandle) ||
+      (this.state.showActionBtn !== nextState.showActionBtn) ||
+      (this.state.isFocused !== nextState.isFocused)
+    )
   }
 
   // For newly created component to change the focus
@@ -45,13 +54,10 @@ class AddComponent extends React.Component{
     let {isFocused} = this.state
     //Compare the old and the new element to check focused has changed or not
     if(currentElem.elemId && id === currentElem.elemId){
-      //Get the dom not if it has changed
-      let elem = ReactDOM.findDOMNode(this).querySelector(`[data-root="true"]`)
       //check if focused or not
       if(!isFocused){
-        this.setState({showActionBtn: true, isFocused: true})
+        this.setState({isFocused: true})
       }
-      //if current state is focus the element
     }
     else{
       //when focus is removed doesn't show the handle and the btns
@@ -160,7 +166,7 @@ class AddComponent extends React.Component{
   }
 
   handleInput = (e) => {
-    this.setState({showActionBtn: e.target.innerHTML === ''})
+    this.setState({showActionBtn: e.target.innerHTML === '' && !e.target.value})
   }
 
   // handles the focus and set the cursor to right position.
@@ -180,12 +186,14 @@ class AddComponent extends React.Component{
       setCursorToEnd(e)
   }
 
-  onMouseDown = (e) => {
-    this.props.setCurrentElem(this.props.id)
+  handleMouseDown = (e) => {
+    let handle = document.getElementById('drag-handle')
+    if(!(handle && handle.contains(e.target)))
+      this.props.setCurrentElem(this.props.id)
   }
 
   handleBlur = (e) => {
-    if(this.props.data.componentType !== 'Embed')
+    if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
       this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
@@ -199,79 +207,70 @@ class AddComponent extends React.Component{
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
+
     const isEdit = this.context.status === 'Edit'
-    // console.log(this.state)
-    return( 
-      <PermissionContext.Consumer>
-        {
-          value => {
-            const isEdit = value.status === 'Edit'
-            const allActions = isEdit ? {
-              'onMouseUp': this.handleMouseUp,
-              'onMouseDown': this.onMouseDown,
-              'onKeyDown': this.handleKeyDown,
-              'data-component-type': data.componentType,
-              'onBlur':this.handleBlur,
-              'onInput':this.handleInput,
-              'onFocus':this.handleFocus,
-              'onMouseEnter':() => this.setState({showHandle: true}),
-              'onMouseLeave':() => this.setState({showHandle: false}),
-            } : {}
-            return(
-              <div 
-                ref={node => this.elem = node} 
-                className="widget-container" 
-                data-block-id={this.props.id}
-                style={this.handleInlineStyles(data.componentType)}
-                {...allActions}
-              >
-                {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}
-                { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
-                <CSSTransition
-                  in={isEdit && showActionBtn}
-                  timeout={300}
-                  classNames="fade"
-                  unmountOnExit
-                >
-                  <div className="text-type-tools" 
-                    data-block-type="component-select-div" 
-                    style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}
-                  >
-                    <div data-type="Header1">
-                      <i className="cm-icon-h1" />
-                    </div>
-                    <div data-type="Header2">
-                      <i className="cm-icon-h2" />
-                    </div>
-                    <div data-type="Olist" >
-                      <i className="cm-icon-numbers" />
-                    </div>
-                    <div data-type="Ulist">
-                      <i className="cm-icon-bullets" />
-                    </div>
-                    {/* <div>
-                      <i className="cm-icon-page" />
-                    </div> */}
-                    <div data-type="Upload">
-                      <i className="cm-icon-picture" />
-                    </div>
-                    <div data-type="Embed">
-                      <i className="cm-icon-video" /> 
-                    </div>
-                    {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
-                      <i className="cm-icon-upload" /> 
-                    </div> */}
-                    <div data-type="Divider">
-                      <i className="cm-icon-divider" />  
-                    </div>
-                  </div>
-                </CSSTransition>
-              </div>
-            )
-          }
-          
-        }
-      </PermissionContext.Consumer>
+    const allActions = isEdit ? {
+      'onMouseUp': this.handleMouseUp,
+      'onMouseDown': this.handleMouseDown,
+      'onKeyDown': this.handleKeyDown,
+      'data-component-type': data.componentType,
+      'onBlur':this.handleBlur,
+      'onInput':this.handleInput,
+      'onFocus':this.handleFocus,
+      'onMouseEnter':() => this.setState({showHandle: true}),
+      'onMouseLeave':() => this.setState({showHandle: false}),
+    } : {}
+
+    return(
+      <div 
+        ref={node => this.elem = node} 
+        className="widget-container" 
+        data-block-id={this.props.id}
+        style={this.handleInlineStyles(data.componentType)}
+        {...allActions}
+      >
+        {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}
+        { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
+        <CSSTransition
+          in={isEdit && showActionBtn}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <div className="text-type-tools" 
+            data-block-type="component-select-div" 
+            style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}
+          >
+            <div data-type="Header1">
+              <i className="cm-icon-h1" />
+            </div>
+            <div data-type="Header2">
+              <i className="cm-icon-h2" />
+            </div>
+            <div data-type="Olist" >
+              <i className="cm-icon-numbers" />
+            </div>
+            <div data-type="Ulist">
+              <i className="cm-icon-bullets" />
+            </div>
+            {/* <div>
+              <i className="cm-icon-page" />
+            </div> */}
+            <div data-type="Upload">
+              <i className="cm-icon-picture" />
+            </div>
+            <div data-type="Embed">
+              <i className="cm-icon-video" /> 
+            </div>
+            {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
+              <i className="cm-icon-upload" /> 
+            </div> */}
+            <div data-type="Divider">
+              <i className="cm-icon-divider" />  
+            </div>
+          </div>
+        </CSSTransition>
+      </div>
     )
   }
 }
