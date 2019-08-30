@@ -58,7 +58,15 @@ class DragHandle extends React.Component{
         onClick={this.optionHandleClick}
         style={{cursor: 'grab'}}
       >
-        <i className="cm cm-icon-handle" />
+        <div 
+          className="delete-btn"
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation(); this.props.removeComponent({blockId: this.props.id})}}
+        >
+            <i className="cm-icon-trash" />
+        </div>
+        <span className="handle-icon"><i className="cm cm-icon-handle" /></span>
         <CSSTransition
           in={this.state.showMoreOptions}
           timeout={300}

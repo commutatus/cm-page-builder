@@ -136,7 +136,7 @@ class PageContainer extends React.Component {
 	handleMouseUp = (e) => {
 		e.persist()
 		let conElem = document.querySelector(`[data-container-block="true"]`)
-		if(conElem.offsetHeight < e.pageY){
+		if(conElem.getBoundingClientRect().bottom < e.pageY){
 			let {appData} = this.props
 			let lastElem = appData.componentData[appData.componentData.length-1]
 			if((!lastElem || lastElem.componentType !== 'Text' || lastElem.content) && !this.props.newPage ) {

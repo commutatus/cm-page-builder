@@ -42,12 +42,14 @@ class ContentEditable extends React.Component{
   }
 
   handleMouseUp = (e) => {
-    !this.props.componentType && this.props.setCurrentElem(this.props.id)
+    if(!this.props.componentType)
+      this.props.setCurrentElem(this.props.id)
   }
   
   handleFocus = (e) => {
     e.persist()
-    !this.props.componentType && setCursorToEnd(e)
+    if(!this.props.componentType)
+      setCursorToEnd(e)
   }
 
   handleNewLine = (e) => {
