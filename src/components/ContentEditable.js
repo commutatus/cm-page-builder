@@ -21,17 +21,21 @@ class ContentEditable extends React.Component{
   }
 
   componentDidMount(){
-    this.setFocus()
+    this.handleFocusAndBlur()
   }
 
-  componentDidUpdate(){
-    this.setFocus()
+  componentDidUpdate(oldProps, oldState){
+    this.handleFocusAndBlur(oldProps, oldState)
   }
     
-  setFocus = () => {
+  handleFocusAndBlur = (oldProps, oldState) => {
     if(this.props.currentElem.elemId === this.props.id){
       if(this.elem)
         this.elem.focus()
+    }
+    else if(oldProps && this.props.currentElem.elemId === oldProps.currentElem.elemId){
+      if(this.elem)
+        this.elem.blur()
     }
   }
 

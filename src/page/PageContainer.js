@@ -3,6 +3,7 @@ import Sortable from 'sortablejs'
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet'
 import { PermissionContext } from '../contexts/permission-context';
 import {PageDetails} from './PageDetails'
 import AddComponent from '../components/AddComponent';
@@ -11,6 +12,9 @@ import {
 	addNewComponent,
 	updatePosition
 } from '../redux/reducers/appDataReducers'
+import {
+	removeCurrentElem
+} from '../redux/reducers/currentElemReducer'
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
@@ -30,18 +34,14 @@ class PageContainer extends React.Component {
 		this.initWindowVar(this.props)
 		if(!this.props.newPage)
 			this.props.initComponents(this.props.pageComponents)
+		
+		document.addEventListener('mousedown', this.removeFocus)
 	}
 
 	componentWillReceiveProps(newProps){
 		this.initWindowVar(newProps)
 	}
 
-	initWindowVar(props){
-		window.cmPageBuilder = {
-			handleUpdate: props.handleUpdate,
-			pid: props.meta && props.meta.id
-		}
-	}
 
 	componentDidMount() {
 		if(!this.dragContext){
@@ -70,6 +70,17 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	componentWillUnmount(){
+		document.removeEventListener('mousedown', this.removeFocus)
+	}
+
+
+	initWindowVar(props){
+		window.cmPageBuilder = {
+			handleUpdate: props.handleUpdate,
+			pid: props.meta && props.meta.id
+		}
+	}
 
 	checkPageHeight() {
 		let pageElem = document.getElementById('page-builder');
@@ -95,14 +106,16 @@ class PageContainer extends React.Component {
 
 	emitUpdate = (...args) => {
 		if(this.props.handleUpdate){
-			// if(args[2] === 'updateTitle'){
-			// 	args[1].office_id = +this.props.currentOffices[0].id
-			// }
-			// console.log("TEST HERE")
 			this.props.handleUpdate(...args)
 		}
+	}
 
+	removeFocus = (e) => {
+		let conElem = document.querySelector(`[data-container-block="true"]`)
 
+		if(conElem && !conElem.contains(e.target)){
+			this.props.removeCurrentElem()
+		}
 	}
 
 	_getCurrentOrder = (currentIndex) => {
@@ -265,7 +278,6 @@ class PageContainer extends React.Component {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
-		console.log()
 		return (
 			<div
 				className="cm-page-builder"
@@ -273,6 +285,10 @@ class PageContainer extends React.Component {
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 			>
+				<Helmet>
+					<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/EXPA-ResourceCentre/style-cf.css?nshawp" />
+				</Helmet>
+
 
 				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
 					<PageDetails
@@ -339,7 +355,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	addNewComponent,
 	initComponents,
-	updatePosition
+	updatePosition,
+	removeCurrentElem
 }
 
 const TYPE_MAP_COMPONENT = {
@@ -360,6 +377,7 @@ PageContainer.propTypes = {
 }
 
 PageContainer.defaultProps = {
+	handleUpdate: () => {},
 	status: 'Edit',
 	updateComponentData: (data) => {},
 	typeMapping: TYPE_MAP_COMPONENT,

@@ -220,7 +220,7 @@ class AddComponent extends React.Component{
       'onMouseEnter':() => this.setState({showHandle: true}),
       'onMouseLeave':() => this.setState({showHandle: false}),
     } : {}
-
+    
     return(
       <div 
         ref={node => this.elem = node} 
