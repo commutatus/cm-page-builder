@@ -22,6 +22,21 @@ export const setCursorToEnd = (e) => {
   }
 }
 
+// convert url to dataUrl
+export const toDataURL = (url, optional, callback) =>  {
+  let xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    let reader = new FileReader();
+    reader.onloadend = function() {
+      callback(reader.result, optional);
+    }
+    reader.readAsDataURL(xhr.response);
+  };
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+  xhr.send();
+}
+
 
 //sort pageComponents on the basis of pos
 export function sortDataOnPos(data){
