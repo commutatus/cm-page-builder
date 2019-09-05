@@ -11,6 +11,7 @@ import {
   addNewComponent
 } from '../redux/reducers/appDataReducers'
 import {setCursorToEnd} from '../utils/helpers'
+import { throws } from 'assert';
 
 class ContentEditable extends React.Component{
   
@@ -39,17 +40,12 @@ class ContentEditable extends React.Component{
     }
   }
 
-  emitChange = (e, context) => {
+  emitChange = (e) => {
     if (!this.props.componentType && e.target.innerHTML) {
-      context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
+      this.context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
     }                   // Block to make changes to title of the page
   }
 
-  handleMouseUp = (e) => {
-    if(!this.props.componentType)
-      this.props.setCurrentElem(this.props.id)
-  }
-  
   handleFocus = (e) => {
     e.persist()
     if(!this.props.componentType)
@@ -57,16 +53,31 @@ class ContentEditable extends React.Component{
   }
 
   handleNewLine = (e) => {
-    if(e.keyCode === 13 && this.props.id === `page-title`) {
+    if(e.key === 'Enter' && this.props.id === `page-title`) {
       e.preventDefault()
-      this.props.addNewComponent({ id: undefined, componentType: 'Text' })
-      return false
+      this.emitChange(e)
+    }
+  }
+
+  handleMouseDown = (e) => {
+    if(this.props.id === 'page-title'){
+      this.props.setCurrentElem(this.props.id)
     }
   }
 
   render() {
     const { placeholder, className, styles, listOrder, content } = this.props
-    const {context} = this
+    const {context, status} = this
+    const isEdit = status === 'Edit'
+    const actions = {
+      onMouseUp: this.handleMouseUp,
+      onBlur: this.emitChange,
+      onSelect: context.handleSelection,
+      onFocus: this.handleFocus,
+      onMouseDown: this.handleMouseDown,
+      onKeyDown: this.handleNewLine,
+      onMouseDown: this.handleMouseDown
+    }
     return(
       <div className={classNames("component-section", context.status.toLowerCase())}>
         {listOrder}
@@ -74,16 +85,12 @@ class ContentEditable extends React.Component{
           data-root="true"
           ref={node => this.elem = node}
           className={classNames(className, context.status.toLowerCase())}
-          onMouseUp={this.handleMouseUp}
-          onFocus={this.handleFocus}
-          onBlur={e => this.emitChange(e, context)}
+          styles={styles}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}
           dangerouslySetInnerHTML={{__html: sanitizeHtml(content || '')}}
-          styles={styles}
           data-gramm_editor="false"
-          onSelect={context.handleSelection}
-          onKeyDown={this.handleNewLine}
+          {...actions}
         />
       </div>
     )

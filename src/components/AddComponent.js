@@ -78,6 +78,7 @@ class AddComponent extends React.Component{
 
   // handle key action and navigation
   handleKeyDown = (e) => {
+    e.stopPropagation()
     let {appData, currentElem, data} = this.props 
     //Intialize all the elem
     let currentElemPos = -1, 

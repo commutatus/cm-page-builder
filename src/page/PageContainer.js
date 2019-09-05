@@ -10,9 +10,10 @@ import AddComponent from '../components/AddComponent';
 import {
 	initComponents,
 	addNewComponent,
-	updatePosition
+	updatePosition,
 } from '../redux/reducers/appDataReducers'
 import {
+	setCurrentElem,
 	removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
 import '../styles/global.css'
@@ -32,14 +33,16 @@ class PageContainer extends React.Component {
 
 	componentWillMount() {
 		this.initWindowVar(this.props)
-		if(!this.props.newPage)
-			this.props.initComponents(this.props.pageComponents)
-		
+		this.initApp(this.props)
 		document.addEventListener('mousedown', this.removeFocus)
+		window.addEventListener('beforeunload', this.handlePageUnload)
 	}
 
 	componentWillReceiveProps(newProps){
-		this.initWindowVar(newProps)
+		if(newProps.meta && !this.props.meta){
+			this.initWindowVar(newProps)
+			this.initApp(newProps)
+		}
 	}
 
 
@@ -72,6 +75,7 @@ class PageContainer extends React.Component {
 
 	componentWillUnmount(){
 		document.removeEventListener('mousedown', this.removeFocus)
+		document.removeEventListener('beforeunload', this.handlePageUnload)
 	}
 
 
@@ -79,6 +83,15 @@ class PageContainer extends React.Component {
 		window.cmPageBuilder = {
 			handleUpdate: props.handleUpdate,
 			pid: props.meta && props.meta.id
+		}
+	}
+	
+	initApp(props){
+		if(!props.newPage && props.meta){
+			if(props.pageComponents.length > 0)
+				this.props.initComponents(props.pageComponents)
+			else
+				this.props.addNewComponent({componentType: 'Text'})
 		}
 	}
 
@@ -112,12 +125,22 @@ class PageContainer extends React.Component {
 
 	removeFocus = (e) => {
 		let conElem = document.querySelector(`[data-container-block="true"]`)
-
 		if(conElem && !conElem.contains(e.target)){
 			this.props.removeCurrentElem()
 		}
 	}
 
+	handlePageUnload = (e) => {
+		let {elemId} = this.props.currentElem
+		if(elemId){
+			this.props.removeCurrentElem()
+			let barEl = document.getElementById('bar-text')
+			if(barEl)
+				barEl.innerHTML = "Changes saved."
+			e.preventDefault()
+			e.returnValue = false
+		}
+	}
 	_getCurrentOrder = (currentIndex) => {
 		const { appData } = this.props
 		if (typeof this._getCurrentOrder.counter === 'undefined')
@@ -274,6 +297,18 @@ class PageContainer extends React.Component {
 		this.setState({ showTooltip: false })
 	}
 
+	handleKeyDown = (e) => {
+		if(!this.props.newPage){
+			if(e.key === 'Enter' && e.target.dataset.root){
+				e.preventDefault()
+				if(this.props.appData.componentData.length > 0)
+					this.props.setCurrentElem(this.props.appData.componentData[0].id)
+				else
+					this.props.addNewComponent({componentType: 'Text'})
+			}
+		}
+	}
+
 	render() {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
@@ -284,9 +319,10 @@ class PageContainer extends React.Component {
 				id="page-builder"
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
+				onKeyDown={isEdit ? this.handleKeyDown : undefined}
 			>
 				<Helmet>
-					<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/EXPA-ResourceCentre/style-cf.css?nshawp" />
+					<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv" />
 				</Helmet>
 
 
@@ -356,6 +392,7 @@ const mapDispatchToProps = {
 	addNewComponent,
 	initComponents,
 	updatePosition,
+	setCurrentElem,
 	removeCurrentElem
 }
 
