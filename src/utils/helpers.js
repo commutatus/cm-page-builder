@@ -23,12 +23,12 @@ export const setCursorToEnd = (e) => {
 }
 
 // convert url to dataUrl
-export const toDataURL = (url, optional, callback) =>  {
+export const toDataURL = (url, callback) =>  {
   let xhr = new XMLHttpRequest();
   xhr.onload = function() {
     let reader = new FileReader();
     reader.onloadend = function() {
-      callback(reader.result, optional);
+      callback(reader.result);
     }
     reader.readAsDataURL(xhr.response);
   };

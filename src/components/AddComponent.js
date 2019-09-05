@@ -210,12 +210,13 @@ class AddComponent extends React.Component{
     let pastedData = clipboardData.getData('text/html')
     if(pastedData){
       e.preventDefault();
+      e.persist();
         let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
         if(content){
             let filename = 'attachments'
             let blockId = e.currentTarget.dataset.blockId
             if(!content.includes('base64')){
-              toDataURL(content, blockId, (dataUrl, blockId)=> {
+              toDataURL(content, (dataUrl)=> {
                 this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content: dataUrl}}})                   
               })
             } else{
