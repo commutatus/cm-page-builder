@@ -75,6 +75,7 @@
     "redux-thunk": "^2.3.0",
     "sanitize-html": "^1.20.1",
     "sortablejs": "^1.10.0-rc3",
+    "split-string": "^6.1.0",
     "style-loader": "^0.23.1",
     "uuid": "^3.3.2"
   }

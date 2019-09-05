@@ -16,7 +16,8 @@ import {
 import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
-import {setCursorToEnd} from '../utils/helpers'
+import {setCursorToEnd, toDataURL} from '../utils/helpers'
+const split = require('split-string');
 
 //A higher order component for the generic components to handle there functionalily.
 
@@ -204,12 +205,34 @@ class AddComponent extends React.Component{
    return styles
   }
 
+  handlePaste = (e) => {
+    let clipboardData = e.clipboardData || window.clipboardData
+    let pastedData = clipboardData.getData('text/html')
+    if(pastedData){
+      e.preventDefault();
+      e.persist();
+        let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
+        if(content){
+            let filename = 'attachments'
+            let blockId = e.currentTarget.dataset.blockId
+            if(!content.includes('base64')){
+              toDataURL(content, (dataUrl)=> {
+                this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content: dataUrl}}})                   
+              })
+            } else{
+              this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content}}})
+            }
+          }
+      }
+  }
+
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
 
     const isEdit = this.context.status === 'Edit'
     const allActions = isEdit ? {
+      'onPaste': this.handlePaste,
       'onMouseUp': this.handleMouseUp,
       'onMouseDown': this.handleMouseDown,
       'onKeyDown': this.handleKeyDown,
