@@ -79,6 +79,7 @@ class AddComponent extends React.Component{
 
   // handle key action and navigation
   handleKeyDown = (e) => {
+    e.stopPropagation()
     let {appData, currentElem, data} = this.props 
     //Intialize all the elem
     let currentElemPos = -1, 
@@ -243,7 +244,7 @@ class AddComponent extends React.Component{
       'onMouseEnter':() => this.setState({showHandle: true}),
       'onMouseLeave':() => this.setState({showHandle: false}),
     } : {}
-
+    
     return(
       <div 
         ref={node => this.elem = node} 
