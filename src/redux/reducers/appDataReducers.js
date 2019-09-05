@@ -37,14 +37,9 @@ export const updatePosition = (data) => {
 
 export const initComponents = (data = []) => {
   return dispatch => {
-    let newId = createID()
     dispatch({ 
       type: INIT_COMPONENTS, 
-      data: data.length === 0 ?  [{content: '', position: 1, componentType: 'Text', id: newId}] : data
-    })
-    dispatch({
-      type: SET_CURRENT_ELEM,
-      elemId: data.length === 0 ? newId : null
+      data: data
     })
   }
 }
@@ -128,7 +123,7 @@ function updateComponentState(state, data){
 }
 
 function removeComponentFromState(state, data){
-  if(state.componentData.length > 1){
+  if(state.componentData.length > 0){
     const {componentData} = state
     const {blockId} = data
     let temp = []
@@ -144,9 +139,7 @@ function removeComponentFromState(state, data){
         position++
       }
     }
-    // if(!isInitial){
       emitUpdate({id: blockId}, 'remove')
-    // }
     return ({...state, componentData: temp})
     
   }else{
