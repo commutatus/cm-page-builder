@@ -63,11 +63,14 @@ export const PageDetails = ({
 								component_type={'office_id'}
 							/>
 						}
-							<div className="seprator-dot"></div>
-							<div className="current-user-detail">
-								<img src={meta ? meta.creator.profile_photo : ''} />
-								<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
-							</div>
+							{
+								meta && meta.creator &&
+								<div className="seprator-dot"></div>
+								<div className="current-user-detail">
+									<img src={meta.creator.profile_photo} />
+									<p className="user-name">{meta.creator.full_name}</p>
+								</div>
+							}
 							{
 								!isEditMode &&
 								<React.Fragment>
