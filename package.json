@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.27",
+  "version": "1.2.28",
   "description": "Awesome react starter kit",
   "main": "lib/page/index.js",
   "scripts": {
