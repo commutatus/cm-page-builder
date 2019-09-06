@@ -63,18 +63,18 @@ export const PageDetails = ({
 								component_type={'office_id'}
 							/>
 						}
-						{
-						 !isEditMode &&
-						 <React.Fragment>
 							<div className="seprator-dot"></div>
 							<div className="current-user-detail">
 								<img src={meta ? meta.creator.profile_photo : ''} />
 								<p className="user-name">{meta ? meta.creator.full_name : ''}</p>
 							</div>
-							<div className="seprator-dot"></div>
-							<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
-						 </React.Fragment>
-						}
+							{
+								!isEditMode &&
+								<React.Fragment>
+									<div className="seprator-dot"></div>
+									<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
+						 		</React.Fragment>
+							}
 					</div>
 				}
 
