@@ -11,6 +11,7 @@ import {
 	initComponents,
 	addNewComponent,
 	updatePosition,
+	resetApp
 } from '../redux/reducers/appDataReducers'
 import {
 	setCurrentElem,
@@ -32,6 +33,7 @@ class PageContainer extends React.Component {
 	}
 
 	componentWillMount() {
+		this.props.resetApp()
 		this.initWindowVar(this.props)
 		this.initApp(this.props)
 		document.addEventListener('mousedown', this.removeFocus)
@@ -393,7 +395,8 @@ const mapDispatchToProps = {
 	initComponents,
 	updatePosition,
 	setCurrentElem,
-	removeCurrentElem
+	removeCurrentElem,
+	resetApp
 }
 
 const TYPE_MAP_COMPONENT = {

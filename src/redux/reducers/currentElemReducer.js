@@ -1,5 +1,6 @@
 export const SET_CURRENT_ELEM = 'SET_CURRENT_ELEM'
 export const REMOVE_CURRENT_ELEM = 'REMOVE_CURRENT_ELEM'
+export const RESET = 'RESET'
 
 const initialState = {
   prevSelectedElemId: null,
@@ -20,6 +21,8 @@ export default (state = initialState, action) => {
       return ({...state, elemId: action.elemId, prevSelectedElemId: state.elemId === action.elemId ? null : state.elemId})
     case REMOVE_CURRENT_ELEM:
       return ({elemId: null, prevSelectedElemId: state.elemId || state.prevSelectedElemId})
+    case RESET:
+      return initialState
     default:
       return state
   }

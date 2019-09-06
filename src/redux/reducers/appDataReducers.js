@@ -9,6 +9,7 @@ export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
 export const INIT_COMPONENTS = 'INIT_COMPONENTS'
 export const UPDATE_POS = 'UPDATE_POS'
+export const RESET = 'RESET'
 
 //Created using CLI
 const CUSTOM_NAMESPACE = '1c57b4cd-4040-463f-9179-84e9ba9b66fa'
@@ -31,6 +32,9 @@ export const addNewComponent = (data) => {
   }
 }
 
+export const resetApp = () => {
+  return({type: RESET})
+}
 export const updatePosition = (data) => {
   return({type: UPDATE_POS, data})
 }
@@ -210,6 +214,8 @@ export default (state = initialState, action) => {
       return updateComponentPos(state, action.data)
     case REMOVE_COMPONENT:
       return removeComponentFromState(state, action.data)
+    case RESET: 
+      return initialState
     default:
       return state
   }
