@@ -17,7 +17,7 @@ import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
 import {setCursorToEnd, toDataURL} from '../utils/helpers'
-const split = require('split-string');
+// const split = require('split-string');
 
 //A higher order component for the generic components to handle there functionalily.
 

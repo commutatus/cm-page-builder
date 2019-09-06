@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.23",
+  "version": "1.2.25",
   "description": "Awesome react starter kit",
   "main": "lib/page/index.js",
   "scripts": {
@@ -76,7 +76,6 @@
     "redux-thunk": "^2.3.0",
     "sanitize-html": "^1.20.1",
     "sortablejs": "^1.10.0-rc3",
-    "split-string": "^6.1.0",
     "style-loader": "^0.23.1",
     "uuid": "^3.3.2"
   }
