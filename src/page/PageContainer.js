@@ -30,6 +30,7 @@ class PageContainer extends React.Component {
 			activeFormatting: []
 		}
 		this.currentListOrder = 1
+		this.shouldReload = true
 	}
 
 	componentWillMount() {
@@ -133,8 +134,8 @@ class PageContainer extends React.Component {
 	}
 
 	handlePageUnload = (e) => {
-		let {elemId} = this.props.currentElem
-		if(elemId){
+		if(this.shouldReload){
+			this.shouldReload = false
 			this.props.removeCurrentElem()
 			let barEl = document.getElementById('bar-text')
 			if(barEl)
@@ -319,6 +320,7 @@ class PageContainer extends React.Component {
 			<div
 				className="cm-page-builder"
 				id="page-builder"
+				style={this.props.newPage ? {marginTop: '50px'} : {}}
 				onMouseUp={isEdit ? this.handleMouseUp : undefined}
 				onSelect={ isEdit ? this.handleSelection : undefined}
 				onKeyDown={isEdit ? this.handleKeyDown : undefined}
