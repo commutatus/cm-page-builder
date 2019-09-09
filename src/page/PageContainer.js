@@ -46,6 +46,9 @@ class PageContainer extends React.Component {
 			this.initWindowVar(newProps)
 			this.initApp(newProps)
 		}
+		if(newProps.currentElem.elemId){
+			this.shouldReload = false
+		}
 	}
 
 
@@ -90,7 +93,7 @@ class PageContainer extends React.Component {
 	}
 	
 	initApp(props){
-		if(!props.newPage && props.meta){
+		if(!props.newPage && props.meta && props.meta.id){
 			if(props.pageComponents.length > 0)
 				this.props.initComponents(props.pageComponents)
 			else
@@ -134,8 +137,8 @@ class PageContainer extends React.Component {
 	}
 
 	handlePageUnload = (e) => {
-		if(this.shouldReload){
-			this.shouldReload = false
+		if(!this.shouldReload){
+			this.shouldReload = true
 			this.props.removeCurrentElem()
 			let barEl = document.getElementById('bar-text')
 			if(barEl)
