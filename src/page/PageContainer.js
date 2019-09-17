@@ -30,7 +30,7 @@ class PageContainer extends React.Component {
 			activeFormatting: []
 		}
 		this.currentListOrder = 1
-		this.shouldReload = true
+		this.shouldReload = props.status === "Read"
 	}
 
 	componentWillMount() {
@@ -81,7 +81,7 @@ class PageContainer extends React.Component {
 
 	componentWillUnmount(){
 		document.removeEventListener('mousedown', this.removeFocus)
-		document.removeEventListener('beforeunload', this.handlePageUnload)
+		window.removeEventListener('beforeunload', this.handlePageUnload)
 	}
 
 
@@ -137,6 +137,7 @@ class PageContainer extends React.Component {
 	}
 
 	handlePageUnload = (e) => {
+		console.log(this.shouldReload)
 		if(!this.shouldReload){
 			this.shouldReload = true
 			this.props.removeCurrentElem()
