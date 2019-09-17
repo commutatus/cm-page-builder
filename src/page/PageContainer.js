@@ -137,7 +137,6 @@ class PageContainer extends React.Component {
 	}
 
 	handlePageUnload = (e) => {
-		console.log(this.shouldReload)
 		if(!this.shouldReload){
 			this.shouldReload = true
 			this.props.removeCurrentElem()
