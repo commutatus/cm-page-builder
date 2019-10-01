@@ -209,7 +209,7 @@ class AddComponent extends React.Component{
   handlePaste = (e) => {
     let clipboardData = e.clipboardData || window.clipboardData
     let pastedData = clipboardData.getData('text/html')
-    if(pastedData){
+    if(pastedData && pastedData.match(/src="(.[^"]+)"/gm)){
       e.preventDefault();
       e.persist();
         let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
