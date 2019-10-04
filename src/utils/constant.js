@@ -6,3 +6,5 @@ export const TEXT_INPUT_COMPONENT = [
   'Ulist',
   'Olist'
 ]
+
+export const S3_BASE_URL = "https://cdn-expa.aiesec.org"

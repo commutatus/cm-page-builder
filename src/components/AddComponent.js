@@ -199,6 +199,16 @@ class AddComponent extends React.Component{
       this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
+  handleMouseEnter = () => {
+    if (this.props.currentElem !== this.props.id) 
+      this.props.setCurrentElem(this.props.id)
+    this.setState({ showHandle: true })
+  }
+
+  handleMouseLeave = () => {
+    this.setState({ showHandle: false })
+  }
+
   handleInlineStyles = (type)=> {
    let styles = {
     margin: (type === 'Header1') ? '32px 0px 4px 0px' : (type==='Header2') ? '16px 0px 4px 0px' : ''
@@ -241,8 +251,8 @@ class AddComponent extends React.Component{
       'onBlur':this.handleBlur,
       'onInput':this.handleInput,
       'onFocus':this.handleFocus,
-      'onMouseEnter':() => this.setState({showHandle: true}),
-      'onMouseLeave':() => this.setState({showHandle: false}),
+      'onMouseEnter': this.handleMouseEnter,
+      'onMouseLeave': this.handleMouseLeave,
     } : {}
     
     return(
@@ -286,9 +296,9 @@ class AddComponent extends React.Component{
             <div data-type="Embed">
               <i className="cm-icon-video" /> 
             </div>
-            {/* <div data-type="Upload" onClick={this.handleTypeSelect}>
+            <div data-type="File">
               <i className="cm-icon-upload" /> 
-            </div> */}
+            </div> 
             <div data-type="Divider">
               <i className="cm-icon-divider" />  
             </div>
@@ -307,4 +317,9 @@ const mapDispatchToProps = {
   removeCurrentElem,
   updateComponent
 }
+
+const mapStateToProps = (state) => { 
+  currentElem: state.currentElem
+}
+
 export default connect(state => state, mapDispatchToProps)(AddComponent)
