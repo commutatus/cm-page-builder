@@ -117,7 +117,6 @@ function updateComponentTypeState(state, data){
 function updateComponentState(state, data){
   let {componentData} = state
   let {newState, id} = data
-  console.log('newstate', newState)
   componentData = componentData.map(component => {
     if(component.id === id){
       return ({...component, ...newState })
