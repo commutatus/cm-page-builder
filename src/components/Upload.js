@@ -124,7 +124,6 @@ class WrappedUpload extends React.Component{
   render() {
     let {component_attachment} = this.props
     const { uploadProgress, fileInfo, uploaded, file, uploading } = this.state
-    console.log('upload progress', uploadProgress)
     let {context} = this
     let isEdit = context.status === 'Edit'
     return(
