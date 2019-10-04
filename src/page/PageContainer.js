@@ -20,6 +20,9 @@ import {
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
+import { type } from 'os';
+import Dropzone from 'react-dropzone'
+
 class PageContainer extends React.Component {
 
 	constructor(props) {
@@ -27,7 +30,7 @@ class PageContainer extends React.Component {
 		this.state = {
 			meta: props.meta,
 			actionDomRect: null,
-			activeFormatting: []
+			activeFormatting: [],
 		}
 		this.currentListOrder = 1
 		this.shouldReload = props.status === "Read"
@@ -163,6 +166,10 @@ class PageContainer extends React.Component {
 		let typeName = data.componentType
 		let dataId = data.id
 		if(typeName){
+			let customProp = (typeName === 'File') ? { file: true } : {}			// Send custom props to Upload component if the component type is File
+			if (typeName === 'Upload' || typeName === 'File')
+				customProp = { ...customProp, progressInfo: this.props.progressInfo }
+			typeName = (typeName === 'File') ? 'Upload' : typeName
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (
 				<AddComponent key={dataId} id={dataId} data={data}>
@@ -170,6 +177,7 @@ class PageContainer extends React.Component {
 						handleUpdate={this.emitUpdate}
 						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
 						useDirectStorageUpload = {this.props.useDirectStorageUpload}
+						{ ...customProp }
 					/>
 				</AddComponent>
 			)
@@ -315,75 +323,111 @@ class PageContainer extends React.Component {
 		}
 	}
 
+	handleFileDrop = (acceptedFiles, rejectedFiles, event) => {
+		const { appData, currentElem } = this.props
+		let id = null
+		let lastPosition = appData.componentData.length
+		let lastElem = appData.componentData[appData.componentData.length-1]
+		id = lastElem && lastElem.id
+		acceptedFiles.forEach(file => {
+			this.props.addNewComponent({ id, componentType: file.type === 'image/jpeg' ? 'Upload' : 'File', content: file })
+		})
+		let pageElem = document.getElementById('page-builder');
+		window.scroll({						//Smooth scroll to bottom of page after file is added
+			top: pageElem.scrollHeight, 
+			left: 0, 
+			behavior: 'smooth' 
+		});
+	}
+
+	// handleFileDragEnter = (event) => {
+	// 	let target = event.target
+	// 	target.setAttribute('id', 'drag-element')
+	// }
+
+	// handleFileDragLeave = (event) => {
+	// 	event.target.removeAttribute('id')
+	// }
+
 	render() {
 		const { meta, actionDomRect, activeFormatting, currentType } = this.state
 		const {appData} = this.props
 		let isEdit = this.props.status === 'Edit'
 		return (
-			<div
-				className="cm-page-builder"
-				id="page-builder"
-				style={this.props.newPage ? {marginTop: '50px'} : {}}
-				onMouseUp={isEdit ? this.handleMouseUp : undefined}
-				onSelect={ isEdit ? this.handleSelection : undefined}
-				onKeyDown={isEdit ? this.handleKeyDown : undefined}
+			<Dropzone 
+				noClick 
+				noKeyboard 
+				// onDragEnter={this.handleFileDragEnter}
+				// onDragLeave={this.handleFileDragLeave}
+				onDrop={this.handleFileDrop}
 			>
-				<Helmet>
-					<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv" />
-				</Helmet>
-
-
-				<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
-					<PageDetails
-						pageComponents={appData.componentData}
-						emitUpdate={this.emitUpdate}
-						meta={meta}
-						getPageComponent={this.getPageComponent}
-						requestHandler={this.props.requestHandler}
-						pageCategories={this.props.pageCategories}
-						currentOffices={this.props.currentOffices}
-						isEditMode={isEdit}
+  				{({getRootProps, getInputProps, isDragActive}) => (
+					<div
+						className="cm-page-builder"
+						style={ isDragActive ? { pointerEvents: 'none' } : {}}
+						id="page-builder"
+						{ ...getRootProps() }
+						style={this.props.newPage ? {marginTop: '50px'} : {}}
 						onMouseUp={isEdit ? this.handleMouseUp : undefined}
-						showTitle = {this.props.showTitle}
-						showEmoji = {this.props.showEmoji}
-						showPageInfo = {this.props.showPageInfo}
-					/>
-				</PermissionContext.Provider>
-				<CSSTransition
-					in={actionDomRect && actionDomRect.top && isEdit && currentType !== "Title of the page"}
-					timeout={400}
-					classNames="dropdown-fade"
-					onEnter={this.showTooltip}
-					onExited={this.hideTooltip}
-					unmountOnExit
-				>
-					<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
-						<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
-						<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
-							<i className="cm-icon-italic" />
-						</div>
-						<div className={  activeFormatting.includes(`strikeThrough`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="strikeThrough">
-							<i className="cm-icon-strikethrough" />
-						</div>
-						<div className={  activeFormatting.includes(`createLink`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="createLink">
-							<i className="cm-icon-link" />
-						</div>
-						{/* <div className="divider"></div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
-							<i className="cm-h1" />
-						</div>
-						<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
-						<i className="cm-h2" />
-						</div>
-						<div className="tool-btn">
-							<i className="cm-bullets" />
-						</div>
-						<div className="tool-btn">
-							<i className="cm-numbers" />
-						</div> */}
+						onSelect={ isEdit ? this.handleSelection : undefined}
+						onKeyDown={isEdit ? this.handleKeyDown : undefined}
+					>
+						<Helmet>
+							<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv" />
+						</Helmet>
+						<PermissionContext.Provider value={{status: this.props.status, emitUpdate: this.emitUpdate}}> 
+							<PageDetails
+								pageComponents={appData.componentData}
+								emitUpdate={this.emitUpdate}
+								meta={meta}
+								getPageComponent={this.getPageComponent}
+								requestHandler={this.props.requestHandler}
+								pageCategories={this.props.pageCategories}
+								currentOffices={this.props.currentOffices}
+								isEditMode={isEdit}
+								onMouseUp={isEdit ? this.handleMouseUp : undefined}
+								showTitle = {this.props.showTitle}
+								showEmoji = {this.props.showEmoji}
+								showPageInfo = {this.props.showPageInfo}
+							/>
+						</PermissionContext.Provider>
+						<CSSTransition
+							in={actionDomRect && actionDomRect.top && isEdit && currentType !== "Title of the page"}
+							timeout={400}
+							classNames="dropdown-fade"
+							onEnter={this.showTooltip}
+							onExited={this.hideTooltip}
+							unmountOnExit
+						>
+							<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
+								<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
+								<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
+									<i className="cm-icon-italic" />
+								</div>
+								<div className={  activeFormatting.includes(`strikeThrough`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="strikeThrough">
+									<i className="cm-icon-strikethrough" />
+								</div>
+								<div className={  activeFormatting.includes(`createLink`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="createLink">
+									<i className="cm-icon-link" />
+								</div>
+								{/* <div className="divider"></div>
+								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
+									<i className="cm-h1" />
+								</div>
+								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
+								<i className="cm-h2" />
+								</div>
+								<div className="tool-btn">
+									<i className="cm-bullets" />
+								</div>
+								<div className="tool-btn">
+									<i className="cm-numbers" />
+								</div> */}
+							</div>
+						</CSSTransition>
 					</div>
-				</CSSTransition>
-			</div>
+				  )}
+			</Dropzone>
 		)
 	}
 }

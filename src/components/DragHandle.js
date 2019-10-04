@@ -31,7 +31,7 @@ class DragHandle extends React.Component{
   optionHandleClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    // this.setState({showMoreOptions: !this.state.showMoreOptions})
+    this.setState({showMoreOptions: !this.state.showMoreOptions})
   }
 
   componentWillUnmount(){

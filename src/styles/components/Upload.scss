@@ -13,7 +13,7 @@
 
 .cm-uploader.read {
   width: 100%;
-  pointer-events: none;
+  //pointer-events: none;
   margin: 8px 0px;
 }
 
@@ -23,5 +23,83 @@
   cursor: pointer;
   &:hover {
     background-color: $gray-bg;
+  }
+
+  .CircularProgressbar {
+    width: 14px;
+    height: 14px;
+    padding-left: 10px;
+    .CircularProgressbar-path {
+      stroke: #037EF3
+    }
+  }
+
+  .file-data-loader {
+    display: flex;
+    padding-top: 4px;
+    .file-data-loader-percent {
+      color: #037EF3;
+      padding-top: -3px;
+      padding-left: 2px;
+      font-size: 12px;
+    }
+  }
+
+  .image-upload {
+    display: flex;
+    .file-data-loader-section {
+      position: relative;
+      .file-data-loader {
+        display: flex;
+        position: absolute;
+        padding-top: 4px;
+        margin-left: 5px;
+        height: 20px;
+        width: 60px;
+        bottom: 0;
+        left: 0;
+        background-color: #1D2129;
+        .CircularProgressbar {
+          width: 14px;
+          height: 14px;
+          .CircularProgressbar-path {
+            stroke: #FFFFFF
+          }
+        }
+        .file-data-loader-percent {
+          color: #FFFFFF;
+          padding-top: -3px;
+          padding-left: 2px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.file-data-section {
+  display: flex;
+  height: 55px;
+  .file-data-information {
+    display: block;
+    padding-left: 5px;
+    .file-data-name {
+      font-size: 16px;
+      color:#1D2129;
+      text-align: left;
+    }
+    .file-data-extension {
+      padding-top: 5px;
+      color: #9EA0A4;      
+      display: flex;  
+    }
+  }
+  .file-data-icon {
+    width: 55px;
+    height: 100%;
+    .file-data-icon-img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
