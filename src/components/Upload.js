@@ -39,12 +39,13 @@ class WrappedUpload extends React.Component{
 
   componentWillReceiveProps = (nextProps) => {
     const { progressInfo } = nextProps
-    if ( progressInfo && progressInfo.progress && progressInfo.progress.operation === `UpdatePageComponentMutation` && progressInfo.progress.percent < 100  && this.state.uploading) {
-      this.setState({ uploadProgress: progressInfo.progress.percent })
-    }
-    else if (this.state.uploadProgress < 100 && progressInfo.progress.percent === 100) {
-      setTimeout(() => { this.setState({ uploadProgress: 100, uploading: false }) }, 2000)
-    }
+    if (progressInfo && nextProps.id === progressInfo.progress.id && progressInfo.progress.operation === `UpdatePageComponentMutation` )
+      if (progressInfo.progress.percent < 100  && this.state.uploading) {
+        this.setState({ uploadProgress: progressInfo.progress.percent })
+      }
+      else if (this.state.uploadProgress < 100 && progressInfo.progress.percent === 100) {
+        setTimeout(() => { this.setState({ uploadProgress: 100, uploading: false }) }, 2000)
+      }
     // else if (this.state.uploading && progressInfo.progress.percent === 100 && this.state.uploadProgress === 1)
     //   this.setState({ uploading: false })
   }
