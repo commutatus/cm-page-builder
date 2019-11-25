@@ -200,8 +200,9 @@ class AddComponent extends React.Component{
   }
 
   handleMouseEnter = () => {
-    if (this.props.currentElem !== this.props.id) 
+    if (this.props.currentElem.elemId === this.props.id){
       this.props.setCurrentElem(this.props.id)
+    }
     this.setState({ showHandle: true })
   }
 
