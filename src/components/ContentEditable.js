@@ -12,7 +12,7 @@ import {
 } from '../redux/reducers/appDataReducers'
 import {setCursorToEnd} from '../utils/helpers'
 import { throws } from 'assert';
-
+import { REGEX_FILTER_TAGS } from '../utils/constant' 
 class ContentEditable extends React.Component{
   
   constructor(props) {
@@ -42,7 +42,11 @@ class ContentEditable extends React.Component{
 
   emitChange = (e) => {
     if (!this.props.componentType && e.target.innerHTML) {
-      this.context.emitUpdate(null, { content: e.target.innerHTML }, 'updateTitle')
+      let content = e.target.innerHTML
+      if(this.props.id === `page-title` && e.target.innerText){
+        content = e.target.innerText.replace(REGEX_FILTER_TAGS, "")
+      }
+      this.context.emitUpdate(null, { content }, 'updateTitle')
     }                   // Block to make changes to title of the page
   }
 
