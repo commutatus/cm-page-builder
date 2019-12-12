@@ -80,7 +80,7 @@ function addComponent(state, data = {}){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      newCom = {content: '', position: position+1, componentType: componentType, id: data.newId}
+      newCom = {content: data.content ? data.content : '', position: position+1, componentType: componentType, id: data.newId}
       temp.push(newCom)
       position += 2
     }
@@ -93,7 +93,9 @@ function addComponent(state, data = {}){
     newCom = {content: '', position: 1, componentType: componentType, id: data.newId}
     temp.unshift(newCom)
   }
-  emitUpdate(newCom, 'add')
+  let tempCom =  { ...newCom }
+  tempCom.content = ""
+  emitUpdate(tempCom, 'add')
   return {componentData: temp}
 }
 

@@ -68,7 +68,7 @@ export const PageDetails = ({
 								<React.Fragment>
 									<div className="seprator-dot"></div>
 									<div className="current-user-detail">
-										<img src={meta.creator.profile_photo} />
+										<img src={meta.creator && meta.creator.profile_photo} />
 										<p className="user-name">{meta.creator.full_name}</p>
 									</div>
 								</React.Fragment>

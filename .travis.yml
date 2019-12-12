@@ -2,14 +2,15 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-- '8'
-before_deploy:
-  npm run build
+  - '8'
+before_deploy: npm run build
+script:
+  - git add . && git commit -m "latest build" && cd server
 deploy:
   provider: npm
-  email: vivsri95@gmail.com
+  email: esurendhar95@gmail.com
   api_key:
-    secure: h1zaam6IStiaKbW7vWoxN/nfHZnUjUP2h0lLwO78gDFKWV1e47ozV+EvSXPwIeLa5g3vcu7RpHoOYfAreeEBDOcE9TZ5HREeE8lMbRGkpVtKkm4A/jOH7MvTS3CDvLF4QsRsFwg1S/bOBHQS9r1EnenL6McI0/HkijnO8NJgieallguZDA3/+QsNKykhLDgNJ0yDbzIfRGKMiKWGaA3vjUB33nKsP8HIDB3+/Lhj3beBb+yY1NGDPbCV7USFanx/Y7HxohCEQ7wONhrX5gsY/DpK7n2gM/CK5gbIv63vW2eBm6I47Y7W6fcTdTX4+SfBwbjHD4hYbfRZoEbEZzxTZ989IVqs+cECMWOiYnpAAs+RiPHN6Cur7pgP7b3B182BviwQVxshPQDDHFEDwPEAgVCT/LfghLRKnsHVu9qfJTdYkkcAYmGIWcKbjExnXjowDFjxrX8xOugqvOm4GsW/YaKuKoYLQcSSDbycmpZ5O55ovkeCvjGA7hROGZ6Tuaf4uGSnxE80b/UX7tlVpo+HzTIs6eqZ4exCKJIb+vhhJT0RYF6fTT+C56OSnOWI0v9qbLIHk+11Z2Obq62H1Y0vA08cDFMRL2oAsy3Du8ikLDCWblpOonZhPkDHmWASdsNcuETCdionNiFGju1SBZhPGwHIpYiqvm4pUA0bDVs2yhU=
+    secure: O/mKITNKjVfdyhFwf2fZBBp6uUHaltmwei8BfzSE9QvQxV0ZyN3evwR/nzE+kIX7oAQZQBDvkptBriXNNuTtbOZmvTAXI1Ni3ZsYpQFa7uRR4DhYhh/S6Qv6PC8n7TcSwrWN+fAAOJejmdrG2peS/CU00xb7DV1ooW3HwYUvEJKUgoxrKT6bFtbKWyDBGQrpStzA2A2TjpN6UTSjqxzRtSgVEdJ7DlWfcllrocOp8Gvqn6f1JAfAtthqUjQUNgfqnpZO7A5QTsLC4gPxcBzMHPX8rTNDSNxm/h/qKA210jEMsVbG7gcfMA4Ve6Gh8Z48oUrmhaEZEanLfZntjeY8SHgXba0QnmpMsbaBEXf4i7fDeBQg2IMGX8p0+uII6JkdcuUF9E9CkvuZiNE4Cpm5oRtgHZj4ZRJltVwr5IfLLg2fM5K6kkramoGEz1EXli4fK1EL41sfioBKSynCwcBAbqBH9Ix7XHKvzhMo+vSlvqJY/h8gG0h9nW24dB9ezteMLQM5cBGJ594QdDFkMEwUG8rF58zD3X/nGV1dvIwecry4I0b/EdFV0PVfp4ZkWAC9bJHG+KxPwTqe59A6B1FgPauDYHfBjZU1ly+WMgVNKAfu2a+LKpB9mESIBdrcWKhc1QvMLDxZt2VHAxPpuBdZF3IWl2YBkavMJAU9TKJoeH8=
   on:
     repo: commutatus/cm-page-builder
-    branch: production
+    branch: master
