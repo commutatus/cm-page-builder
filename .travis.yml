@@ -3,8 +3,8 @@ dist: trusty
 language: node_js
 node_js:
   - '8'
-before_deploy: npm run build
 script:
+  - npm run build
   - git add . && git commit -m "latest build"
 deploy:
   provider: npm
