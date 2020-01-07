@@ -1,17 +1,16 @@
-# sudo: required
-# branches:
-#   only:
-#     - test
-# dist: trusty
-# language: node_js
-# node_js:
-#   - '8'
-# before_deploy: npm run build
-# deploy:
-#   provider: npm
-#   email: esurendhar95@gmail.com
-#   api_key:
-#     secure: O/mKITNKjVfdyhFwf2fZBBp6uUHaltmwei8BfzSE9QvQxV0ZyN3evwR/nzE+kIX7oAQZQBDvkptBriXNNuTtbOZmvTAXI1Ni3ZsYpQFa7uRR4DhYhh/S6Qv6PC8n7TcSwrWN+fAAOJejmdrG2peS/CU00xb7DV1ooW3HwYUvEJKUgoxrKT6bFtbKWyDBGQrpStzA2A2TjpN6UTSjqxzRtSgVEdJ7DlWfcllrocOp8Gvqn6f1JAfAtthqUjQUNgfqnpZO7A5QTsLC4gPxcBzMHPX8rTNDSNxm/h/qKA210jEMsVbG7gcfMA4Ve6Gh8Z48oUrmhaEZEanLfZntjeY8SHgXba0QnmpMsbaBEXf4i7fDeBQg2IMGX8p0+uII6JkdcuUF9E9CkvuZiNE4Cpm5oRtgHZj4ZRJltVwr5IfLLg2fM5K6kkramoGEz1EXli4fK1EL41sfioBKSynCwcBAbqBH9Ix7XHKvzhMo+vSlvqJY/h8gG0h9nW24dB9ezteMLQM5cBGJ594QdDFkMEwUG8rF58zD3X/nGV1dvIwecry4I0b/EdFV0PVfp4ZkWAC9bJHG+KxPwTqe59A6B1FgPauDYHfBjZU1ly+WMgVNKAfu2a+LKpB9mESIBdrcWKhc1QvMLDxZt2VHAxPpuBdZF3IWl2YBkavMJAU9TKJoeH8=
-#   on:
-#     repo: commutatus/cm-page-builder
-#     branch: master
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - '8'
+script:
+  - npm run build
+  - git add . && git commit -m "latest build"
+deploy:
+  provider: npm
+  email: esurendhar95@gmail.com
+  api_key:
+    secure: O/mKITNKjVfdyhFwf2fZBBp6uUHaltmwei8BfzSE9QvQxV0ZyN3evwR/nzE+kIX7oAQZQBDvkptBriXNNuTtbOZmvTAXI1Ni3ZsYpQFa7uRR4DhYhh/S6Qv6PC8n7TcSwrWN+fAAOJejmdrG2peS/CU00xb7DV1ooW3HwYUvEJKUgoxrKT6bFtbKWyDBGQrpStzA2A2TjpN6UTSjqxzRtSgVEdJ7DlWfcllrocOp8Gvqn6f1JAfAtthqUjQUNgfqnpZO7A5QTsLC4gPxcBzMHPX8rTNDSNxm/h/qKA210jEMsVbG7gcfMA4Ve6Gh8Z48oUrmhaEZEanLfZntjeY8SHgXba0QnmpMsbaBEXf4i7fDeBQg2IMGX8p0+uII6JkdcuUF9E9CkvuZiNE4Cpm5oRtgHZj4ZRJltVwr5IfLLg2fM5K6kkramoGEz1EXli4fK1EL41sfioBKSynCwcBAbqBH9Ix7XHKvzhMo+vSlvqJY/h8gG0h9nW24dB9ezteMLQM5cBGJ594QdDFkMEwUG8rF58zD3X/nGV1dvIwecry4I0b/EdFV0PVfp4ZkWAC9bJHG+KxPwTqe59A6B1FgPauDYHfBjZU1ly+WMgVNKAfu2a+LKpB9mESIBdrcWKhc1QvMLDxZt2VHAxPpuBdZF3IWl2YBkavMJAU9TKJoeH8=
+  on:
+    repo: commutatus/cm-page-builder
+    branch: master

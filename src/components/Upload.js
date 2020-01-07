@@ -40,6 +40,7 @@ class WrappedUpload extends React.Component {
 
   componentWillReceiveProps = nextProps => {
     const { progressInfo } = nextProps;
+    console.log('progress info', progressInfo)
     if (
       progressInfo &&
       progressInfo.progress &&
