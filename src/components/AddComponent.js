@@ -8,15 +8,18 @@ import {
   updateComponentType,
   updateComponent,
   removeComponent,
+  bulkComponentCreate,
 } from '../redux/reducers/appDataReducers'
 import {
   setCurrentElem,
   removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
-import { TEXT_INPUT_COMPONENT } from '../utils/constant';
+import { TEXT_INPUT_COMPONENT, TAGS_TO_COMPONENT_MAP, IS_ALLOWED_TAGS } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
-import {setCursorToEnd, toDataURL} from '../utils/helpers'
+import {setCursorToEnd, toDataURL, isAllowedTag} from '../utils/helpers'
+import {parse} from 'node-html-parser'
+import _ from 'lodash'
 // const split = require('split-string');
 
 //A higher order component for the generic components to handle there functionalily.
@@ -217,27 +220,18 @@ class AddComponent extends React.Component{
    return styles
   }
 
+  
   handlePaste = (e) => {
+    e.preventDefault()
     let clipboardData = e.clipboardData || window.clipboardData
-    let pastedData = clipboardData.getData('text/html')
-    if(pastedData && pastedData.match(/src="(.[^"]+)"/gm)){
-      e.preventDefault();
-      e.persist();
-        let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
-        if(content){
-            let filename = 'attachments'
-            let blockId = e.currentTarget.dataset.blockId
-            if(!content.includes('base64')){
-              toDataURL(content, (dataUrl)=> {
-                this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content: dataUrl}}})                   
-              })
-            } else{
-              this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content}}})
-            }
-          }
-      }
+    let parsedData = parse(clipboardData.getData('text/html'))
+    this.props.bulkComponentCreate(parsedData)
+    // this.props.removeCurrentElem()
+
   }
 
+
+ 
   render(){
     let { data } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
@@ -316,7 +310,8 @@ const mapDispatchToProps = {
   removeComponent,
   setCurrentElem,
   removeCurrentElem,
-  updateComponent
+  updateComponent,
+  bulkComponentCreate
 }
 
 const mapStateToProps = (state) => { 
@@ -324,3 +319,26 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(state => state, mapDispatchToProps)(AddComponent)
+
+
+// if(parsedData)
+    //   debugger
+    
+
+    // let pastedData = clipboardData.getData('text/html')
+    // if(pastedData && pastedData.match(/src="(.[^"]+)"/gm)){
+    //   e.preventDefault();
+    //   e.persist();
+    //     let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
+    //     if(content){
+    //         let filename = 'attachments'
+    //         let blockId = e.currentTarget.dataset.blockId
+    //         if(!content.includes('base64')){
+    //           toDataURL(content, (dataUrl)=> {
+    //             this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content: dataUrl}}})                   
+    //           })
+    //         } else{
+    //           this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content}}})
+    //         }
+    //       }
+    //   }

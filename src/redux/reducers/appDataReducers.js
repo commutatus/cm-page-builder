@@ -2,8 +2,11 @@ import uuid from 'uuid/v5'
 import moment from 'moment'
 
 import { SET_CURRENT_ELEM } from './currentElemReducer';
+import { isAllowedTag, getComponentFromTag, isTextTag, isInlineElement, convertObjectToText, isTagAllowedToCreateComponent } from '../../utils/helpers';
+import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
 
 export const ADD_COMPONENT = 'ADD_COMPONENT'
+export const BULK_ADD_COMPONENT = 'BULK_ADD_COMPONENT'
 export const UPDATE_COMPONENT = 'UPDATE_COMPONENT'
 export const UPDATE_COMPONENT_TYPE = 'UPDATE_COMPONENT_TYPE'
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT'
@@ -58,6 +61,76 @@ export const updateComponent = (data) => {
 
 export const updateComponentType = (data) => {
   return ({type: UPDATE_COMPONENT_TYPE, data})
+}
+
+export const bulkComponentCreate = (parsedData) => {
+  return (dispatch, getState) => {
+    // console.log(getState()) 
+    let data = {}, newData = []
+
+    const traverseTree = (root) => {
+      if(root.childNodes.length > 0){
+        root.childNodes.forEach((node, i) => {
+          if(isAllowedTag(node.tagName)){
+            // console.log(node)
+            //Traverse tree untill you find a inline element node.
+            if(node.childNodes.length > 0 && !isInlineElement(node.tagName)){
+              traverseTree(node)
+            }
+            //Convert different elem to there respective component
+            let siblingNode = newData[newData.length - 1]
+
+            //Handle inline component => truncate invalid tags and create text.
+            if(isInlineElement(node.tagName)){
+              let content = convertObjectToText(node)
+              if(siblingNode && siblingNode.componentType === 'Text'){
+                siblingNode.content = `${siblingNode.content}${content}`
+              }else{
+                newData.push({
+                  content,
+                  componentType: getComponentFromTag(node.tagName) || 'Text',
+                  id: createID(),
+                })
+              }
+            }
+            //Handle block component => truncate components which are not supported.
+            else if(isTagAllowedToCreateComponent(node.tagName)){
+              // console.log(root.tagName)
+              newData.push({
+                content: node.rawText,
+                component_attachment: node.tagName === 'img' ? {filename: 'attachements', content: node.attributes.src} : null,
+                componentType: getComponentFromTag(node.tagName, root.tagName),
+                id: createID(),
+              })
+            }
+          }
+        })
+      }
+    }
+    // console.log(parsedData)
+    traverseTree(
+      parsedData, 
+      data,
+    )
+    dispatch({type: BULK_ADD_COMPONENT, data: {newData, focusedElemId: getState().currentElem.elemId}})
+  }
+}
+
+function bulkCreateComponent(state, data){
+  const {componentData} = state
+  let temp = [], indexCount = 0
+  
+  componentData.forEach((component) => {
+    temp.push({...component, position: indexCount})
+    if(component.id === data.focusedElemId){
+      data.newData.forEach((item) => {
+        temp.push({...item, position: indexCount})
+        indexCount++
+      })
+    }
+    indexCount++
+  })
+  return {componentData: temp}
 }
 
 const initialState = {
@@ -206,6 +279,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case INIT_COMPONENTS: 
       return initializeComponentsInState(state, action.data)
+    case BULK_ADD_COMPONENT:
+      return bulkCreateComponent(state, action.data)
     case ADD_COMPONENT:
       return addComponent(state, action.data)
     case UPDATE_COMPONENT_TYPE:
