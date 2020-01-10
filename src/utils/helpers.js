@@ -91,7 +91,10 @@ export const bytesToSize = (bytes) => {
 }
 
 //Check if a tag is allowed. All the tag are includes which are supported or will be converted to supported tags.
-export const isAllowedTag = (tag) => {
+export const isAllowedTag = (tag, parentTag) => {
+  if(parentTag === 'li' && ( tag === 'ul' || tag === 'li')){
+    return false
+  }
   return IS_ALLOWED_TAGS.includes(tag) || isHeaderTag(tag)
 }
 
@@ -135,13 +138,12 @@ export const getComponentFromTag = (tag, parentTag) => {
 
 // It takes dom object and converts it to a text.
 export const convertObjectToText = (root) => {
-  console.log(root)
   if(root.constructor.name === 'TextNode'){
     return root.rawText
   }else if(!root){
     return ''
   }
-  return `<${root.tagName} ${root.tagName === 'a' ? `src=${root.attributes.href}` : ''}>${root.childNodes.map(node => convertObjectToText(node)).join('')}</${root.tagName}>`
+  return `<${root.tagName} ${root.tagName === 'a' ? `href="${root.attributes.href}"` : ''}>${root.childNodes.map(node => convertObjectToText(node)).join('')}</${root.tagName}>`
 }
 
 export const shouldUseParentTag = (tag) => {

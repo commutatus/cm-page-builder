@@ -71,7 +71,7 @@ export const bulkComponentCreate = (parsedData) => {
     const traverseTree = (root) => {
       if(root.childNodes.length > 0){
         root.childNodes.forEach((node, i) => {
-          if(isAllowedTag(node.tagName)){
+          if(isAllowedTag(node.tagName, root.tagName)){
             // console.log(node)
             //Traverse tree untill you find a inline element node.
             if(node.childNodes.length > 0 && !isInlineElement(node.tagName)){
@@ -97,7 +97,7 @@ export const bulkComponentCreate = (parsedData) => {
             else if(isTagAllowedToCreateComponent(node.tagName)){
               // console.log(root.tagName)
               newData.push({
-                content: node.rawText,
+                content: node.tagName === 'li' ? node.childNodes[0].rawText : node.rawText,
                 component_attachment: node.tagName === 'img' ? {filename: 'attachements', content: node.attributes.src} : null,
                 componentType: getComponentFromTag(node.tagName, root.tagName),
                 id: createID(),
