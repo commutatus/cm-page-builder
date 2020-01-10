@@ -92,7 +92,7 @@ export const bytesToSize = (bytes) => {
 
 //Check if a tag is allowed. All the tag are includes which are supported or will be converted to supported tags.
 export const isAllowedTag = (tag, parentTag) => {
-  if(parentTag === 'li' && ( tag === 'ul' || tag === 'li')){
+  if(parentTag === 'li' && ( tag === 'ul' || tag === 'li' || tag === 'ol')){
     return false
   }
   return IS_ALLOWED_TAGS.includes(tag) || isHeaderTag(tag)
