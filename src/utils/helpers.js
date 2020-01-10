@@ -117,7 +117,7 @@ export const isTextTag = (tag) => {
 
 // Check if a element is a inline element or not. Cannot be used to check if element is block or not.
 export const isInlineElement = (tag) => {
-  return IS_INLINE_COMPONENT.includes(tag) || isHeaderTag(tag)
+  return IS_INLINE_COMPONENT.includes(tag)
 }
 
 //Accepts tag and parent tag and return respective components.
@@ -152,5 +152,5 @@ export const shouldUseParentTag = (tag) => {
 
 //Block elements that are allowed to create a component
 export const isTagAllowedToCreateComponent = (tag) => {
-  return ['li', 'img', 'hr'].includes(tag)
+  return ['li', 'img', 'hr'].includes(tag) || isHeaderTag(tag)
 }

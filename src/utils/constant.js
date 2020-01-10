@@ -29,9 +29,9 @@ export const TAGS_TO_COMPONENT_MAP = {
   ul: 'Ulist',
   embed: 'Embed',
   img: 'Upload',
-  h2: 'Header1',
+  h1: 'Header1',
   h2: 'Header2',
-  hr: 'Divider'
+  hr: 'Divider',
 }
 
 export const IS_ALLOWED_TAGS = [
@@ -56,7 +56,7 @@ export const IS_ALLOWED_TAGS = [
   'i',
   'em',
   'small',
-  'strong'
+  'strong',
 ]
 
 export const IS_INLINE_COMPONENT = [
