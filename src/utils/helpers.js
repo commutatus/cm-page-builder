@@ -135,12 +135,13 @@ export const getComponentFromTag = (tag, parentTag) => {
 
 // It takes dom object and converts it to a text.
 export const convertObjectToText = (root) => {
+  console.log(root)
   if(root.constructor.name === 'TextNode'){
     return root.rawText
   }else if(!root){
     return ''
   }
-  return `<${root.tagName} ${root.tagName === 'a' ? `src=${root.attributes.href}` : ''}>${root.childNodes.map(node => convertObjectToText(node))}</${root.tagName}>`
+  return `<${root.tagName} ${root.tagName === 'a' ? `src=${root.attributes.href}` : ''}>${root.childNodes.map(node => convertObjectToText(node)).join('')}</${root.tagName}>`
 }
 
 export const shouldUseParentTag = (tag) => {
