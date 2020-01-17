@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
 import '../styles/components/AddComponent.css'
 import { connect } from 'react-redux';
@@ -14,10 +14,10 @@ import {
   setCurrentElem,
   removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
-import { TEXT_INPUT_COMPONENT, TAGS_TO_COMPONENT_MAP, IS_ALLOWED_TAGS } from '../utils/constant';
+import { TEXT_INPUT_COMPONENT } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
-import {setCursorToEnd, toDataURL, isAllowedTag} from '../utils/helpers'
+import {setCursorToEnd} from '../utils/helpers'
 import {parse} from 'node-html-parser'
 import _ from 'lodash'
 // const split = require('split-string');
