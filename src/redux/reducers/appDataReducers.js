@@ -71,7 +71,7 @@ export const updateComponentType = (data) => {
   return ({type: UPDATE_COMPONENT_TYPE, data})
 }
 
-export const bulkComponentCreate = (parsedData) => {
+export const bulkCreate = (parsedData) => {
   return (dispatch, getState) => {
     // console.log(getState()) 
     let data = {}, newData = []
@@ -121,8 +121,7 @@ export const bulkComponentCreate = (parsedData) => {
     }
     // console.log(parsedData)
     traverseTree(
-      parsedData, 
-      data,
+      parsedData
     )
     dispatch({type: BULK_ADD_COMPONENT, data: {newData, focusedElemId: getState().currentElem.elemId}})
   }

@@ -34,7 +34,7 @@ export const TAGS_TO_COMPONENT_MAP = {
   hr: 'Divider',
 }
 
-export const IS_ALLOWED_TAGS = [
+export const ALLOWED_TAGS = [
   "h1",
   "h2",
   "ol",

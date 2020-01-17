@@ -1,4 +1,4 @@
-import { IS_ALLOWED_TAGS, TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from "./constant"
+import { ALLOWED_TAGS, TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from "./constant"
 
 //Vimeo and youtube validator
 export const getVideoUrl = (url) => {
@@ -95,7 +95,7 @@ export const isAllowedTag = (tag, parentTag) => {
   if(parentTag === 'li' && ( tag === 'ul' || tag === 'li' || tag === 'ol')){
     return false
   }
-  return IS_ALLOWED_TAGS.includes(tag) || isHeaderTag(tag)
+  return ALLOWED_TAGS.includes(tag) || isHeaderTag(tag)
 }
 
 export const isHeaderTag = (tag) => {

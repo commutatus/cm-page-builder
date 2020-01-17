@@ -8,7 +8,7 @@ import {
   updateComponentType,
   updateComponent,
   removeComponent,
-  bulkComponentCreate,
+  bulkCreate,
 } from '../redux/reducers/appDataReducers'
 import {
   setCurrentElem,
@@ -225,7 +225,7 @@ class AddComponent extends React.Component{
     e.preventDefault()
     let clipboardData = e.clipboardData || window.clipboardData
     let parsedData = parse(clipboardData.getData('text/html'))
-    this.props.bulkComponentCreate(parsedData)
+    this.props.bulkCreate(parsedData)
     // this.props.removeCurrentElem()
 
   }
@@ -311,7 +311,7 @@ const mapDispatchToProps = {
   setCurrentElem,
   removeCurrentElem,
   updateComponent,
-  bulkComponentCreate
+  bulkCreate
 }
 
 const mapStateToProps = (state) => { 
