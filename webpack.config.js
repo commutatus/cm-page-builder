@@ -27,7 +27,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: ['node_modules'],
         use: {
           loader: "babel-loader",
           query: {
@@ -38,10 +38,6 @@ module.exports = {
       {
         test: /\.(png|woff|woff2|eot|ttf|ico)$/,
         loader: 'url-loader?limit=100000'
-      },
-      {
-        test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
       },
       {
         test: /\.svg$/,
