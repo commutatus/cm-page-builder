@@ -2,8 +2,16 @@ import uuid from 'uuid/v5'
 import moment from 'moment'
 
 import { SET_CURRENT_ELEM } from './currentElemReducer';
-import { isAllowedTag, getComponentFromTag, isTextTag, isInlineElement, convertObjectToText, isTagAllowedToCreateComponent } from '../../utils/helpers';
-import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
+import { 
+  isAllowedTag, 
+  getComponentFromTag, 
+  // isTextTag, 
+  isInlineElement, 
+  convertObjectToText, 
+  isTagAllowedToCreateComponent, 
+  toDataURL 
+} from '../../utils/helpers';
+// import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
 
 export const ADD_COMPONENT = 'ADD_COMPONENT'
 export const BULK_ADD_COMPONENT = 'BULK_ADD_COMPONENT'
@@ -96,11 +104,15 @@ export const bulkComponentCreate = (parsedData) => {
             //Handle block component => truncate components which are not supported.
             else if(isTagAllowedToCreateComponent(node.tagName)){
               // console.log(root.tagName)
+              const ID = createID()
+              const getImage = (src, id) => {
+                return !src.includes('base64') ? downloadAndCreateComponent(src, id, dispatch) : {filename: 'attachements', content: src}
+              }
               newData.push({
                 content: node.tagName === 'li' ? node.childNodes[0].rawText : node.rawText,
-                component_attachment: node.tagName === 'img' ? {filename: 'attachements', content: node.attributes.src} : null,
+                component_attachment: node.tagName === 'img' ? getImage(node.attributes.src, ID) : null,
                 componentType: getComponentFromTag(node.tagName, root.tagName),
-                id: createID(),
+                id: ID,
               })
             }
           }
@@ -116,19 +128,29 @@ export const bulkComponentCreate = (parsedData) => {
   }
 }
 
+function downloadAndCreateComponent(src, id, dispatch){
+  toDataURL(src, (dataUrl, id, dispatch)=> {
+    dispatch({type: UPDATE_COMPONENT, data: {id, newState: {component_attachment: {filename: 'attachements', content: dataUrl }}}})
+  })
+  return null
+}
+
 function bulkCreateComponent(state, data){
   const {componentData} = state
-  let temp = [], indexCount = 0
+  let temp = [], indexCount = 1
   
   componentData.forEach((component) => {
     temp.push({...component, position: indexCount})
+    indexCount++
     if(component.id === data.focusedElemId){
       data.newData.forEach((item) => {
-        temp.push({...item, position: indexCount})
+        let newData = {...item, position: indexCount}
+        temp.push(newData)
+        emitUpdate(newData, 'add')
         indexCount++
       })
     }
-    indexCount++
+    
   })
   return {componentData: temp}
 }
@@ -248,7 +270,8 @@ function emitUpdate(data, type){
           content: data.content, 
           position: data.position, 
           component_type: data.componentType, 
-          client_reference_id: data.id
+          client_reference_id: data.id,
+          component_attachment: data.component_attachment
         }, 
         'createComponent'
       )
@@ -271,6 +294,8 @@ function emitUpdate(data, type){
           null,
           'deleteComponent'
         )
+      default:
+        console.error('invalid mutation type.')
 
   }
 }
@@ -297,3 +322,4 @@ export default (state = initialState, action) => {
       return state
   }
 }
+

@@ -111,7 +111,8 @@ export const isTextTag = (tag) => {
     'i',
     'em',
     'small',
-    'strong'
+    'strong',
+    'strike'
   ].includes(tag) || isHeaderTag(tag)
 }
 
@@ -143,7 +144,7 @@ export const convertObjectToText = (root) => {
   }else if(!root){
     return ''
   }
-  return `<${root.tagName} ${root.tagName === 'a' ? `href="${root.attributes.href}"` : ''}>${root.childNodes.map(node => convertObjectToText(node)).join('')}</${root.tagName}>`
+  return `<${root.tagName}${root.tagName === 'a' ? ` href="${root.attributes.href}"` : ''}>${root.childNodes.map(node => convertObjectToText(node)).join('')}</${root.tagName}>`
 }
 
 export const shouldUseParentTag = (tag) => {

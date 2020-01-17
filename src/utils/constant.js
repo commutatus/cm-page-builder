@@ -57,6 +57,7 @@ export const IS_ALLOWED_TAGS = [
   'em',
   'small',
   'strong',
+  'strike'
 ]
 
 export const IS_INLINE_COMPONENT = [
@@ -68,5 +69,6 @@ export const IS_INLINE_COMPONENT = [
   'small',
   'strong',
   'p',
-  'a'
+  'a',
+  'strike'
 ]
