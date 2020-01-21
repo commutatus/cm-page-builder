@@ -44,7 +44,15 @@
       font-size: 12px;
     }
   }
-
+  .external-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .blur-image-loader{
+      position: absolute;
+    }
+  }
   .image-upload {
     display: flex;
     .file-data-loader-section {
