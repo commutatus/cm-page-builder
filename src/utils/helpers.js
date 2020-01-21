@@ -1,4 +1,12 @@
-import { ALLOWED_TAGS, TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from "./constant"
+import { 
+  ALLOWED_TAGS, 
+  TAGS_TO_COMPONENT_MAP, 
+  INLINE_COMPONENT, 
+  COMPONENT_ALLOWED_TO_CREATE_COMPONENT,
+  TEXT_TAGS,
+  HEADER_TAGS,
+  PARENT_CHILD_TAGS
+} from "./constant"
 
 //Vimeo and youtube validator
 export const getVideoUrl = (url) => {
@@ -99,26 +107,16 @@ export const isAllowedTag = (tag, parentTag) => {
 }
 
 export const isHeaderTag = (tag) => {
-  return ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']. includes(tag)
+  return HEADER_TAGS.includes(tag)
 }
 
 export const isTextTag = (tag) => {
-  return [
-    'p',
-    'span',
-    'strong',
-    'b',
-    'i',
-    'em',
-    'small',
-    'strong',
-    'strike'
-  ].includes(tag) || isHeaderTag(tag)
+  return TEXT_TAGS.includes(tag) || isHeaderTag(tag)
 }
 
 // Check if a element is a inline element or not. Cannot be used to check if element is block or not.
 export const isInlineElement = (tag) => {
-  return IS_INLINE_COMPONENT.includes(tag)
+  return INLINE_COMPONENT.includes(tag)
 }
 
 //Accepts tag and parent tag and return respective components.
@@ -148,10 +146,10 @@ export const convertObjectToText = (root) => {
 }
 
 export const shouldUseParentTag = (tag) => {
-  return ['li'].includes(tag)
+  return PARENT_CHILD_TAGS.includes(tag)
 }
 
 //Block elements that are allowed to create a component
 export const isTagAllowedToCreateComponent = (tag) => {
-  return ['li', 'img', 'hr'].includes(tag) || isHeaderTag(tag)
+  return COMPONENT_ALLOWED_TO_CREATE_COMPONENT.includes(tag) || isHeaderTag(tag)
 }

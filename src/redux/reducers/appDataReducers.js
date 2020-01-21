@@ -119,7 +119,7 @@ export const bulkCreate = (parsedData) => {
         })
       }
     }
-    // console.log(parsedData)
+    console.log(parsedData)
     traverseTree(
       parsedData
     )

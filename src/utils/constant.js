@@ -27,7 +27,6 @@ export const REGEX_FILTER_TAGS = /(<([^>]+)>)/ig
 export const TAGS_TO_COMPONENT_MAP = {
   ol: 'Olist',
   ul: 'Ulist',
-  embed: 'Embed',
   img: 'Upload',
   h1: 'Header1',
   h2: 'Header2',
@@ -41,13 +40,10 @@ export const ALLOWED_TAGS = [
   "ul",
   "div",
   "a",
-  "embed",
-  "a",
   "img",
   "br",
   "p",
   "span",
-  "strong",
   "li",
   'hr',
   'span',
@@ -60,7 +56,7 @@ export const ALLOWED_TAGS = [
   'strike'
 ]
 
-export const IS_INLINE_COMPONENT = [
+export const INLINE_COMPONENT = [
   'span',
   'strong',
   'b',
@@ -70,5 +66,27 @@ export const IS_INLINE_COMPONENT = [
   'strong',
   'p',
   'a',
-  'strike'
+  'strike',
+  'div'
 ]
+
+export const COMPONENT_ALLOWED_TO_CREATE_COMPONENT = ['li', 'img', 'hr', 'br']
+
+export const TEXT_TAGS = [
+  'p',
+  'span',
+  'strong',
+  'b',
+  'i',
+  'em',
+  'small',
+  'strong',
+  'strike',
+  'div',
+  'a',
+  'br'
+]
+
+export const HEADER_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+
+export const PARENT_CHILD_TAGS = ['li']
