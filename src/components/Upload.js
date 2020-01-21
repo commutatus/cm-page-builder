@@ -209,7 +209,7 @@ class WrappedUpload extends React.Component {
           <div className="image-upload">
               {
                 //check for external image url & blur until saved on API
-                ((component_attachment.url && (component_attachment.url).includes('https://api-staging.aiesec.org')) || component_attachment.content) ?
+                ((component_attachment.url && (component_attachment.url).includes(process.env.ASSET_API_BASE_URL)) || component_attachment.content) ?
                   <img
                     src={component_attachment.url || component_attachment.content}
                     width="100%"
