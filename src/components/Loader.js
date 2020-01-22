@@ -4,7 +4,7 @@ import LoaderSVG from '../../src/assets/fonts/loader.svg';
 export class Loader extends Component {
     render() {
         return (
-            <LoaderSVG width={40} height={40}/>
+            <img src={LoaderSVG}/>
         )
     }
 }
