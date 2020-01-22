@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.47",
+  "version": "1.2.48",
   "description": "Page builder package like notion",
   "main": "lib/page/index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "dev": "npm-run-all -p watch-css start-dev-server",
     "local": "npm-run-all -p build-watch-css watch-babel",
     "build-babel": "babel src --out-dir lib",
-    "build": "npm-run-all clean build-css build-babel",
+    "build-assets": "cp -r src/assets lib",
+    "build": "npm-run-all clean build-css build-babel build-assets",
     "clean": "rimraf lib",
     "build-css": "node-sass-chokidar src/styles -o lib/styles",
     "build-watch-css": "node-sass-chokidar src/styles -o lib/styles --watch --recursive",
