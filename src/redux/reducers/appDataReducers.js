@@ -105,12 +105,12 @@ export const bulkCreate = (parsedData) => {
             else if(isTagAllowedToCreateComponent(node.tagName)){
               // console.log(root.tagName)
               const ID = createID()
-              const getImage = (src, id) => {
-                return !src.includes('base64') ? downloadAndCreateComponent(src, id, dispatch) : {filename: 'attachements', content: src}
+              const getImage = (src) => {
+                return !src.includes('base64') ? {filename: 'attachements', url: src} : {filename: 'attachements', content: src}
               }
               newData.push({
                 content: node.tagName === 'li' ? node.childNodes[0].rawText : node.rawText,
-                component_attachment: node.tagName === 'img' ? getImage(node.attributes.src, ID) : null,
+                component_attachment: node.tagName === 'img' ? getImage(node.attributes.src) : null,
                 componentType: getComponentFromTag(node.tagName, root.tagName),
                 id: ID,
               })
@@ -127,12 +127,6 @@ export const bulkCreate = (parsedData) => {
   }
 }
 
-function downloadAndCreateComponent(src, id, dispatch){
-  toDataURL(src, (dataUrl, id, dispatch)=> {
-    dispatch({type: UPDATE_COMPONENT, data: {id, newState: {component_attachment: {filename: 'attachements', content: dataUrl }}}})
-  })
-  return null
-}
 
 function bulkCreateComponent(state, data){
   const {componentData} = state
