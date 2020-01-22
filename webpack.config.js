@@ -20,14 +20,15 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    contentBase: './dist'
+    contentBase: './dist',
+    host: '0.0.0.0'
   },
   devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_module/,
         use: {
           loader: "babel-loader",
           query: {
@@ -38,10 +39,6 @@ module.exports = {
       {
         test: /\.(png|woff|woff2|eot|ttf|ico)$/,
         loader: 'url-loader?limit=100000'
-      },
-      {
-        test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
       },
       {
         test: /\.svg$/,

@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.45",
+  "version": "1.2.47",
   "description": "Page builder package like notion",
   "main": "lib/page/index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "build-css": "node-sass-chokidar src/styles -o lib/styles",
     "build-watch-css": "node-sass-chokidar src/styles -o lib/styles --watch --recursive",
     "watch-css": "node-sass-chokidar src/styles -o src/styles --watch --recursive",
-    "watch-babel": "babel src --out-dir lib --watch --recursive"
+    "watch-babel": "babel src --out-dir lib --watch --recursive",
+    "test": "jest --env=node"
   },
   "watch": {
     "build": "src/",
@@ -67,12 +68,17 @@
     "is-accessor-descriptor": "^3.0.1",
     "is-data-descriptor": "^2.0.0",
     "moment": "^2.24.0",
+    "node-html-parser": "^1.1.16",
     "prop-types": "^15.7.2",
+    "react": "^16.12.0",
     "react-circular-progressbar": "^2.0.2",
+    "react-dom": "^16.12.0",
     "react-dropzone": "^10.1.9",
     "react-helmet": "^5.2.1",
     "react-redux": "^7.1.0",
-    "react-transition-group": "^4.0.1",
+    "react-router-dom": "^5.1.2",
+    "react-svg-loader": "^3.0.3",
+    "react-transition-group": "^4.3.0",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
@@ -80,5 +86,11 @@
     "sortablejs": "^1.10.0-rc3",
     "style-loader": "^0.23.1",
     "uuid": "^3.3.2"
+  },
+  "jest": {
+    "verbose": true,
+    "globals": {
+      "window": {}
+    }
   }
 }
