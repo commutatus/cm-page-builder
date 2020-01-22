@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import LoaderSVG from '../../src/assets/fonts/loader.svg';
+import LoaderSVG from '../assets/fonts/loader.svg';
 
 export class Loader extends Component {
     render() {
