@@ -10,7 +10,7 @@ import { CircularProgressbar } from 'react-circular-progressbar'; // Package for
 import 'react-circular-progressbar/dist/styles.css';
 import { bytesToSize } from '../utils/helpers'; // Stylesheet for progress bar
 import { S3_BASE_URL } from '../utils/constant';
-import loader from '../../src/assets/fonts/loader.svg';
+import Loader from './Loader';
 //const acceptedExtensions = [ 'pdf', 'xls', 'docx', 'doc', 'csv', 'zip' ]
 
 class WrappedUpload extends React.Component {
@@ -223,7 +223,7 @@ class WrappedUpload extends React.Component {
                         style={externalImageResponse ? {} : { filter: 'blur(5px)' }}
                         alt={component_attachment.filename}
                       />
-                      {!externalImageResponse && <img className='blur-image-loader' src={loader}/>}
+                      {!externalImageResponse && <div className='blur-image-loader'><Loader/></div>}
                   </div>
               }
               <div className="file-data-loader-section">
