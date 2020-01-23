@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.50",
+  "version": "1.2.51",
   "description": "Page builder package like notion",
   "main": "lib/page/index.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "build-css": "node-sass-chokidar src/styles -o lib/styles",
     "build-watch-css": "node-sass-chokidar src/styles -o lib/styles --watch --recursive",
     "watch-css": "node-sass-chokidar src/styles -o src/styles --watch --recursive",
-    "watch-babel": "babel src --out-dir lib --watch --recursive"
+    "watch-babel": "babel src --out-dir lib --watch --recursive",
+    "test": "jest --env=node"
   },
   "watch": {
     "build": "src/",
@@ -86,5 +87,11 @@
     "sortablejs": "^1.10.0-rc3",
     "style-loader": "^0.23.1",
     "uuid": "^3.3.2"
+  },
+  "jest": {
+    "verbose": true,
+    "globals": {
+      "window": {}
+    }
   }
 }
