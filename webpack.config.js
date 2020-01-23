@@ -41,10 +41,6 @@ module.exports = {
         loader: 'url-loader?limit=100000'
       },
       {
-        test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
-      },
-      {
         test: /\.svg$/,
         use: [
           {
