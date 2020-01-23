@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import '../styles/components/Upload.css';
 import withComponent from './withComponent';
 import { PermissionContext } from '../contexts/permission-context';
