@@ -77,7 +77,6 @@
     "react-dropzone": "^10.1.9",
     "react-helmet": "^5.2.1",
     "react-redux": "^7.1.0",
-    "react-router-dom": "^5.1.2",
     "react-svg-loader": "^3.0.3",
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.1",
