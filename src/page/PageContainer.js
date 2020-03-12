@@ -168,7 +168,7 @@ class PageContainer extends React.Component {
 		if(typeName){
 			let customProp = (typeName === 'File') ? { file: true } : {}			// Send custom props to Upload component if the component type is File
 			if (typeName === 'Upload' || typeName === 'File')
-				customProp = { ...customProp, progressInfo: this.props.progressInfo }
+				customProp = { ...customProp, progressInfo: this.props.progressInfo, externalImageResponse: this.props.externalImageResponse, assetBaseUrl: this.props.assetBaseUrl }
 			typeName = (typeName === 'File') ? 'Upload' : typeName
 			let Component = require(`../components/${typeName}`)[typeName]
 			return (

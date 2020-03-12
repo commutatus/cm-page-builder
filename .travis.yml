@@ -5,6 +5,7 @@ node_js:
   - '8'
 script:
   - npm run build
+  - sed -i '15d' .gitignore
   - git add . && git commit -m "latest build"
 deploy:
   provider: npm
