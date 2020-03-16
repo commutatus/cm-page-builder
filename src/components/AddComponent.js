@@ -222,9 +222,12 @@ class AddComponent extends React.Component{
 
   
   handlePaste = (e) => {
+    console.log('handlePaste',e)
     e.preventDefault()
     let clipboardData = e.clipboardData || window.clipboardData
+    console.log('handlePaste-clipboardData',clipboardData)
     let parsedData = parse(clipboardData.getData('text/html'))
+    console.log('handlePaste-parsedData',parsedData)
     this.props.bulkCreate(parsedData)
     // this.props.removeCurrentElem()
 
