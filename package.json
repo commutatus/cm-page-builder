@@ -1,6 +1,6 @@
 {
   "name": "cm-page-builder",
-  "version": "1.2.54",
+  "version": "1.2.55",
   "description": "Page builder package like notion",
   "main": "lib/page/index.js",
   "scripts": {
