@@ -139,7 +139,7 @@ export const getComponentFromTag = (tag, parentTag) => {
 
 // It takes dom object and converts it to a text.
 export const convertObjectToText = (root) => {
-  if(root.constructor.name === 'TextNode'){
+  if(root.constructor.name === 'TextNode' || root.nodeType === 3){
     return root.rawText
   }else if(!root){
     return ''
