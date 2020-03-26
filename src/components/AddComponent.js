@@ -187,6 +187,7 @@ class AddComponent extends React.Component{
         prevElemPos = +i
       }
     }
+    //Put caret at end if nav b/w component.
     if(currElemPos < prevElemPos)
       setCursorToEnd(e)
   }
@@ -222,10 +223,16 @@ class AddComponent extends React.Component{
 
   
   handlePaste = (e) => {
-    e.preventDefault()
     let clipboardData = e.clipboardData || window.clipboardData
-    let parsedData = parse(clipboardData.getData('text/html'))
-    this.props.bulkCreate(parsedData)
+    let plainText = clipboardData.getData('text/plain')
+    let {componentData} = this.props.appData
+    
+    if(clipboardData.getData('text/html') || (plainText && componentData.find(item => item.id === this.props.id).content === '')){
+      e.preventDefault()
+      let dataToBeParsed = clipboardData.getData('text/html') || `<p>${plainText}</p>`
+      let parsedData = parse(dataToBeParsed)
+      this.props.bulkCreate(parsedData)
+    }
     // this.props.removeCurrentElem()
 
   }
@@ -319,26 +326,3 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(state => state, mapDispatchToProps)(AddComponent)
-
-
-// if(parsedData)
-    //   debugger
-    
-
-    // let pastedData = clipboardData.getData('text/html')
-    // if(pastedData && pastedData.match(/src="(.[^"]+)"/gm)){
-    //   e.preventDefault();
-    //   e.persist();
-    //     let content = pastedData.match(/src="(.[^"]+)"/gm)[0].split("\"")[1]
-    //     if(content){
-    //         let filename = 'attachments'
-    //         let blockId = e.currentTarget.dataset.blockId
-    //         if(!content.includes('base64')){
-    //           toDataURL(content, (dataUrl)=> {
-    //             this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content: dataUrl}}})                   
-    //           })
-    //         } else{
-    //           this.props.updateComponent({id: blockId, newState: {componentType: 'Upload',component_attachment: {filename, content}}})
-    //         }
-    //       }
-    //   }
