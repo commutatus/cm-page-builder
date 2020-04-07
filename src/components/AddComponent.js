@@ -227,14 +227,13 @@ class AddComponent extends React.Component{
     let plainText = clipboardData.getData('text/plain')
     let {componentData} = this.props.appData
     
-    if(clipboardData.getData('text/html') || (plainText && componentData.find(item => item.id === this.props.id).content === '')){
-      e.preventDefault()
+    if(clipboardData.getData('text/html') || plainText){
       let dataToBeParsed = clipboardData.getData('text/html') || `<p>${plainText}</p>`
       let parsedData = parse(dataToBeParsed)
       if(parsedData.childNodes && parsedData.childNodes.length > 0 && parsedData.childNodes[0].tagName === 'html'){
         parsedData = parsedData.childNodes[0].childNodes[1]
       }
-      this.props.bulkCreate(parsedData)
+      this.props.bulkCreate(parsedData, e)
     }
     // this.props.removeCurrentElem()
 

@@ -9,6 +9,9 @@
   @include text-wrapping;
   @include editable-style; 
   font-family: 'Open Sans', sans-serif !important; 
+  p{
+    margin: 0px;
+  }
   // background-color: transparent;
   // transition: background-color .3s linear;
   // &:hover {

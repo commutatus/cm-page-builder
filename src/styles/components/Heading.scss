@@ -6,6 +6,9 @@
   @include editable-style;
   @include text-wrapping;
   line-height: 34px;
+  strong{
+    font-weight: inherit !important;
+  }
 }
 
 .cm-header1.read {
@@ -20,6 +23,9 @@
   @include editable-style;
   @include text-wrapping;
   line-height: 28px;
+  strong{
+    font-weight: inherit !important;
+  } 
 }
 
 .cm-header2.read {

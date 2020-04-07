@@ -71,16 +71,15 @@ export const updateComponentType = (data) => {
   return ({type: UPDATE_COMPONENT_TYPE, data})
 }
 
-export const bulkCreate = (parsedData) => {
+export const bulkCreate = (parsedData, e) => {
   return (dispatch, getState) => {
-    // console.log(getState()) 
     let data = {}, newData = []
 
     const traverseTree = (root) => {
       if(root.childNodes.length > 0){
         root.childNodes.forEach((node, i) => {
           if(isAllowedTag(node.tagName, root.tagName)){
-            // console.log(node)
+
             //Traverse tree untill you find a inline element node.
             if(node.childNodes.length > 0 && !isInlineElement(node.tagName)){
               traverseTree(node)
@@ -101,9 +100,9 @@ export const bulkCreate = (parsedData) => {
                 })
               }
             }
+            
             //Handle block component => truncate components which are not supported.
             else if(isTagAllowedToCreateComponent(node.tagName)){
-              // console.log(root.tagName)
               const ID = createID()
               const getImage = (src) => {
                 return !src.includes('base64') ? {filename: 'attachements', url: src} : {filename: 'attachements', content: src}
@@ -119,11 +118,13 @@ export const bulkCreate = (parsedData) => {
         })
       }
     }
-    // console.log(parsedData)
-    traverseTree(
-      parsedData
-    )
-    dispatch({type: BULK_ADD_COMPONENT, data: {newData, focusedElemId: getState().currentElem.elemId}})
+
+    traverseTree(parsedData)
+
+    if(newData.length > 1 && (newData[0].componentType !== 'Text' || newData[0].componentType !== 'Header1' || newData[0].componentType !== 'Header2')){
+      e.preventDefault()
+      dispatch({type: BULK_ADD_COMPONENT, data: {newData, focusedElemId: getState().currentElem.elemId}})
+    }
   }
 }
 
