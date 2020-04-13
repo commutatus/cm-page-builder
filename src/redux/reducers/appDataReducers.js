@@ -11,6 +11,7 @@ import {
   isTagAllowedToCreateComponent, 
   toDataURL 
 } from '../../utils/helpers';
+import { TEXT_COMPONENT } from '../../utils/constant';
 // import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
 
 export const ADD_COMPONENT = 'ADD_COMPONENT'
@@ -120,8 +121,7 @@ export const bulkCreate = (parsedData, e) => {
     }
 
     traverseTree(parsedData)
-
-    if(newData.length > 1 && (newData[0].componentType !== 'Text' || newData[0].componentType !== 'Header1' || newData[0].componentType !== 'Header2')){
+    if(!(newData.length === 1 && TEXT_COMPONENT.includes(newData[0].componentType))){
       e.preventDefault()
       dispatch({type: BULK_ADD_COMPONENT, data: {newData, focusedElemId: getState().currentElem.elemId}})
     }

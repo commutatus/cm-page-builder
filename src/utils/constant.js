@@ -34,6 +34,14 @@ export const TAGS_TO_COMPONENT_MAP = {
   hr: 'Divider',
 }
 
+export const TEXT_COMPONENT = [
+  'Olist',
+  'Ulist',
+  'Header1',
+  'Header2',
+  'Text'
+]
+
 export const ALLOWED_TAGS = [
   "h1",
   "h2",
