@@ -169,7 +169,13 @@ function addComponent(state, data = {}){
     let componentId = componentData[i].id
     if(id === componentId){
       temp.push({...componentData[i], position})
-      newCom = {content: data.content ? data.content : '', position: position+1, componentType: componentType, id: data.newId}
+      newCom = {
+        content: data.content ? data.content : '', 
+        position: position+1, 
+        componentType: componentType, 
+        id: data.newId,
+        component_attachment: data.component_attachment ? {...data.component_attachment} : null
+      }
       temp.push(newCom)
       position += 2
     }

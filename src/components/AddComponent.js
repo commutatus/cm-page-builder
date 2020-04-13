@@ -200,7 +200,7 @@ class AddComponent extends React.Component{
 
   handleBlur = (e) => {
     if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
-      this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
+      this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML, }})
   }
 
   handleMouseEnter = () => {
@@ -223,11 +223,30 @@ class AddComponent extends React.Component{
 
   
   handlePaste = (e) => {
+    e.persist()
     let clipboardData = e.clipboardData || window.clipboardData
     let plainText = clipboardData.getData('text/plain')
     let {componentData} = this.props.appData
-    
-    if(clipboardData.getData('text/html') || plainText){
+
+    let items = clipboardData.items;
+    let blob = items[0].getAsFile();
+
+    if(blob){
+      const blockId = e.currentTarget.dataset.blockId
+      let reader = new FileReader();
+      reader.onload = (event) =>{
+        this.props.addNewComponent({
+          id: blockId, 
+          componentType: 'Upload', 
+          component_attachment: {
+            filename: blob.name, 
+            content: event.target.result,
+          }
+        })
+      }
+      reader.readAsDataURL(blob); 
+    }
+    else if(clipboardData.getData('text/html') || plainText){
       let dataToBeParsed = clipboardData.getData('text/html') || `<p>${plainText}</p>`
       let parsedData = parse(dataToBeParsed)
       if(parsedData.childNodes && parsedData.childNodes.length > 0 && parsedData.childNodes[0].tagName === 'html'){
@@ -235,7 +254,6 @@ class AddComponent extends React.Component{
       }
       this.props.bulkCreate(parsedData, e)
     }
-    // this.props.removeCurrentElem()
 
   }
 
