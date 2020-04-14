@@ -25,6 +25,10 @@
   a{
     color: $blue;
   }
+  *{
+    background-color: transparent !important;
+    -webkit-text-fill-color: black !important;
+  }
 }
 
 .text-selection-tool {
