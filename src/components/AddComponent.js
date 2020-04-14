@@ -200,7 +200,7 @@ class AddComponent extends React.Component{
 
   handleBlur = (e) => {
     if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
-      this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML, }})
+      this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
   handleMouseEnter = () => {
