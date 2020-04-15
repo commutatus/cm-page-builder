@@ -33,14 +33,15 @@ class WrappedUpload extends React.Component {
       let fileInfo = {
         name,
         ext,
-        size: bytesToSize(component_attachment.filesize),
+        size: component_attachment.filesize ? bytesToSize(component_attachment.filesize) : null,
       };
       this.setState({ fileInfo });
     }
   }
 
   componentWillReceiveProps = nextProps => {
-    const { progressInfo, externalImageResponse } = nextProps;
+    const { progressInfo, externalImageResponse, component_attachment } = nextProps;
+    let { fileInfo } = this.state
     if (
       progressInfo &&
       progressInfo.progress &&
@@ -64,6 +65,12 @@ class WrappedUpload extends React.Component {
         nextProps.id === externalImageResponse.client_reference_id
       ) {
       this.setState({ externalImageResponse })
+    }
+
+    if (fileInfo) {
+      if (component_attachment.filesize)
+        fileInfo.size = bytesToSize(component_attachment.filesize)
+        this.setState({ fileInfo })
     }
   };
 
