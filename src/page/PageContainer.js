@@ -400,7 +400,14 @@ class PageContainer extends React.Component {
 							unmountOnExit
 						>
 							<div className="text-selection-tool" id="cm-text-edit-tooltip" style={actionDomRect ? { top: actionDomRect.top, left: actionDomRect.left }: {display: 'none'}}>
-								<div className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } data-action="bold">B</div>
+								<div 
+									className={ activeFormatting.includes(`bold`) ? "bold-tool-btn-active" : "bold-tool-btn"} 
+									onMouseDown={ !['Heading', 'Subheading'].includes(currentType) ? this.editText : (e) => {e.preventDefault()} } 
+									data-action="bold"
+									style={['Heading', 'Subheading'].includes(currentType) ? {cursor: 'not-allowed' } : {}}
+								>
+									B
+								</div>
 								<div className={ activeFormatting.includes(`italic`) ? "tool-btn-active" : "tool-btn"} onMouseDown={this.editText} data-action="italic">
 									<i className="cm-icon-italic" />
 								</div>
