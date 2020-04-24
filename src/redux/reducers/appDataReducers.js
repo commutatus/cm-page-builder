@@ -1,5 +1,6 @@
 import uuid from 'uuid/v5'
 import moment from 'moment'
+import sanitizeHtml from 'sanitize-html'
 
 import { SET_CURRENT_ELEM } from './currentElemReducer';
 import { 
@@ -170,7 +171,7 @@ function addComponent(state, data = {}){
     if(id === componentId){
       temp.push({...componentData[i], position})
       newCom = {
-        content: data.content ? data.content : '', 
+        content: data.content ? sanitizeHtml(data.content) : '', 
         position: position+1, 
         componentType: componentType, 
         id: data.newId,
@@ -214,7 +215,7 @@ function updateComponentState(state, data){
   let {newState, id} = data
   componentData = componentData.map(component => {
     if(component.id === id){
-      return ({...component, ...newState })
+      return ({...component, ...newState, content: newState.content ? sanitizeHtml(newState.content) : '' })
     }else{
       return component
     }
