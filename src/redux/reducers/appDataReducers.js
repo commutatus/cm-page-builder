@@ -171,7 +171,7 @@ function addComponent(state, data = {}){
     if(id === componentId){
       temp.push({...componentData[i], position})
       newCom = {
-        content: data.content ? sanitizeHtml(data.content) : '', 
+        content: data.content ? typeof content === 'string' ? sanitizeHtml(data.content) : data.content : '',  //Sanitizing only strings, exception for file objects
         position: position+1, 
         componentType: componentType, 
         id: data.newId,
