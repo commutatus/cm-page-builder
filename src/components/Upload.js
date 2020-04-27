@@ -25,7 +25,7 @@ class WrappedUpload extends React.Component {
 
   componentWillMount() {
     const { component_attachment, content, componentType } = this.props;
-    if (typeof content === 'object')
+    if (typeof content === 'object') 
       this.getImageUploader()(this.props.content, null, true);
     if (component_attachment && componentType === 'File') {
       let name = component_attachment.filename.split('.')[0];
@@ -68,9 +68,9 @@ class WrappedUpload extends React.Component {
     }
 
     if (fileInfo) {
-      if (component_attachment.filesize)
+      if (component_attachment && component_attachment.filesize)
         fileInfo.size = bytesToSize(component_attachment.filesize)
-        this.setState({ fileInfo })
+      this.setState({ fileInfo })
     }
   };
 
