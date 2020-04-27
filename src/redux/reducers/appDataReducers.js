@@ -1,5 +1,6 @@
 import uuid from 'uuid/v5'
 import moment from 'moment'
+import sanitizeHtml from 'sanitize-html'
 
 import { SET_CURRENT_ELEM } from './currentElemReducer';
 import { 
@@ -95,7 +96,7 @@ export const bulkCreate = (parsedData, e) => {
                 siblingNode.content = `${siblingNode.content}${content}`
               }else{
                 newData.push({
-                  content,
+                  content: sanitizeHtml(content),
                   componentType: getComponentFromTag(node.tagName) || 'Text',
                   id: createID(),
                 })
@@ -109,7 +110,7 @@ export const bulkCreate = (parsedData, e) => {
                 return !src.includes('base64') ? {filename: 'attachements', url: src} : {filename: 'attachements', content: src}
               }
               newData.push({
-                content: node.tagName === 'li' ? node.childNodes[0].rawText : node.rawText,
+                content: sanitizeHtml(node.tagName === 'li' ? node.childNodes[0].rawText : node.rawText),
                 component_attachment: node.tagName === 'img' ? getImage(node.attributes.src) : null,
                 componentType: getComponentFromTag(node.tagName, root.tagName),
                 id: ID,
@@ -170,7 +171,7 @@ function addComponent(state, data = {}){
     if(id === componentId){
       temp.push({...componentData[i], position})
       newCom = {
-        content: data.content ? data.content : '', 
+        content: data.content ? typeof content === 'string' ? sanitizeHtml(data.content) : data.content : '',  //Sanitizing only strings, exception for file objects
         position: position+1, 
         componentType: componentType, 
         id: data.newId,
@@ -214,7 +215,7 @@ function updateComponentState(state, data){
   let {newState, id} = data
   componentData = componentData.map(component => {
     if(component.id === id){
-      return ({...component, ...newState })
+      return ({...component, ...newState, content: newState.content ? sanitizeHtml(newState.content) : '' })
     }else{
       return component
     }
@@ -267,7 +268,7 @@ function emitUpdate(data, type){
       window.cmPageBuilder.handleUpdate(
         null, 
         { 
-          content: data.content, 
+          content: sanitizeHtml(data.content), 
           position: data.position, 
           component_type: data.componentType, 
           client_reference_id: data.id,
@@ -280,7 +281,7 @@ function emitUpdate(data, type){
         window.cmPageBuilder.handleUpdate(
           data.id, 
           { 
-            content: data.content, 
+            content: sanitizeHtml(data.content), 
             position: data.position, 
             component_type: data.componentType,
             component_attachment: data.component_attachment

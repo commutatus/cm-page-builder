@@ -20,7 +20,6 @@ import {
 import '../styles/global.css'
 import '../styles/page.css'
 import '../styles/animations.css'
-import { type } from 'os';
 import Dropzone from 'react-dropzone'
 
 class PageContainer extends React.Component {
