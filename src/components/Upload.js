@@ -70,7 +70,7 @@ class WrappedUpload extends React.Component {
     if (fileInfo) {
       if (component_attachment && component_attachment.filesize)
         fileInfo.size = bytesToSize(component_attachment.filesize)
-        this.setState({ fileInfo })
+      this.setState({ fileInfo })
     }
   };
 
