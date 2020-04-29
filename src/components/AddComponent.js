@@ -275,8 +275,7 @@ class AddComponent extends React.Component{
       'onFocus':this.handleFocus,
       'onMouseEnter': this.handleMouseEnter,
       'onMouseLeave': this.handleMouseLeave,
-    } : {}
-    
+    } : {}    
     return(
       <div 
         ref={node => this.elem = node} 
