@@ -18,6 +18,7 @@ export class Dropdown extends React.Component{
 
   toggleDropdown = (e) => {
     e.stopPropagation()
+    this.props.onClick()
     this.setState(state => ({isDropdownOpen: !state.isDropdownOpen}), () => {
       if(this.state.isDropdownOpen)
         window.addEventListener('click', this.handleOutsideClick)
