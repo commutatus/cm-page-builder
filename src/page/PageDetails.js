@@ -4,6 +4,10 @@ import { EmojiIconContainer } from '../components/EmojiIconContainer';
 import { Title } from '../components/Title'
 import { Dropdown } from '../components/Dropdown';
 import { AutoCompleteDropdown } from '../components/AutoCompleteDropdown';
+import { store } from '../redux/store';
+import {
+	REMOVE_CURRENT_ELEM
+} from '../redux/reducers/currentElemReducer'
 
 export const PageDetails = ({
 	meta,
@@ -50,6 +54,7 @@ export const PageDetails = ({
 								options={pageCategories}
 								type="meta"
 								component_type="category_id"
+								onClick={() => store.dispatch({type: REMOVE_CURRENT_ELEM})}
 							/>
 						}
 						<div className="seprator-dot"></div>
@@ -61,6 +66,7 @@ export const PageDetails = ({
 								options={currentOffices}
 								type="meta"
 								component_type={'office_id'}
+								onClick={() => store.dispatch({type: REMOVE_CURRENT_ELEM})}
 							/>
 						}
 							{
