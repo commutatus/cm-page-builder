@@ -254,7 +254,7 @@ function updateComponentPos(state, {newIndex, oldIndex}) {
   let elem = state.componentData[oldIndex]
   newData = state.componentData.filter((d, i) => i !== oldIndex)
   newData.splice(newIndex, 0, elem)	
-  emitUpdate({id: state.componentData[oldIndex].id, position: newIndex+1}, 'update')
+  emitUpdate({id: state.componentData[oldIndex].id, position: newIndex+1}, 'updatePos')
   return ({
     ...state, 
     componentData: newData.map((d, i) => ({...d, position: i+1}))
@@ -289,6 +289,9 @@ function emitUpdate(data, type){
           'updateComponent'
         )
       break;
+      case 'updatePos': 
+        window.cmPageBuilder.handleUpdate(data.id, { position: data.position }, 'updateComponent')
+        break;
       case 'remove':
         window.cmPageBuilder.handleUpdate(
           data.id,
