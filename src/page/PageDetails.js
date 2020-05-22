@@ -58,6 +58,7 @@ export const PageDetails = ({
 							/>
 						}
 						<div className="seprator-dot"></div>
+						<div className='hub-detail-wrapper'>
 						{
 							currentOffices &&
 							<Dropdown
@@ -86,7 +87,8 @@ export const PageDetails = ({
 									<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
 						 		</React.Fragment>
 							}
-					</div>
+							</div>
+						</div>
 				}
 
 
