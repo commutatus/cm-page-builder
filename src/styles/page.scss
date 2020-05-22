@@ -7,8 +7,11 @@
         width: 100%;
         .page-info {
             display: flex;
+            height: 70px;
+            flex-wrap: wrap;
             align-items: center;
-            margin: 25px 0 38px;
+            align-content: space-between;
+            margin: 25px 0;
             .current-user-detail {
                 display: inline-flex;
                 align-items: center;

@@ -155,3 +155,11 @@ export const shouldUseParentTag = (tag) => {
 export const isTagAllowedToCreateComponent = (tag) => {
   return ['li', 'img', 'hr'].includes(tag) || isHeaderTag(tag)
 }
+
+export const formatOptionsToMultiSelect = (options, selectedOptions) =>{
+  let formattedOptions = [] 
+  options && options.map((item)=>{
+    formattedOptions.push({option: item, isSelected: selectedOptions && selectedOptions.some(e => e && (Number(item.id) === e.id || Number(item.id) === e.constant_id))})
+  })
+  return formattedOptions
+}
