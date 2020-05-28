@@ -35,3 +35,22 @@
     outline: none;
   }
 }
+
+@mixin placeholder-text() {
+  &::-webkit-input-placeholder {
+    height: 16px;
+    width: 114px;
+    color: #9B9B9B;
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+  &:-ms-input-placeholder {
+    height: 16px;
+    width: 114px;
+    color: #9B9B9B;
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+}

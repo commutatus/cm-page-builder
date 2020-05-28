@@ -8,6 +8,7 @@ import { store } from '../redux/store';
 import {
 	REMOVE_CURRENT_ELEM
 } from '../redux/reducers/currentElemReducer'
+import { MultiSelectDropdown } from '../components/MultiSelectDropdown';
 
 export const PageDetails = ({
 	meta,
@@ -48,16 +49,16 @@ export const PageDetails = ({
 					<div className="page-info">
 						{
 							pageCategories &&
-							<Dropdown
+							<MultiSelectDropdown
 								handleOptionSelect={emitUpdate}
-								selectedOption={meta && meta.category}
+								selectedOptions={meta && meta.categories}
 								options={pageCategories}
 								type="meta"
-								component_type="category_id"
-								onClick={() => store.dispatch({type: REMOVE_CURRENT_ELEM})}
+								component_type="categories"
 							/>
 						}
 						<div className="seprator-dot"></div>
+						<div className='hub-detail-wrapper'>
 						{
 							currentOffices &&
 							<Dropdown
@@ -86,7 +87,8 @@ export const PageDetails = ({
 									<div className="date-updated">{meta ? moment(meta.created_at).format('DD MMM, YYYY') : ''}</div>
 						 		</React.Fragment>
 							}
-					</div>
+							</div>
+						</div>
 				}
 
 
