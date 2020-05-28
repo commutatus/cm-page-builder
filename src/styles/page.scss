@@ -12,6 +12,10 @@
             align-items: center;
             align-content: space-between;
             margin: 25px 0;
+            .hub-detail-wrapper{
+                display: flex;
+                align-items: center;
+            }
             .current-user-detail {
                 display: inline-flex;
                 align-items: center;
