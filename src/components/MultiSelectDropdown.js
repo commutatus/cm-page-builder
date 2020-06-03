@@ -101,13 +101,15 @@ export class MultiSelectDropdown extends React.Component {
 													<div className="multi-select-dropdown-list-body">
 														{
 															options
-																.filter(option => !cmSearchInput || (option.option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
-																.map((option, i) =>
-																	<div key={`dropdown-${option.option.id || i}`} className="dropdown-item" onClick={(e) => this.handleClick(e, i)}>
-																		<input checked={option.isSelected} type='checkbox' className="dropdown-item-checkbox" />
-																		{option.option.name}
-																	</div>
-																)
+																.map((option, i) => {
+																	if (!cmSearchInput || (option.option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
+																		return (
+																			<div key={`dropdown-${option.option.id || i}`} className="dropdown-item" onClick={(e) => this.handleClick(e, i)}>
+																				<input checked={option.isSelected} type='checkbox' className="dropdown-item-checkbox" />
+																				{option.option.name}
+																			</div>
+																		)
+																})
 														}
 													</div>
 												</div>
