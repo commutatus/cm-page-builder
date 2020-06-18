@@ -4,8 +4,10 @@ import { CSSTransition } from 'react-transition-group';
 import '../styles/components/MultiSelectDropdown.css';
 import { PermissionContext } from '../contexts/permission-context';
 import { formatOptionsToMultiSelect } from '../utils/helpers';
+import { connect } from 'react-redux';
+import { removeCurrentElem } from '../redux/reducers/currentElemReducer'
 
-export class MultiSelectDropdown extends React.Component {
+class MultiSelectDropdown extends React.Component {
 
 	constructor(props) {
 		super(props)
@@ -17,6 +19,7 @@ export class MultiSelectDropdown extends React.Component {
 	}
 
 	toggleDropdown = (e) => {
+		this.props.removeCurrentElem()
 		e.stopPropagation()
 		this.setState(state => ({ isDropdownOpen: !state.isDropdownOpen }), () => {
 			if (this.state.isDropdownOpen)
@@ -130,3 +133,9 @@ MultiSelectDropdown.propTypes = {
 	options: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleOptionSelect: PropTypes.func.isRequired
 }
+
+const mapDispatchToProps = {
+	removeCurrentElem
+}
+
+export default connect(null, mapDispatchToProps)(MultiSelectDropdown)
