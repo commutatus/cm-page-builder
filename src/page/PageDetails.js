@@ -8,7 +8,7 @@ import { store } from '../redux/store';
 import {
 	REMOVE_CURRENT_ELEM
 } from '../redux/reducers/currentElemReducer'
-import { MultiSelectDropdown } from '../components/MultiSelectDropdown';
+import MultiSelectDropdown from '../components/MultiSelectDropdown';
 
 export const PageDetails = ({
 	meta,
