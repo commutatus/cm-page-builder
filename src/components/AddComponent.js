@@ -232,6 +232,8 @@ class AddComponent extends React.Component{
     let blob = items[0].getAsFile();
 
     if(blob){
+      
+      e.preventDefault()
       const blockId = e.currentTarget.dataset.blockId
       let reader = new FileReader();
       reader.onload = (event) =>{
