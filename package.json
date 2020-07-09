@@ -78,6 +78,7 @@
     "react-helmet": "^5.2.1",
     "react-redux": "^7.1.0",
     "react-svg-loader": "^3.0.3",
+    "react-syntax-highlighter": "^12.2.1",
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",

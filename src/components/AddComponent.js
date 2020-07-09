@@ -227,11 +227,13 @@ class AddComponent extends React.Component{
     let clipboardData = e.clipboardData || window.clipboardData
     let plainText = clipboardData.getData('text/plain')
     let {componentData} = this.props.appData
-
+    
     let items = clipboardData.items;
     let blob = items[0].getAsFile();
 
     if(blob){
+      //stop the default behaviour
+      e.preventDefault()
       const blockId = e.currentTarget.dataset.blockId
       let reader = new FileReader();
       reader.onload = (event) =>{
@@ -246,6 +248,7 @@ class AddComponent extends React.Component{
       }
       reader.readAsDataURL(blob); 
     }
+
     else if(clipboardData.getData('text/html') || plainText){
       let dataToBeParsed = clipboardData.getData('text/html') || `<p>${plainText}</p>`
       let parsedData = parse(dataToBeParsed)
@@ -308,9 +311,9 @@ class AddComponent extends React.Component{
             <div data-type="Ulist">
               <i className="cm-icon-bullets" />
             </div>
-            {/* <div>
+            <div data-type="CodeHighlighter">
               <i className="cm-icon-page" />
-            </div> */}
+            </div>
             <div data-type="Upload">
               <i className="cm-icon-picture" />
             </div>
