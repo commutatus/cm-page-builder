@@ -84,6 +84,10 @@ class AddComponent extends React.Component{
   handleKeyDown = (e) => {
     e.stopPropagation()
     let {appData, currentElem, data} = this.props 
+
+    //Code component only need navigation so other key actions are disabled.
+    if(this.props.data.componentType === 'Code' && !['ArrowUp', 'ArrowDown'].includes(e.key)) return 
+
     //Intialize all the elem
     let currentElemPos = -1, 
         elemRect = null, 
@@ -132,6 +136,7 @@ class AddComponent extends React.Component{
             (elemRect.top === (caretRect.top - extraHeight - 1)) // is a text component
         ){
           e.preventDefault()
+          //skip component if not a text component else navigate
           currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
           while(currentElemPos > 0){
             if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos-1].componentType)){
@@ -267,6 +272,8 @@ class AddComponent extends React.Component{
     let { showActionBtn, showHandle, isFocused } = this.state
 
     const isEdit = this.context.status === 'Edit'
+    
+
     const allActions = isEdit ? {
       'onPaste': this.handlePaste,
       'onMouseUp': this.handleMouseUp,
@@ -279,6 +286,16 @@ class AddComponent extends React.Component{
       'onMouseEnter': this.handleMouseEnter,
       'onMouseLeave': this.handleMouseLeave,
     } : {}    
+
+    if(data.componentType === 'Code'){
+      [
+        'onPaste',
+        'onMouseUp',
+        'onBlur',
+        'onInput',
+      ].forEach(action => delete allActions[action])
+    }
+
     return(
       <div 
         ref={node => this.elem = node} 
@@ -297,7 +314,7 @@ class AddComponent extends React.Component{
         >
           <div className="text-type-tools" 
             data-block-type="component-select-div" 
-            style={{display: showActionBtn && !['Divider', 'Upload'].includes(data.componentType)  ? 'flex' : 'none'}}
+            style={{display: showActionBtn && !['Divider', 'Upload', 'Code'].includes(data.componentType)  ? 'flex' : 'none'}}
           >
             <div data-type="Header1">
               <i className="cm-icon-h1" />
@@ -311,7 +328,7 @@ class AddComponent extends React.Component{
             <div data-type="Ulist">
               <i className="cm-icon-bullets" />
             </div>
-            <div data-type="CodeHighlighter">
+            <div data-type="Code">
               <i className="cm-icon-page" />
             </div>
             <div data-type="Upload">

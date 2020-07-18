@@ -1,0 +1,27 @@
+@import './imports';
+
+.cm-code-block{
+  width: 100%;
+  [contenteditable]{
+    outline: none;
+  }
+  .hljs{
+    margin: 0px;
+    code{
+      padding: 10px;
+    }
+  }
+  select{
+    float: right;
+  }
+}
+
+.cm-code-block.edit  {
+  margin: 2px 0;
+  padding: 4px 2px;
+}
+
+.cm-code-block.read  {
+  margin: 2px 0;
+  padding: 4px 2px; 
+}

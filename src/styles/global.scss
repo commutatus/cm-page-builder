@@ -14,22 +14,6 @@
   min-height: 100vh;
 }
 
-//placeholder-style
-[contenteditable]:empty:focus:before {
-  content: attr(placeholder);
-  display: block;
-}
-
-[contenteditable] {
-  -webkit-tap-highlight-color: transparent;
-  a{
-    color: $blue;
-  }
-  *{
-    background-color: transparent !important;
-    -webkit-text-fill-color: black !important;
-  }
-}
 
 .text-selection-tool {
   position: absolute;
