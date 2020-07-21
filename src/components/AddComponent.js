@@ -119,7 +119,7 @@ class AddComponent extends React.Component{
               this.props.removeComponent({blockId: currentElem.elemId})
               this.props.setCurrentElem(newCurrentId)
             }else{
-              this.props.updateComponent({blockId: appData.componentData[0].id, newState: {content: ''}})
+              this.props.updateComponent({id: appData.componentData[0].id, newState: {content: ''}})
             }
           }
         }

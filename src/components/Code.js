@@ -6,6 +6,10 @@ import { PermissionContext } from '../contexts/permission-context';
 import classNames from 'classnames';
 import _ from 'lodash'
 import { connect } from 'react-redux';
+import {
+  updateComponent,
+} from '../redux/reducers/appDataReducers'
+
 
 const SUPPORTED_LANGUAGES = [
   'JavaScript',
@@ -46,7 +50,7 @@ class CodeBlock extends React.Component {
     super(props);
     this.registerLang(DEFAULT_LANG)
     this.state = {
-      code: 'a = 10',
+      code: '',
       selectedLang: DEFAULT_LANG
     }
     CodeBlock.contextType = PermissionContext
@@ -60,7 +64,10 @@ class CodeBlock extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    if(newProps.currentElem.elemId === newProps.id){
+    if(
+      this.props.currentElem.id !== newProps.currentElem.id && 
+      newProps.currentElem.elemId === newProps.id
+    ){
       this.highlighterNode.focus()
     }
   }
@@ -186,10 +193,23 @@ class CodeBlock extends React.Component {
     }
   }
 
+  handleBlur = (e) => {
+    console.log(e.target)
+    e.stopPropagation()
+    this.props.updateComponent({id: this.props.id, newState: {content: this.state.code}})
+  }
 
   render() {
     const {code, selectedLang} = this.state
     const {context} = this
+
+    const actions = context.status === 'Edit' ? {
+      onKeyDown: this.handleTab,
+      onInput: this.handleChange,
+      onKeyUp: this.handleKeyUp,
+      onSelect: e => e.stopPropagation(),
+      onBlur: this.handleBlur,
+    } : {}
     
     return (
       <div className={classNames("cm-code-block", context.status.toLowerCase())}>
@@ -197,32 +217,33 @@ class CodeBlock extends React.Component {
           <code>
             <div 
               style={{width: '100%'}}
-              contentEditable={true}
-              onKeyDown={this.handleTab} 
-              onInput={this.handleChange}
-              onKeyUp={this.handleKeyUp}
+              contentEditable={context.status === 'Edit'}
               ref={node => this.highlighterNode = node}
-              dangerouslySetInnerHTML={{__html: `${hljs.highlight(selectedLang, code).value}`}} 
-              onSelect={e => e.stopPropagation()}
+              dangerouslySetInnerHTML={{__html: `${hljs.highlight(selectedLang, context.status === 'Edit' ? code : this.props.content).value}`}} 
+              data-gramm_editor="false"
+              {...actions}
             />
           </code>
         </pre>
         
-        <select onChange={this.handleLangChange}>
-          {
-            SUPPORTED_LANGUAGES.map(lang => {
-              return (
-                <option 
-                  key={lang}
-                  value={lang.toLowerCase()} 
-                  {...(selectedLang === lang.toLowerCase() ? ["selected"] : '')}
-                >
-                  {lang}
-                </option>
-              )
-            })
-          }
-        </select>
+        {
+          context.status === 'Edit' && 
+          <select onChange={this.handleLangChange}>
+            {
+              SUPPORTED_LANGUAGES.map(lang => {
+                return (
+                  <option 
+                    key={lang}
+                    value={lang.toLowerCase()} 
+                    {...(selectedLang === lang.toLowerCase() ? ["selected"] : '')}
+                  >
+                    {lang}
+                  </option>
+                )
+              })
+            }
+          </select>
+        }
       </div>
     );
   }
@@ -232,5 +253,9 @@ const mapStateToProps = (state) => ({
   currentElem: state.currentElem
 })
 
+const mapDispatchToProps = {
+  updateComponent
+}
 
-export const Code = connect(mapStateToProps)(CodeBlock)
+
+export const Code = connect(mapStateToProps, mapDispatchToProps)(CodeBlock)
