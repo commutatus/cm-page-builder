@@ -36,6 +36,11 @@ const SUPPORTED_LANGUAGES = [
 
 const DEFAULT_LANG = 'javascript'
 
+hljs.configure({
+  tabReplace: '\u00a0\u00a0\u00a0\u00a0',
+  useBR: true
+});
+
 class CodeBlock extends React.Component {
   constructor(props) {
     super(props);
@@ -70,25 +75,16 @@ class CodeBlock extends React.Component {
     }
   }
 
-  handleChange = (e) => {
-    e.stopPropagation()
-    const text = e.target.innerText
-    if(text[text.length-1] !== '\n'){
-      this.saveSelection(this.highlighterNode)
-      this.setState(state => ({code: text}))
-    }
-  }
-
-  saveSelection = (containerEl) => {
+  saveSelection = (containerEl, text) => {
     if(window.getSelection && document.createRange){
       let range = window.getSelection().getRangeAt(0);
       let preSelectionRange = range.cloneRange();
       preSelectionRange.selectNodeContents(containerEl);
       preSelectionRange.setEnd(range.startContainer, range.startOffset);
-      let start = preSelectionRange.toString().length;
+      let start = text.length
 
       this.oldRange = {
-          start: start,
+          start,
           end: start + range.toString().length
       };
     }else{
@@ -99,7 +95,7 @@ class CodeBlock extends React.Component {
       preSelectionTextRange.setEndPoint("EndToStart", selectedTextRange);
       let start = preSelectionTextRange.text.length;
 
-      return {
+      this.oldRange = {
           start: start,
           end: start + selectedTextRange.text.length
       };
@@ -134,7 +130,8 @@ class CodeBlock extends React.Component {
           }
       }
 
-      var sel = win.getSelection();
+
+      let sel = win.getSelection();
       sel.removeAllRanges();
       sel.addRange(range);
     }else{
@@ -154,6 +151,42 @@ class CodeBlock extends React.Component {
     this.setState({selectedLang})
   }
 
+
+  handleKeyUp = (e) => {
+    switch(e.key){
+      case 'Enter':
+        this.oldRange = null
+        break
+      default:
+        let text = e.target.innerText
+        this.saveSelection(this.highlighterNode, text)
+        this.setState(state => ({code: text}))
+        break
+    }
+  }
+
+  handleTab = e => {
+    if(e.keyCode === 9){
+      e.preventDefault();
+      
+      // handleTab spaces by inserting a no break node
+      //for more info https://www.fileformat.info/info/unicode/char/00a0/index.htm
+      let editor = this.highlighterNode
+      let doc = editor.ownerDocument.defaultView;
+      let sel = doc.getSelection();
+      let range = sel.getRangeAt(0);
+
+      let tabNode = document.createTextNode("\u00a0\u00a0\u00a0\u00a0");
+      range.insertNode(tabNode);
+
+      range.setStartAfter(tabNode);
+      range.setEndAfter(tabNode); 
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }
+
+
   render() {
     const {code, selectedLang} = this.state
     const {context} = this
@@ -164,8 +197,10 @@ class CodeBlock extends React.Component {
           <code>
             <div 
               style={{width: '100%'}}
-              contentEditable={true} 
+              contentEditable={true}
+              onKeyDown={this.handleTab} 
               onInput={this.handleChange}
+              onKeyUp={this.handleKeyUp}
               ref={node => this.highlighterNode = node}
               dangerouslySetInnerHTML={{__html: `${hljs.highlight(selectedLang, code).value}`}} 
               onSelect={e => e.stopPropagation()}
