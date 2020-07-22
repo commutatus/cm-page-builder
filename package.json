@@ -70,6 +70,7 @@
     "compression": "^1.7.4",
     "emoji-js": "^3.4.1",
     "emoji-mart": "^2.11.1",
+    "express": "^4.17.1",
     "highlight.js": "^10.1.1",
     "is-accessor-descriptor": "^3.0.1",
     "is-data-descriptor": "^2.0.0",
