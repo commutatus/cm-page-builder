@@ -67,6 +67,7 @@
   "dependencies": {
     "activestorage": "^5.2.3",
     "classnames": "^2.2.6",
+    "compression": "^1.7.4",
     "emoji-js": "^3.4.1",
     "emoji-mart": "^2.11.1",
     "highlight.js": "^10.1.1",
