@@ -5,7 +5,7 @@
   "main": "lib/page/index.js",
   "scripts": {
     "start": "node ./server.js",
-    "build": "npm-run-all -p watch-css webpack --mode production",
+    "build": "npm-run-all -p watch-css build-prod",
     "build:prod": "webpack --mode production",
     "start-dev-server": "webpack-dev-server --host localhost --mode development --content-base=www --inline --watch --hot --open",
     "dev": "npm-run-all -p watch-css start-dev-server",
