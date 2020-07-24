@@ -77,24 +77,21 @@ class CodeBlock extends React.Component {
       this.state.code !== oldState.code &&
       this.state.selectedLang === oldState.selectedLang
     ){
-      if(this.oldRange)
-        this.restoreSelection(this.highlighterNode, this.oldRange)
+      if(this.oldCaretPos)
+        this.restoreSelection(this.highlighterNode, this.oldCaretPos)
     }
   }
 
-  saveSelection = (containerEl, text) => {
+  saveSelection = (containerEl) => {
     if(window.getSelection && document.createRange){
       let range = window.getSelection().getRangeAt(0);
       let preSelectionRange = range.cloneRange();
       preSelectionRange.selectNodeContents(containerEl);
       preSelectionRange.setEnd(range.startContainer, range.startOffset);
-      let start = text.length
-
-      this.oldRange = {
-          start,
-          end: start + range.toString().length
-      };
-    }else{
+      let start = preSelectionRange.toString().length
+      this.oldCaretPos = start + range.toString().length
+    }
+    else{
       let doc = containerEl.ownerDocument, win = doc.defaultView || doc.parentWindow;
       let selectedTextRange = doc.selection.createRange();
       let preSelectionTextRange = doc.body.createTextRange();
@@ -102,14 +99,11 @@ class CodeBlock extends React.Component {
       preSelectionTextRange.setEndPoint("EndToStart", selectedTextRange);
       let start = preSelectionTextRange.text.length;
 
-      this.oldRange = {
-          start: start,
-          end: start + selectedTextRange.text.length
-      };
+      this.oldCaretPos = start + selectedTextRange.text.length
     }
   }
 
-  restoreSelection = (containerEl, savedSel) => {
+  restoreSelection = (containerEl, savedPos) => {
     if(window.getSelection && document.createRange){
       let doc = containerEl.ownerDocument, win = doc.defaultView;
       let charIndex = 0, range = doc.createRange();
@@ -120,13 +114,10 @@ class CodeBlock extends React.Component {
       while (!stop && (node = nodeStack.pop())) {
           if (node.nodeType == 3) {
               let nextCharIndex = charIndex + node.length;
-              if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
-                  range.setStart(node, savedSel.start - charIndex);
-                  foundStart = true;
-              }
-              if (foundStart && savedSel.end >= charIndex && savedSel.end <= nextCharIndex) {
-                  range.setEnd(node, savedSel.end - charIndex);
-                  stop = true;
+              if(savedPos <= nextCharIndex){
+                range.setStart(node, savedPos - charIndex)
+                range.setEnd(node, savedPos - charIndex)
+                stop = true
               }
               charIndex = nextCharIndex;
           } else {
@@ -141,13 +132,15 @@ class CodeBlock extends React.Component {
       let sel = win.getSelection();
       sel.removeAllRanges();
       sel.addRange(range);
-    }else{
+      this.oldCaretPos = null
+    }
+    else{
       let doc = containerEl.ownerDocument, win = doc.defaultView || doc.parentWindow;
       let textRange = doc.body.createTextRange();
       textRange.moveToElementText(containerEl);
       textRange.collapse(true);
-      textRange.moveEnd("character", savedSel.end);
-      textRange.moveStart("character", savedSel.start);
+      textRange.moveEnd("character", savedPos);
+      textRange.moveStart("character", savedPos);
       textRange.select();
     }
   };
@@ -162,7 +155,19 @@ class CodeBlock extends React.Component {
   handleKeyUp = (e) => {
     switch(e.key){
       case 'Enter':
-        this.oldRange = null
+        //append newline node when enter is pressed.
+        let editor = this.highlighterNode
+        let doc = editor.ownerDocument.defaultView;
+        let sel = doc.getSelection();
+        let range = sel.getRangeAt(0);
+
+        let newlineNode = document.createTextNode("\n");
+        range.insertNode(newlineNode);
+
+        range.setStartAfter(newlineNode);
+        range.setEndAfter(newlineNode); 
+        sel.removeAllRanges();
+        sel.addRange(range);
         break
       default:
         let text = e.target.innerText
@@ -191,10 +196,13 @@ class CodeBlock extends React.Component {
       sel.removeAllRanges();
       sel.addRange(range);
     }
+    if(e.key === 'Enter'){
+      //By default when you press enter the brower creates a div.
+      e.preventDefault()
+    }
   }
 
   handleBlur = (e) => {
-    console.log(e.target)
     e.stopPropagation()
     this.props.updateComponent({id: this.props.id, newState: {content: this.state.code}})
   }
