@@ -153,31 +153,12 @@ class CodeBlock extends React.Component {
 
 
   handleKeyUp = (e) => {
-    switch(e.key){
-      case 'Enter':
-        //append newline node when enter is pressed.
-        let editor = this.highlighterNode
-        let doc = editor.ownerDocument.defaultView;
-        let sel = doc.getSelection();
-        let range = sel.getRangeAt(0);
-
-        let newlineNode = document.createTextNode("\n");
-        range.insertNode(newlineNode);
-
-        range.setStartAfter(newlineNode);
-        range.setEndAfter(newlineNode); 
-        sel.removeAllRanges();
-        sel.addRange(range);
-        break
-      default:
-        let text = e.target.innerText
-        this.saveSelection(this.highlighterNode, text)
-        this.setState(state => ({code: text}))
-        break
-    }
+    let text = e.target.innerText
+    this.saveSelection(this.highlighterNode, text)
+    this.setState(state => ({code: text}))
   }
 
-  handleTab = e => {
+  handleKeyDown = e => {
     if(e.keyCode === 9){
       e.preventDefault();
       
@@ -198,7 +179,24 @@ class CodeBlock extends React.Component {
     }
     if(e.key === 'Enter'){
       //By default when you press enter the brower creates a div.
+      //append newline node when enter is pressed.
       e.preventDefault()
+      
+      let editor = this.highlighterNode
+      let doc = editor.ownerDocument.defaultView;
+      let sel = doc.getSelection();
+      let range = sel.getRangeAt(0);
+
+      let newlineNode = document.createTextNode("\n");
+      range.insertNode(newlineNode);
+
+      range.setStartAfter(newlineNode);
+      range.setEndAfter(newlineNode); 
+      sel.removeAllRanges();
+      sel.addRange(range);
+      let text = e.target.innerText + '\n'
+      this.saveSelection(this.highlighterNode, text)
+      this.setState(state => ({code: text}))
     }
   }
 
@@ -212,7 +210,7 @@ class CodeBlock extends React.Component {
     const {context} = this
 
     const actions = context.status === 'Edit' ? {
-      onKeyDown: this.handleTab,
+      onKeyDown: this.handleKeyDown,
       onInput: this.handleChange,
       onKeyUp: this.handleKeyUp,
       onSelect: e => e.stopPropagation(),
