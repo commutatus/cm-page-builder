@@ -40,7 +40,7 @@ class PageContainer extends React.Component {
 		this.initWindowVar(this.props)
 		this.initApp(this.props)
 		document.addEventListener('mousedown', this.removeFocus)
-		window.addEventListener('beforeunload', this.handlePageUnload)
+		// window.addEventListener('beforeunload', this.handlePageUnload)
 	}
 
 	componentWillReceiveProps(newProps){

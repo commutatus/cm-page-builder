@@ -54,3 +54,24 @@
     letter-spacing: 0;
   }
 }
+
+@mixin search-input(
+  // $border-bottom: 1px solid #ececec,
+  $height: 40px,
+  $background-color: #f4f5f7,
+  $color: #9b9b9b,
+  $font-size: 14px,
+  $border-radius: 2px,
+) {
+  width: 100%;
+  border: none;
+  // border-bottom: $border-bottom;
+  height: $height;
+  background-color: $background-color;
+  color: $color;
+  font-size: $font-size;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+  padding-left: 16px;
+  text-overflow: ellipsis;
+}

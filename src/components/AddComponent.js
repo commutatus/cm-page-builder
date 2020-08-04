@@ -329,7 +329,7 @@ class AddComponent extends React.Component{
               <i className="cm-icon-bullets" />
             </div>
             <div data-type="Code">
-              <i className="cm-icon-page" />
+              <i className="cm-icon-code-block" />
             </div>
             <div data-type="Upload">
               <i className="cm-icon-picture" />

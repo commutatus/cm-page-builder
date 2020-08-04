@@ -1,0 +1,72 @@
+@import "./mixins.scss";
+@import "./variables.scss";
+
+.cm-select-container {
+  width: 100%;
+  position: relative;
+  .cm-select-body {
+    width: 100%;
+    .search-input {
+      @include search-input();
+      color: black;
+      outline: none;
+    }
+    .disable-search {
+      cursor: pointer;
+      caret-color: transparent;
+      &:focus {
+        outline: none;
+      }
+      &::selection {
+        background: none;
+      }
+    }
+    .disabled-dropdown {
+      background-color: #f8f9fa !important;
+    }
+    .search-icon {
+      font-size: 14px;
+      position: absolute;
+      right: 15px;
+      top: 12px;
+      color: #9b9b9b;
+    }
+    .arrow-icon {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      font-size: 10px;
+      color: #9ca7ae;
+    }
+    .cm-select-options {
+      position: absolute;
+      max-height: 350px;
+      background-color: white;
+      padding: 10px;
+      border-bottom-right-radius: 2px;
+      border-bottom-left-radius: 2px;
+      box-shadow: $dropdown-shadow;
+      overflow-y: auto;
+      left: 0;
+      right: 0;
+      z-index: 9;
+      .cm-option-item {
+        display: flex;
+        min-height: 25px;
+        padding: 5px;
+        background-color: #fff;
+        border-radius: $round-2;
+        font-size: 14px;
+        align-items: center;
+        cursor: pointer;
+        &.hover {
+          background-color: #f3f4f7;
+          border-radius: 2px;
+        }
+        &.focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}

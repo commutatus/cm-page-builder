@@ -9,19 +9,20 @@ import { connect } from 'react-redux';
 import {
   updateComponent,
 } from '../redux/reducers/appDataReducers'
+import Select from './Select';
 
 
 const SUPPORTED_LANGUAGES = [
   'JavaScript',
   'JSON',
   'Bash',
-  'C',
-  'C#',
-  'C++',
+  // 'C',
+  // 'C#',
+  // 'C++',
   'CSS',
   'CoffeeScript',
   'Dockerfile',
-  'HTML, XML',
+  'HTML',
   'Java',
   'Markdown',
   'PHP',
@@ -35,7 +36,7 @@ const SUPPORTED_LANGUAGES = [
   'SQL',
   'Swift',
   'TypeScript',
-  'VB.Net',
+  // 'VB.Net',
 ]
 
 const DEFAULT_LANG = 'javascript'
@@ -145,8 +146,7 @@ class CodeBlock extends React.Component {
     }
   };
 
-  handleLangChange = (e) => {
-    let selectedLang = e.target.value
+  handleLangChange = (selectedLang) => {
     this.registerLang(selectedLang)
     this.setState({selectedLang})
   }
@@ -218,7 +218,15 @@ class CodeBlock extends React.Component {
     } : {}
     
     return (
-      <div className={classNames("cm-code-block", context.status.toLowerCase())}>
+      <div 
+        className={classNames("cm-code-block", context.status.toLowerCase())} 
+        onClick={(e) => {
+          this.highlighterNode.focus()
+        }}
+        onMouseUp={(e) => {
+          e.stopPropagation()
+        }}
+      >
         <pre className={classNames('hljs')}>
           <code>
             <div 
@@ -234,21 +242,25 @@ class CodeBlock extends React.Component {
         
         {
           context.status === 'Edit' && 
-          <select onChange={this.handleLangChange}>
+          <Select
+            value={selectedLang}
+            onSelect={this.handleLangChange}
+            containerClassname="language-selector"
+            showArrow
+          >
             {
               SUPPORTED_LANGUAGES.map(lang => {
                 return (
-                  <option 
+                  <Select.Option 
                     key={lang}
                     value={lang.toLowerCase()} 
-                    {...(selectedLang === lang.toLowerCase() ? ["selected"] : '')}
                   >
                     {lang}
-                  </option>
+                  </Select.Option>
                 )
               })
             }
-          </select>
+          </Select>
         }
       </div>
     );
