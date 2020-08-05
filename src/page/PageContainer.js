@@ -40,7 +40,7 @@ class PageContainer extends React.Component {
 		this.initWindowVar(this.props)
 		this.initApp(this.props)
 		document.addEventListener('mousedown', this.removeFocus)
-		window.addEventListener('beforeunload', this.handlePageUnload)
+		// window.addEventListener('beforeunload', this.handlePageUnload)
 	}
 
 	componentWillReceiveProps(newProps){
@@ -162,14 +162,21 @@ class PageContainer extends React.Component {
 	}
 
 	getPageComponent = (data, index) => {
-		let typeName = data.componentType
+    let typeName = data.componentType
 		let dataId = data.id
 		if(typeName){
 			let customProp = (typeName === 'File') ? { file: true } : {}			// Send custom props to Upload component if the component type is File
-			if (typeName === 'Upload' || typeName === 'File')
-				customProp = { ...customProp, progressInfo: this.props.progressInfo, externalImageResponse: this.props.externalImageResponse, assetBaseUrl: this.props.assetBaseUrl }
+			if (typeName === 'Upload' || typeName === 'File'){
+        customProp = { 
+          ...customProp, 
+          progressInfo: this.props.progressInfo, 
+          externalImageResponse: this.props.externalImageResponse, 
+          assetBaseUrl: this.props.assetBaseUrl 
+        }
+      }
+				
 			typeName = (typeName === 'File') ? 'Upload' : typeName
-			let Component = require(`../components/${typeName}`)[typeName]
+      let Component = require(`../components/${typeName}`)[typeName]
 			return (
 				<AddComponent key={dataId} id={dataId} data={data}>
 					<Component
