@@ -215,7 +215,10 @@ function updateComponentState(state, data){
   let {newState, id} = data
   componentData = componentData.map(component => {
     if(component.id === id){
-      return ({...component, ...newState, content: newState.content ? sanitizeHtml(newState.content) : '' })
+      return ({
+        ...component, 
+        ...newState, 
+        content: newState.content ? newState.content : '' })
     }else{
       return component
     }
