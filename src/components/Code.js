@@ -58,6 +58,7 @@ class CodeBlock extends React.Component {
   }
 
   registerLang(lang){
+    if(lang === 'html') lang = 'xml'
     hljs.registerLanguage(
       lang, 
       require(`highlight.js/lib/languages/${lang}`)
