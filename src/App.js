@@ -1,5 +1,16 @@
 import React from 'react'
 import Page from './page'
+import './styles/App.css'
 
-const App = () => <Page />
+class App extends React.Component{
+ 
+  render() {
+    return (
+      <div className="cm-editor">
+        <Page  status={'Edit'} />
+        <Page  status={'Read'} />
+      </div>
+    )
+  }
+}
 export default App

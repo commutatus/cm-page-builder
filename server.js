@@ -3,7 +3,7 @@ var path = require("path"),
 express = require("express");
 
 var DIST_DIR = path.join(__dirname, "dist"),
-PORT = 3000,
+PORT = process.env.PORT || 3000,
 app = express();
 
 //Serving the files on the dist folder
@@ -15,4 +15,6 @@ app.get("*", function (req, res) {
 	res.sendFile(path.join(DIST_DIR, "index.html"));
 });
 
-app.listen(process.env.PORT || PORT);
+app.listen(PORT, () => {
+  console.log(`Server is up on port ${PORT}!`);
+});
