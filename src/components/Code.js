@@ -51,7 +51,7 @@ class CodeBlock extends React.Component {
     super(props);
     this.registerLang(DEFAULT_LANG)
     this.state = {
-      code: '',
+      code: props.content || '',
       selectedLang: DEFAULT_LANG
     }
     CodeBlock.contextType = PermissionContext
