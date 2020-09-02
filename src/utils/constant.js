@@ -81,3 +81,42 @@ export const IS_INLINE_COMPONENT = [
   'a',
   'strike'
 ]
+
+export const DEFAULT_COMPONENT_TYPES = [
+  {
+    "name" : "Header1",
+    "icon" : "cm-icon-h1",
+  },
+  {
+    "name" : "Header2",
+    "icon" : "cm-icon-h2",
+  },
+  {
+    "name" : "Olist",
+    "icon" : "cm-icon-numbers",
+  },
+  {
+    "name" : "Ulist",
+    "icon" : "cm-icon-bullets",
+  },
+  {
+    "name" : "Code",
+    "icon" : "cm-icon-code-block",
+  },
+  {
+    "name" : "Upload",
+    "icon" : "cm-icon-picture",
+  },
+  {
+    "name" : "Embed",
+    "icon" : "cm-icon-video",
+  },
+  {
+    "name" : "File",
+    "icon" : "cm-icon-upload",
+  },
+  {
+    "name" : "Divider",
+    "icon" : "cm-icon-divider",
+  }  
+]

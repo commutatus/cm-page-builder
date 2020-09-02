@@ -45,6 +45,9 @@ A list of Page components, to be initialized. They have the following structure
 ##### Status (default: `Edit`):
 Has to be one of `Edit`
 
+##### options (default: `['Header1','Header2','OList','UList','Embed','Upload','Divider','Code']`):
+Array of available components. For example, setting options as `['Header1']` will only render `Header1` component.
+
 ##### handleUpdate(id, data, type, key):
 A `function` that gets fired every time something happens with the components of a page. It receives four parameters, `id`, `data`, `type`, `key`
 - `id`: The ID of the component,
@@ -66,3 +69,4 @@ found inside the src/components folder. Available components are
 - `Embed`: A vimeo or youtube video which is meant to be displayed as an embed file
 - `Upload`: A file. `component_attachment` will hold all relevant information. If it is an image, it should be displayed as an embedded image
 - `Divider`: A line divider.
+- `Code`: A code snippet component.
