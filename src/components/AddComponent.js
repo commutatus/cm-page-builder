@@ -14,7 +14,7 @@ import {
   setCurrentElem,
   removeCurrentElem
 } from '../redux/reducers/currentElemReducer'
-import { TEXT_INPUT_COMPONENT } from '../utils/constant';
+import { TEXT_INPUT_COMPONENT, DEFAULT_COMPONENT_TYPES } from '../utils/constant';
 import DragHandle from './DragHandle';
 import { PermissionContext } from '../contexts/permission-context';
 import {setCursorToEnd} from '../utils/helpers'
@@ -234,7 +234,9 @@ class AddComponent extends React.Component{
     let {componentData} = this.props.appData
     
     let items = clipboardData.items;
-    let blob = items[0].getAsFile();
+    let types = clipboardData.types;
+    let fileIndex = types.findIndex(type => type === "Files")
+    let blob = fileIndex !== -1 && items[fileIndex].getAsFile();
 
     if(blob){
       //stop the default behaviour
@@ -268,9 +270,12 @@ class AddComponent extends React.Component{
 
  
   render(){
-    let { data } = this.props
+    let { data, options } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
-
+    let componentsToRender = DEFAULT_COMPONENT_TYPES
+		if (options && options.length) {
+			componentsToRender = componentsToRender.filter(item => options.includes(item.name))
+		}
     const isEdit = this.context.status === 'Edit'
     
 
@@ -316,33 +321,15 @@ class AddComponent extends React.Component{
             data-block-type="component-select-div" 
             style={{display: showActionBtn && !['Divider', 'Upload', 'Code'].includes(data.componentType)  ? 'flex' : 'none'}}
           >
-            <div data-type="Header1">
-              <i className="cm-icon-h1" />
-            </div>
-            <div data-type="Header2">
-              <i className="cm-icon-h2" />
-            </div>
-            <div data-type="Olist" >
-              <i className="cm-icon-numbers" />
-            </div>
-            <div data-type="Ulist">
-              <i className="cm-icon-bullets" />
-            </div>
-            <div data-type="Code">
-              <i className="cm-icon-code-block" />
-            </div>
-            <div data-type="Upload">
-              <i className="cm-icon-picture" />
-            </div>
-            <div data-type="Embed">
-              <i className="cm-icon-video" /> 
-            </div>
-            <div data-type="File">
-              <i className="cm-icon-upload" /> 
-            </div> 
-            <div data-type="Divider">
-              <i className="cm-icon-divider" />  
-            </div>
+            {
+              componentsToRender.map((type, index) => {
+                return (
+                  <div data-type={type.name} key={index}>
+                    <i className={type.icon} />
+                  </div>
+                )
+              })
+            }
           </div>
         </CSSTransition>
       </div>

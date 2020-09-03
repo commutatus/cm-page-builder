@@ -178,7 +178,7 @@ class PageContainer extends React.Component {
 			typeName = (typeName === 'File') ? 'Upload' : typeName
       let Component = require(`../components/${typeName}`)[typeName]
 			return (
-				<AddComponent key={dataId} id={dataId} data={data}>
+				<AddComponent key={dataId} id={dataId} data={data} options={this.props.options}>
 					<Component
 						handleUpdate={this.emitUpdate}
 						order={data.componentType === `Olist` && this._getCurrentOrder(index)}
