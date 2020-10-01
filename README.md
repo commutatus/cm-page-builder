@@ -1,34 +1,52 @@
-# cm-page-builder
-Page builder package like notion
+# CM Page Builder
+### A Notion inspired page builder
+CM Page builder is a modern rich text component based page builder inspired from [Notion](https://www.notion.so/). This Component allows you to compose awesome, formatted text in your web application and supports uploading files, pictures, code snippets and even embedding videos.
 
-## Installation
 
-Run `npm install -s cm-page-builder`
+## Download and Install CM Page Builder
 
-Add to your index.html the fonts cdn: `<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/EXPAV3/style-cf.css?crxvf0">`
+### Install from npm
 
-Import it as `import PageBuilder from 'cm-page-builder'`
+```
+npm install -s cm-page-builder
+```
 
-## Initialization
+### Adding custom icon fonts
+Add your font's `link` tag in `index.html`.
+<br/>
+For example: `<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/EXPAV3/style-cf.css?crxvf0">`
 
-A PageBuilder component looks like this:
+### Load CM Page Builder as a Module
+
+```javascript
+import PageBuilder from 'cm-page-builder'
+```
+
+### Initialization and Usage
+
+An Example of using page builder component:
 
 ```JSX
 
 <PageBuilder
-	meta={meta}
 	pageComponents={pageComponents}
 	typeMapping={TYPE_MAP_COMPONENT}
-	REVERSE_TYPE_MAP_COMPONENT={REVERSE_TYPE_MAP_COMPONENT}
 	handleUpdate={this._updatePageComponent}
 	status={this.state.status}
-	requestHandler={requestHandler}
-	pageCategories={getResourceCategories()}
-	currentOffices={currentPerson.creatable_offices_for_pages}
+	requestHandler={this.requestHandler}
+	options={[['Header1','Header2','Olist','Ulist']}
 />
 ```
 
-## Props
+Component Props  	|
+--------------------|
+pageComponents 		|
+typeMapping  		|
+options  			|
+handleUpdate  		|
+status  			|
+
+<br/>
 
 ##### Page components.
 A list of Page components, to be initialized. They have the following structure
@@ -41,12 +59,17 @@ A list of Page components, to be initialized. They have the following structure
   position: Number
 }
 ```
+<br/>
 
 ##### Status (default: `Edit`):
-Has to be one of `Edit`
+Has to be one of `Edit` or `Read`
+
+<br/>
 
 ##### options (default: `['Header1','Header2','Olist','Ulist','Embed','Upload', 'File','Divider','Code']`):
 Array of available components. For example, setting options as `['Header1']` will only render `Header1` component.
+
+<br/>
 
 ##### handleUpdate(id, data, type, key):
 A `function` that gets fired every time something happens with the components of a page. It receives four parameters, `id`, `data`, `type`, `key`
@@ -57,6 +80,8 @@ A `function` that gets fired every time something happens with the components of
   - `"updateComponent"`
   - `"deleteComponent"`
 - `key`: `undefined`
+
+<br/>
 
 ##### typeMapping
 A hash that maps snake_cased names of components with cm-page-builder components
@@ -70,3 +95,5 @@ found inside the src/components folder. Available components are
 - `Upload`: A file. `component_attachment` will hold all relevant information. If it is an image, it should be displayed as an embedded image
 - `Divider`: A line divider.
 - `Code`: A code snippet component.
+
+### Crafted with ❤️ by [Commutatus](https://www.commutatus.com)
