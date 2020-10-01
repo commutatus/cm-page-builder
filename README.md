@@ -2,6 +2,8 @@
 ### A Notion inspired page builder
 CM Page builder is a modern rich text component based page builder inspired from [Notion](https://www.notion.so/). This Component allows you to compose awesome, formatted text in your web application and supports uploading files, pictures, code snippets and even embedding videos.
 
+### Demo:
+[CM Page Builder 📝](http://cm-page-builder.herokuapp.com/)
 
 ## Download and Install CM Page Builder
 
