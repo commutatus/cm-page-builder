@@ -45,7 +45,7 @@ A list of Page components, to be initialized. They have the following structure
 ##### Status (default: `Edit`):
 Has to be one of `Edit`
 
-##### options (default: `['Header1','Header2','OList','UList','Embed','Upload','Divider','Code']`):
+##### options (default: `['Header1','Header2','Olist','Ulist','Embed','Upload', 'File','Divider','Code']`):
 Array of available components. For example, setting options as `['Header1']` will only render `Header1` component.
 
 ##### handleUpdate(id, data, type, key):
