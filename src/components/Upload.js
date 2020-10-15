@@ -25,7 +25,7 @@ class WrappedUpload extends React.Component {
 
   componentWillMount() {
     const { component_attachment, content, componentType } = this.props;
-    if (typeof content === 'object') 
+    if (typeof content === 'object')
       this.getImageUploader()(this.props.content, null, true);
     if (component_attachment && componentType === 'File') {
       let name = component_attachment.filename.split('.')[0];
@@ -60,7 +60,7 @@ class WrappedUpload extends React.Component {
       }
     // else if (this.state.uploading && progressInfo.progress.percent === 100 && this.state.uploadProgress === 1)
     //   this.setState({ uploading: false })
-    if (externalImageResponse && 
+    if (externalImageResponse &&
         this.props.externalImageResponse !== externalImageResponse &&
         nextProps.id === externalImageResponse.client_reference_id
       ) {
@@ -215,7 +215,7 @@ class WrappedUpload extends React.Component {
           <div className="image-upload">
               {
                 //check for external image url & blur until saved on API
-                ((component_attachment.url && (component_attachment.url).includes(this.props.assetBaseUrl)) || component_attachment.content) ?
+                ((component_attachment.url && (component_attachment.url.includes(this.props.assetBaseUrl) || component_attachment.url.startsWith("/"))) || component_attachment.content) ?
                   <img
                     src={component_attachment.url || component_attachment.content}
                     width="100%"
