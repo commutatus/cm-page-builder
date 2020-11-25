@@ -271,7 +271,7 @@ function emitUpdate(data, type){
       window.cmPageBuilder.handleUpdate(
         null, 
         { 
-          content: sanitizeHtml(data.content), 
+          content: sanitizeHtml(data.content) || null, 
           position: data.position, 
           component_type: data.componentType, 
           client_reference_id: data.id,
@@ -284,7 +284,7 @@ function emitUpdate(data, type){
         window.cmPageBuilder.handleUpdate(
           data.id, 
           { 
-            content: sanitizeHtml(data.content), 
+            content: sanitizeHtml(data.content) || null, 
             position: data.position, 
             component_type: data.componentType,
             component_attachment: data.component_attachment
