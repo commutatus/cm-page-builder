@@ -28,7 +28,6 @@ A PageBuilder component looks like this:
 	status={this.state.status}
 	requestHandler={requestHandler}
 	pageCategories={getResourceCategories()}
-	currentOffices={currentPerson.creatable_offices_for_pages}
 />
 ```
 
