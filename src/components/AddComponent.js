@@ -12,7 +12,8 @@ import {
 } from '../redux/reducers/appDataReducers'
 import {
   setCurrentElem,
-  removeCurrentElem
+  removeCurrentElem,
+  moveCaretToEnd,
 } from '../redux/reducers/currentElemReducer'
 import { TEXT_INPUT_COMPONENT, DEFAULT_COMPONENT_TYPES } from '../utils/constant';
 import DragHandle from './DragHandle';
@@ -118,6 +119,7 @@ class AddComponent extends React.Component{
               newCurrentId = appData.componentData[fromIndex-1].id
               this.props.removeComponent({blockId: currentElem.elemId})
               this.props.setCurrentElem(newCurrentId)
+              this.props.moveCaretToEnd()
             }else{
               this.props.updateComponent({id: appData.componentData[0].id, newState: {content: ''}})
             }
@@ -344,7 +346,8 @@ const mapDispatchToProps = {
   setCurrentElem,
   removeCurrentElem,
   updateComponent,
-  bulkCreate
+  bulkCreate,
+  moveCaretToEnd,
 }
 
 const mapStateToProps = (state) => { 
