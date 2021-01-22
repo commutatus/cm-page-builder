@@ -4,14 +4,14 @@ import sanitizeHtml from 'sanitize-html'
 import { connect } from 'react-redux';
 import {
   setCurrentElem,
-  removeCurrentElem
+  removeCurrentElem,
+  resetCaretManipulation,
 } from '../redux/reducers/currentElemReducer'
 import { PermissionContext } from '../contexts/permission-context';
 import {
   addNewComponent
 } from '../redux/reducers/appDataReducers'
 import {setCursorToEnd} from '../utils/helpers'
-import { throws } from 'assert';
 import { REGEX_FILTER_TAGS } from '../utils/constant' 
 class ContentEditable extends React.Component{
   
@@ -29,16 +29,42 @@ class ContentEditable extends React.Component{
     this.handleFocusAndBlur(oldProps, oldState)
   }
     
-  handleFocusAndBlur = (oldProps, oldState) => {
-    if(this.props.currentElem.elemId === this.props.id){
-      if(this.elem)
-        this.elem.focus()
+
+  //Moves the caret to the end of the range of the current element
+  moveCaretToEnd = () => {
+    let range, selection;
+    if (document.createRange) {
+      range = document.createRange();
+      range.selectNodeContents(this.elem);
+      range.collapse(false);
+      selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
-    else if(oldProps && this.props.currentElem.elemId === oldProps.currentElem.elemId){
-      if(this.elem)
-        this.elem.blur()
+  };
+
+  handleFocusAndBlur = (oldProps) => {
+    const { currentElem, resetCaretManipulation } = this.props;
+    if (currentElem.elemId === this.props.id) {
+      //Focus the element only if it's not focued already
+      if (this.elem && this.elem !== document.activeElement) {
+        this.elem.focus();
+        //Move the caret to the end of the contenteditable division alone, if flag is set in the store
+        if (
+          currentElem.shouldCaretMoveToEnd &&
+          this.elem.getAttribute("contenteditable") === "true"
+        ) {
+          //Reset the flag
+          resetCaretManipulation();
+          this.moveCaretToEnd();
+        }
+      }
+    } else if (oldProps && currentElem.elemId === oldProps.currentElem.elemId) {
+      if (this.elem) this.elem.blur();
     }
-  }
+  };
 
   emitChange = (e) => {
     if (!this.props.componentType && e.target.innerHTML) {
@@ -109,5 +135,6 @@ const mapDispatchToProps = {
   setCurrentElem,
   removeCurrentElem,
   addNewComponent,
+  resetCaretManipulation,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ContentEditable)
