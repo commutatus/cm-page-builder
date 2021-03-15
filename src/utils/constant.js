@@ -56,7 +56,7 @@ export const ALLOWED_TAGS = [
   'strike'
 ]
 
-export const INLINE_COMPONENT = [
+export const INLINE_COMPONENTS = [
   'span',
   'strong',
   'b',
