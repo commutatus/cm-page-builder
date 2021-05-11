@@ -79,6 +79,9 @@ class PageContainer extends React.Component {
     ) {
       this.props.updateComponentData(data);
     }
+    if (this.selectedPosition && this.selectedPosition.updated) {
+      this.restoreSelection();
+    }
   }
 
   componentWillUnmount() {
@@ -236,6 +239,7 @@ class PageContainer extends React.Component {
   };
 
   handleSelection = (e) => {
+    this.saveSelction(e);
     if (e.target.getAttribute("placeholder") !== `Title of the page`) {
       let selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
@@ -279,6 +283,85 @@ class PageContainer extends React.Component {
     if (index > -1) activeFormatting.splice(index, 1);
     else activeFormatting.push(action);
     this.setState({ activeFormatting });
+    this.selectedPosition = {
+      ...this.selectedPosition,
+      updated: true,
+    };
+  };
+
+  saveSelction = (e) => {
+    let range = window.getSelection().getRangeAt(0);
+    let preSelectionRange = range.cloneRange();
+    preSelectionRange.selectNodeContents(e.target);
+    preSelectionRange.setEnd(range.startContainer, range.startOffset);
+    let start = preSelectionRange.toString().length;
+
+    this.selectedPosition = {
+      selectedElement: e.target,
+      startSelect: start,
+      endSelect: start + range.toString().length,
+    };
+  };
+
+  restoreSelection = () => {
+    let { selectedElement, startSelect, endSelect } = this.selectedPosition;
+    if (window.getSelection && document.createRange) {
+      let doc = selectedElement.ownerDocument,
+        win = doc.defaultView;
+      let charIndex = 0,
+        range = doc.createRange();
+      range.setStart(selectedElement, 0);
+      range.collapse(true);
+      let nodeStack = [selectedElement],
+        node,
+        foundStart = false,
+        stop = false;
+
+      while (!stop && (node = nodeStack.pop())) {
+        if (node.nodeType == 3) {
+          var nextCharIndex = charIndex + node.length;
+          if (
+            !foundStart &&
+            startSelect >= charIndex &&
+            startSelect <= nextCharIndex
+          ) {
+            range.setStart(node, startSelect - charIndex);
+            foundStart = true;
+          }
+          if (
+            foundStart &&
+            endSelect >= charIndex &&
+            endSelect <= nextCharIndex
+          ) {
+            range.setEnd(node, endSelect - charIndex);
+            stop = true;
+          }
+          charIndex = nextCharIndex;
+        } else {
+          var i = node.childNodes.length;
+          while (i--) {
+            nodeStack.push(node.childNodes[i]);
+          }
+        }
+      }
+
+      let sel = win.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      this.selectedPosition = {
+        ...this.selectedPosition,
+        updated: false,
+      };
+    } else {
+      let doc = selectedElement.ownerDocument,
+        win = doc.defaultView || doc.parentWindow;
+      let textRange = doc.body.createTextRange();
+      textRange.moveToElementText(selectedElement);
+      textRange.collapse(true);
+      textRange.moveEnd("character", savedPos);
+      textRange.moveStart("character", savedPos);
+      textRange.select();
+    }
   };
 
   getSelectedNode = (e) => {
