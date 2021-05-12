@@ -90,6 +90,9 @@ class ContentEditable extends React.Component{
   }
 
   handleMouseDown = (e) => {
+    if(e.target.nodeName === 'A'){
+      window.open(e.target.href)
+    }
     if(this.props.id === 'page-title'){
       this.props.setCurrentElem(this.props.id)
     }
@@ -100,13 +103,12 @@ class ContentEditable extends React.Component{
     const {context, status} = this
     const isEdit = status === 'Edit'
     const actions = {
-      onMouseUp: this.handleMouseUp,
+      //onMouseUp: this.handleMouseUp,
       onBlur: this.emitChange,
-      onSelect: context.handleSelection,
+      //onSelect: context.handleSelection,
       onFocus: this.handleFocus,
       onMouseDown: this.handleMouseDown,
       onKeyDown: this.handleNewLine,
-      onMouseDown: this.handleMouseDown
     }
     return(
       <div className={classNames("component-section", context.status.toLowerCase())}>

@@ -1,6 +1,12 @@
 .cm-editor{
   display: flex;
-  .cm-page-builder{
+  & > div{
+    & > h1 {
+      opacity: 90%;
+      & > span{
+        font-size: 14px;
+      }
+    }
     flex: 1;
     border: 1px solid black;
     padding: 10px 64px;

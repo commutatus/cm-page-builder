@@ -1,5 +1,5 @@
 import React from "react";
-import Sortable from "sortablejs";
+import Sortable, { active } from "sortablejs";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
@@ -66,19 +66,23 @@ class PageContainer extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.state.actionDomRect) {
-      document.addEventListener("mousedown", this.handlePageClick);
-    }
+  componentDidUpdate(prevProps, prevState) {
     PageContainer.contextType = PermissionContext;
 
-    let data = this.props.appData.componentData;
+    let data = this.props.appData.componentData
 
     if (
       JSON.stringify(prevProps.appData.componentData) !== JSON.stringify(data)
     ) {
       this.props.updateComponentData(data);
     }
+
+    //for formatting fix
+    if(this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)){
+      this.handleFormatting()
+      
+    }
+    
   }
 
   componentWillUnmount() {
@@ -119,14 +123,6 @@ class PageContainer extends React.Component {
     }
   }
 
-  handlePageClick = (e) => {
-    let editTooltip = document.getElementById("cm-text-edit-tooltip");
-    if (editTooltip && !editTooltip.contains(e.target)) {
-      this.setState({ actionDomRect: null, activeFormatting: [] });
-    } else {
-      document.removeEventListener("mousedown", this.handlePageClick);
-    }
-  };
 
   emitUpdate = (...args) => {
     if (this.props.handleUpdate) {
@@ -135,10 +131,10 @@ class PageContainer extends React.Component {
   };
 
   removeFocus = (e) => {
-    let conElem = document.querySelector(`[data-container-block="true"]`);
-    if (conElem && !conElem.contains(e.target)) {
-      this.props.removeCurrentElem();
-    }
+    //let conElem = document.querySelector(`[data-container-block="true"]`);
+    //if (conElem && !conElem.contains(e.target)) {
+    //  this.props.removeCurrentElem();
+    //}
   };
 
   handlePageUnload = (e) => {
@@ -151,6 +147,7 @@ class PageContainer extends React.Component {
       e.returnValue = false;
     }
   };
+
   _getCurrentOrder = (currentIndex) => {
     const { appData } = this.props;
     if (typeof this._getCurrentOrder.counter === "undefined")
@@ -203,20 +200,26 @@ class PageContainer extends React.Component {
 
   handleMouseUp = (e) => {
     e.persist();
-    let conElem = document.querySelector(`[data-container-block="true"]`);
-    if (conElem.getBoundingClientRect().bottom < e.pageY) {
-      let { appData } = this.props;
-      let lastElem = appData.componentData[appData.componentData.length - 1];
-      if (
-        (!lastElem || lastElem.componentType !== "Text" || lastElem.content) &&
-        !this.props.newPage
-      ) {
-        this.props.addNewComponent({
-          id: lastElem && lastElem.id,
-          componentType: "Text",
-        });
+    if(e.target.dataset.action){
+      this.editText(e)
+    }else{
+      this.setState({actionDomRect: null})
+      let conElem = document.querySelector(`[data-container-block="true"]`);
+      if (conElem.getBoundingClientRect().bottom < e.pageY) {
+        let { appData } = this.props;
+        let lastElem = appData.componentData[appData.componentData.length - 1];
+        if (
+          (!lastElem || lastElem.componentType !== "Text" || lastElem.content) &&
+          !this.props.newPage
+        ) {
+          this.props.addNewComponent({
+            id: lastElem && lastElem.id,
+            componentType: "Text",
+          });
+        }
       }
     }
+    
   };
 
   getScrollOffsets = () => {
@@ -236,6 +239,10 @@ class PageContainer extends React.Component {
   };
 
   handleSelection = (e) => {
+    
+    if(e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed){
+      return 
+    }
     if (e.target.getAttribute("placeholder") !== `Title of the page`) {
       let selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
@@ -244,100 +251,108 @@ class PageContainer extends React.Component {
         if (dimensions.width > 1) {
           let scrollOffsets = this.getScrollOffsets();
           let actionDomRect = {
-            top: dimensions.top + scrollOffsets.y - dimensions.height - 10,
+            top: dimensions.top + scrollOffsets.y - 30,
             left: dimensions.left + scrollOffsets.x,
           };
-          this.setState({ actionDomRect });
+          
+          this.saveSelection()
+          
+          this.setState({ actionDomRect, activeFormatting: this.getActiveFormatting(e), name: 'handleSelection' });
         }
       } else {
         this.currentElemSelection = null;
       }
     }
-    this.handleRangeSelection(e);
+
   };
+
+  getActiveFormatting(e){
+
+    function getParentTilYoufindDiv(node){
+      if(node.nodeName === 'DIV'){
+        return [node.nodeName]
+      }
+      return [node.nodeName, ...(getParentTilYoufindDiv(node.parentElement))]
+    }
+    
+    const parentNodes = getParentTilYoufindDiv(this.range.commonAncestorContainer)
+    
+    const mapping = {
+      'B': 'bold',
+      'I': 'italic',
+      'STRIKE': 'strikeThrough',
+      'A': 'createLink'
+    }
+    
+    return parentNodes.map(item => mapping[item]).filter(Boolean) || []
+
+  }
+
+  saveSelection(){
+    let selectedRange = window.getSelection().getRangeAt(0)
+    this.range = new Range()
+    this.range.setStart(selectedRange.startContainer, selectedRange.startOffset)
+    this.range.setEnd(selectedRange.endContainer, selectedRange.endOffset)
+  }
+
 
   editText = (e) => {
     e.preventDefault();
-    let { activeFormatting } = this.state;
-    let action = e.currentTarget.dataset.action;
-    if (action === "createLink") {
-      if (!activeFormatting.includes(`createLink`)) {
-        let link = prompt("Enter a link");
-        let url = link ? link.split("//")[0] : "";
-        if (url && url !== "http:" && url !== "https:") link = "http://" + link;
-        document.execCommand(
-          "insertHTML",
-          true,
-          `<a href=${link} target="_blank">${window
-            .getSelection()
-            .toString()}</a>`
-        );
-        //document.execCommand(action, false, link)
-      } else document.execCommand("unlink", false, false);
-    } else document.execCommand(action);
-    let index = activeFormatting.indexOf(action);
-    if (index > -1) activeFormatting.splice(index, 1);
-    else activeFormatting.push(action);
-    this.setState({ activeFormatting });
+    e.stopPropagation()
+    const { activeFormatting } = this.state;
+    let newActiveFormatting = []
+
+    let action = e.target.dataset.action;
+    
+    if(activeFormatting.includes(action)){
+      newActiveFormatting = activeFormatting.filter(item => item != action)
+    }else{
+      newActiveFormatting = [...activeFormatting, action]
+    }    
+
+    this.formatting = action
+    this.setState({ activeFormatting: newActiveFormatting, name: 'editText' });
   };
 
-  getSelectedNode = (e) => {
-    // To get the parent node of the selected DOM element so that all the slected tags can be detected
-    if (document.selection)
-      return document.selection.createRange().parentElement();
-    else {
-      var selection = window.getSelection();
-      if (selection.rangeCount > 0) {
-        let parent = selection.getRangeAt(0).startContainer.parentNode;
-        if (parent !== e.target)
-          while (parent.parentNode && parent.parentNode !== e.target) {
-            parent = parent.parentNode;
-          }
-        return parent;
-      }
-      return null;
-    }
-  };
+  
 
-  handleRangeSelection = (e) => {
+  handleFormatting = () => {
     let { activeFormatting } = this.state;
-    activeFormatting = [];
-    let node = this.getSelectedNode(e);
-    while (node) {
-      switch (node.nodeName) {
-        case `A`:
-          if (!activeFormatting.includes(`createLink`))
-            activeFormatting.push(`createLink`);
-          break;
-        case `B`:
-          if (!activeFormatting.includes(`bold`)) activeFormatting.push(`bold`);
-          break;
-        case `I`:
-          if (!activeFormatting.includes(`italic`))
-            activeFormatting.push(`italic`);
-          break;
-        case `STRIKE`:
-          if (!activeFormatting.includes(`strikeThrough`))
-            activeFormatting.push(`strikeThrough`);
-          break;
-        default:
-          this.setState({ activeFormatting: [] });
-          break;
-      }
-      node = node.firstChild;
+
+    window.getSelection().removeAllRanges()
+    window.getSelection().addRange(this.range)
+
+    
+    let action = this.formatting;
+    switch(action){
+      case 'createLink':
+        if (activeFormatting.includes(`createLink`)) {
+          let link = prompt("Enter a link");
+          let url = link ? link.split("//")[0] : "";
+          if (url && url !== "http:" && url !== "https:") link = "http://" + link;
+          document.execCommand(
+            "insertHTML",
+            false,
+            `<a href=${link} target="_blank" >${window
+              .getSelection()
+              .toString()}</a>`
+          );
+        } else document.execCommand("unlink", false, false);
+        break
+      default:
+        console.log(document.execCommand(action, false, null))
+        break
     }
-    this.setState({
-      activeFormatting,
-      currentType: e.target.getAttribute("placeholder"),
-    });
-  };
+    this.formatting = null;
+    this.saveSelection()
+  }
 
   showTooltip = () => {
-    this.setState({ showTooltip: true });
+    this.setState({ showTooltip: true, name: 'showTooltip' });
   };
 
   hideTooltip = () => {
-    this.setState({ showTooltip: false });
+    this.setState({ showTooltip: false, name: 'hideTooltip' });
   };
 
   handleKeyDown = (e) => {
@@ -350,6 +365,7 @@ class PageContainer extends React.Component {
       }
     }
   };
+
 
   handleFileDrop = (acceptedFiles, rejectedFiles, event) => {
     const { appData, currentElem } = this.props;
@@ -373,19 +389,12 @@ class PageContainer extends React.Component {
     });
   };
 
-  // handleFileDragEnter = (event) => {
-  // 	let target = event.target
-  // 	target.setAttribute('id', 'drag-element')
-  // }
-
-  // handleFileDragLeave = (event) => {
-  // 	event.target.removeAttribute('id')
-  // }
 
   render() {
     const { meta, actionDomRect, activeFormatting, currentType } = this.state;
     const { appData } = this.props;
     let isEdit = this.props.status === "Edit";
+    
     return (
       <Dropzone
         noClick
@@ -457,13 +466,6 @@ class PageContainer extends React.Component {
                       ? "bold-tool-btn-active"
                       : "bold-tool-btn"
                   }
-                  onMouseDown={
-                    !["Heading", "Subheading"].includes(currentType)
-                      ? this.editText
-                      : (e) => {
-                          e.preventDefault();
-                        }
-                  }
                   data-action="bold"
                   style={
                     ["Heading", "Subheading"].includes(currentType)
@@ -479,10 +481,9 @@ class PageContainer extends React.Component {
                       ? "tool-btn-active"
                       : "tool-btn"
                   }
-                  onMouseDown={this.editText}
                   data-action="italic"
                 >
-                  <i className="cm-icon-italic" />
+                  <i className="cm-icon-italic" data-action="italic" />
                 </div>
                 <div
                   className={
@@ -490,10 +491,9 @@ class PageContainer extends React.Component {
                       ? "tool-btn-active"
                       : "tool-btn"
                   }
-                  onMouseDown={this.editText}
                   data-action="strikeThrough"
                 >
-                  <i className="cm-icon-strikethrough" />
+                  <i className="cm-icon-strikethrough" data-action="strikeThrough" />
                 </div>
                 <div
                   className={
@@ -501,10 +501,10 @@ class PageContainer extends React.Component {
                       ? "tool-btn-active"
                       : "tool-btn"
                   }
-                  onMouseDown={this.editText}
                   data-action="createLink"
+                  
                 >
-                  <i className="cm-icon-link" />
+                  <i className="cm-icon-link" data-action="createLink"/>
                 </div>
                 {/* <div className="divider"></div>
 								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
