@@ -66,7 +66,8 @@ export const ALLOWED_TAGS = [
   'em',
   'small',
   'strong',
-  'strike'
+  'strike',
+  'meta'
 ]
 
 export const IS_INLINE_COMPONENT = [
@@ -79,7 +80,8 @@ export const IS_INLINE_COMPONENT = [
   'strong',
   'p',
   'a',
-  'strike'
+  'strike',
+  'meta'
 ]
 
 export const DEFAULT_COMPONENT_TYPES = [
