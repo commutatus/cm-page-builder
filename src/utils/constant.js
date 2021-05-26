@@ -1,16 +1,16 @@
 export const TEXT_INPUT_COMPONENT = [
-  'Text',
-  'Title',
-  'Header1',
-  'Header2',
-  'Ulist',
-  'Olist',
-  'Code'
-]
+  "Text",
+  "Title",
+  "Header1",
+  "Header2",
+  "Ulist",
+  "Olist",
+  "Code",
+];
 
-export const S3_BASE_URL = "https://cdn-expa.aiesec.org"
+export const S3_BASE_URL = "https://cdn-expa.aiesec.org";
 
-export const REGEX_FILTER_TAGS = /(<([^>]+)>)/ig
+export const REGEX_FILTER_TAGS = /(<([^>]+)>)/gi;
 
 // const TYPE_MAP_COMPONENT = {
 //   header: 'Header1',
@@ -26,22 +26,16 @@ export const REGEX_FILTER_TAGS = /(<([^>]+)>)/ig
 // };
 
 export const TAGS_TO_COMPONENT_MAP = {
-  ol: 'Olist',
-  ul: 'Ulist',
-  embed: 'Embed',
-  img: 'Upload',
-  h1: 'Header1',
-  h2: 'Header2',
-  hr: 'Divider',
-}
+  ol: "Olist",
+  ul: "Ulist",
+  embed: "Embed",
+  img: "Upload",
+  h1: "Header1",
+  h2: "Header2",
+  hr: "Divider",
+};
 
-export const TEXT_COMPONENT = [
-  'Olist',
-  'Ulist',
-  'Header1',
-  'Header2',
-  'Text'
-]
+export const TEXT_COMPONENT = ["Olist", "Ulist", "Header1", "Header2", "Text"];
 
 export const ALLOWED_TAGS = [
   "h1",
@@ -58,65 +52,67 @@ export const ALLOWED_TAGS = [
   "span",
   "strong",
   "li",
-  'hr',
-  'span',
-  'strong',
-  'b',
-  'i',
-  'em',
-  'small',
-  'strong',
-  'strike'
-]
+  "hr",
+  "span",
+  "strong",
+  "b",
+  "i",
+  "em",
+  "small",
+  "strong",
+  "strike",
+  "meta",
+];
 
 export const IS_INLINE_COMPONENT = [
-  'span',
-  'strong',
-  'b',
-  'i',
-  'em',
-  'small',
-  'strong',
-  'p',
-  'a',
-  'strike'
-]
+  "span",
+  "strong",
+  "b",
+  "i",
+  "em",
+  "small",
+  "strong",
+  "p",
+  "a",
+  "strike",
+  "meta",
+];
 
 export const DEFAULT_COMPONENT_TYPES = [
   {
-    "name" : "Header1",
-    "icon" : "cm-icon-h1",
+    name: "Header1",
+    icon: "cm-icon-h1",
   },
   {
-    "name" : "Header2",
-    "icon" : "cm-icon-h2",
+    name: "Header2",
+    icon: "cm-icon-h2",
   },
   {
-    "name" : "Olist",
-    "icon" : "cm-icon-numbers",
+    name: "Olist",
+    icon: "cm-icon-numbers",
   },
   {
-    "name" : "Ulist",
-    "icon" : "cm-icon-bullets",
+    name: "Ulist",
+    icon: "cm-icon-bullets",
   },
   {
-    "name" : "Code",
-    "icon" : "cm-icon-code-block",
+    name: "Code",
+    icon: "cm-icon-code-block",
   },
   {
-    "name" : "Upload",
-    "icon" : "cm-icon-picture",
+    name: "Upload",
+    icon: "cm-icon-picture",
   },
   {
-    "name" : "Embed",
-    "icon" : "cm-icon-video",
+    name: "Embed",
+    icon: "cm-icon-video",
   },
   {
-    "name" : "File",
-    "icon" : "cm-icon-upload",
+    name: "File",
+    icon: "cm-icon-upload",
   },
   {
-    "name" : "Divider",
-    "icon" : "cm-icon-divider",
-  }  
-]
+    name: "Divider",
+    icon: "cm-icon-divider",
+  },
+];
