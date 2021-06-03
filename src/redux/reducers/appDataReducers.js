@@ -247,11 +247,7 @@ function updateComponentState(state, data) {
       return {
         ...component,
         ...newState,
-        content: newState.content
-          ? component.componentType === "Text"
-            ? urlify(sanitizeHtml(newState.content))
-            : newState.content
-          : "",
+        content: newState.content ? newState.content : "",
       };
     } else {
       return component;
