@@ -109,20 +109,16 @@ class AddComponent extends React.Component{
         }
       case 'Backspace':
         if(this.elem.querySelector(`[data-root="true"]`).innerHTML === ''){
-          if (this.props.data.componentType === 'Ulist' || this.props.data.componentType === 'Olist')
-            this.props.updateComponentType({blockId: e.currentTarget.dataset.blockId, type: 'Text'})
-          else {
-            e.preventDefault()
-            let newCurrentId = null
-            let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
-            if (fromIndex > 0) {
-              newCurrentId = appData.componentData[fromIndex-1].id
-              this.props.removeComponent({blockId: currentElem.elemId})
-              this.props.setCurrentElem(newCurrentId)
-              this.props.moveCaretToEnd()
-            }else{
-              this.props.updateComponent({id: appData.componentData[0].id, newState: {content: ''}})
-            }
+          e.preventDefault()
+          let newCurrentId = null
+          let fromIndex = appData.componentData.findIndex(object => object.id === currentElem.elemId)
+          if (fromIndex > 0) {
+            newCurrentId = appData.componentData[fromIndex-1].id
+            this.props.removeComponent({blockId: currentElem.elemId})
+            this.props.setCurrentElem(newCurrentId)
+            this.props.moveCaretToEnd()
+          }else{
+            this.props.updateComponent({id: appData.componentData[0].id, newState: {content: ''}})
           }
         }
         break
