@@ -1,6 +1,8 @@
-@import '../imports';
+@import "../imports";
 
 .cm-embed {
+  width: 100%;
+
   .embed-input-field {
     display: flex;
     align-items: center;
@@ -42,4 +44,3 @@
     margin: 5px 0;
   }
 }
-

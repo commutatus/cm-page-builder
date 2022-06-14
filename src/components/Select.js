@@ -1,9 +1,10 @@
-import classNames from 'classnames'
 import React from 'react'
-import '../styles/Select.css'
+import styles from "./../styles/Select.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
-class SelectNew extends React.Component{
-  constructor(props){
+class SelectNew extends React.Component {
+  constructor(props) {
     super(props)
     this.state = {
       showDropdown: props.openByDefault,
@@ -12,38 +13,38 @@ class SelectNew extends React.Component{
       initialValue: ''
     }
   }
-  
-  componentWillMount(){
+
+  componentWillMount() {
     this.handleValue(this.props.children, this.props.value)
   }
 
-  componentDidMount(){
-    if(this.props.autoFocus) {
+  componentDidMount() {
+    if (this.props.autoFocus) {
       this.inputNode && this.inputNode.focus()
     }
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     this.handleValue(nextProps.children, nextProps.value)
   }
 
   handleOutsideClick = (e) => {
-    if(this.node && !this.node.contains(e.target)){
-      this.setState({showDropdown: false})
+    if (this.node && !this.node.contains(e.target)) {
+      this.setState({ showDropdown: false })
     }
   }
 
-  handleValue(child, value){
-    let {showSearch} = this.props
-    if(!showSearch){
+  handleValue(child, value) {
+    let { showSearch } = this.props
+    if (!showSearch) {
       let initialValue = ""
       React.Children.forEach(child, (child => value && child.props.value === value ? initialValue = child.props.children : undefined))
-      this.setState({initialValue})
+      this.setState({ initialValue })
     }
   }
 
   handleNavigation = (e) => {
-    let {currentPosition} = this.state
+    let { currentPosition } = this.state
     let {
       filterOption,
       filterOptionProp = 'value',
@@ -54,44 +55,44 @@ class SelectNew extends React.Component{
       searchText,
     } = this.state
 
-    if(this.scrollableDiv){
+    if (this.scrollableDiv) {
       let children = this.scrollableDiv.querySelectorAll('div')
       let childCount = children.length
       switch (e.key) {
         case 'ArrowUp':
           e.preventDefault()
-          if(childCount > 0 && currentPosition > 0){
+          if (childCount > 0 && currentPosition > 0) {
             let el = children[currentPosition - 1]
             this.scrollableDiv.scrollTo(0, el.offsetTop - el.offsetHeight - 5)
-            this.setState({currentPosition: currentPosition - 1})
+            this.setState({ currentPosition: currentPosition - 1 })
           }
           break;
         case 'ArrowDown':
           e.preventDefault()
-          if(childCount > 0 && (currentPosition < childCount - 1)){
+          if (childCount > 0 && (currentPosition < childCount - 1)) {
             let el = children[currentPosition + 1]
             this.scrollableDiv.scrollTo(0, el.offsetTop - el.offsetHeight - 5)
-            this.setState({currentPosition: currentPosition + 1})
+            this.setState({ currentPosition: currentPosition + 1 })
           }
           break
         case 'Enter':
           e.preventDefault()
           let counter = -1
-          React.Children.forEach(this.props.children, (child, ) => {
-            if(
+          React.Children.forEach(this.props.children, (child,) => {
+            if (
               filterOption
-              ?
-              filterOption && filterOption(searchText, child)
-              :
-              showSearch &&
-              filterOptionProp && 
-              child.props[filterOptionProp] && 
-              String(!child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
+                ?
+                filterOption && filterOption(searchText, child)
+                :
+                showSearch &&
+                filterOptionProp &&
+                child.props[filterOptionProp] &&
+                String(!child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
             ) {
-              return 
+              return
             }
             counter++
-            if(counter === Number(currentPosition)){
+            if (counter === Number(currentPosition)) {
               this.handleSelect(child.props.dataProp || child.props.value, e)
             }
           })
@@ -106,15 +107,15 @@ class SelectNew extends React.Component{
   }
 
   handleChange = (e) => {
-    this.setState({searchText: e.target.value, currentPosition: 0})
+    this.setState({ searchText: e.target.value, currentPosition: 0 })
   }
-  
 
-  
+
+
   toggleDropdown = () => {
-    this.setState(state => ({showDropdown: this.props.openUntillSelect ? true : !state.showDropdown}), () => {
-      if(!this.props.shouldAlwaysOpen){
-        if(this.state.showDropdown)
+    this.setState(state => ({ showDropdown: this.props.openUntillSelect ? true : !state.showDropdown }), () => {
+      if (!this.props.shouldAlwaysOpen) {
+        if (this.state.showDropdown)
           document.addEventListener('click', this.handleOutsideClick, false)
         else
           document.removeEventListener('click', this.handleOutsideClick, false)
@@ -124,19 +125,19 @@ class SelectNew extends React.Component{
 
   handleSelect = (...args) => {
     this.props.onSelect(...args)
-    this.setState({searchText: ''}, () => {
+    this.setState({ searchText: '' }, () => {
       this.toggleDropdown()
     })
-  } 
+  }
 
   handleMouseEnter = (e, currentPosition) => {
     e.preventDefault()
-    this.setState({currentPosition})
+    this.setState({ currentPosition })
   }
 
   handleMouseLeave = (e, currentPosition) => {
     e.preventDefault()
-    this.setState({currentPosition})
+    this.setState({ currentPosition })
   }
 
   getChildren = () => {
@@ -146,8 +147,8 @@ class SelectNew extends React.Component{
     } = this.state
 
     let {
-      children, 
-      showCheckbox, 
+      children,
+      showCheckbox,
       filterOption,
       filterOptionProp = 'value',
       showSearch
@@ -161,25 +162,25 @@ class SelectNew extends React.Component{
     let counter = -1
     return (
       React.Children.map(children, ((child, i) => {
-        if(filterOptionProp !== 'value' && !child.props[filterOptionProp]){
+        if (filterOptionProp !== 'value' && !child.props[filterOptionProp]) {
           console.error(`Warning: filterOptionProp is passed but its prop is not passed in the Option ${i}. This may result inconsistency.`)
         }
-        else if(
+        else if (
           filterOption
-          ?
-          filterOption && filterOption(searchText, child)
-          :
-          showSearch &&
-          filterOptionProp && 
-          child.props[filterOptionProp] && 
-          !String(child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
+            ?
+            filterOption && filterOption(searchText, child)
+            :
+            showSearch &&
+            filterOptionProp &&
+            child.props[filterOptionProp] &&
+            !String(child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
         ) {
-          return 
+          return
         }
         counter++
         return (React.cloneElement(child, {
-          ...childProps, 
-          handleMouseEnter: this.handleMouseEnter, 
+          ...childProps,
+          handleMouseEnter: this.handleMouseEnter,
           handleMouseLeave: this.handleMouseLeave,
           position: counter,
           currentPosition,
@@ -190,14 +191,14 @@ class SelectNew extends React.Component{
 
   render() {
     let {
-      showDropdown, 
+      showDropdown,
       searchText,
       initialValue
     } = this.state
 
     let {
-      showSearch, 
-      placeholder, 
+      showSearch,
+      placeholder,
       containerClassname,
       containerStyle,
       showArrow,
@@ -206,66 +207,66 @@ class SelectNew extends React.Component{
       disabled
     } = this.props
 
-    return(
-      <div 
-        className={classNames('cm-select-container', containerClassname)} 
+    return (
+      <div
+        className={cx('cm-select-container', containerClassname)}
         style={containerStyle}
         onKeyDownCapture={this.handleNavigation}
         ref={node => this.node = node}
       >
-        <div className="cm-select-body">
+        <div className={cx("cm-select-body")}>
           {
             [
               React.isValidElement(initialValue) || !showSearch
-              ? 
-              <div
-                ref={node => this.inputNode = node}
-                className={classNames(
-                  "search-input", 
-                  searchInputClassname, 
-                  {
-                    "disable-search": !showSearch, 
-                    "disabled-dropdown": disabled
-                  }
-                )}
-                onFocus={!disabled ? this.toggleDropdown : () => {}}
-                disabled={disabled}
-                key="cm-select-input"
-                {...(!disabled ? {tabIndex: "0"} : {})}
-              >
-                {initialValue}
-              </div>
-              :
-              <input 
-                ref={node => this.inputNode = node}
-                type="text"
-                className={classNames(
-                  "search-input", 
-                  searchInputClassname, 
-                  {
-                    "disable-search": !showSearch, 
-                    "disabled-dropdown": disabled
-                  }
-                )}
-                value={showSearch ? searchText : initialValue}
-                onChange={this.handleChange}
-                placeholder={placeholder}
-                autoComplete="nope"
-                onFocus={this.toggleDropdown}
-                disabled={disabled}
-                key="cm-select-input"
-                {...(!showSearch ? {readOnly: true} : {})}
-              />,
-              showSearchIcon && <span key="cm-select-showSearchIcon"> <i className="cm cm-search search-icon"> </i> </span>,
-              showArrow && <span key="cm-select-showArrow"> <i className={`cm-icon-cm-icon-arrow-${showDropdown ? 'up' : 'down'} arrow-icon`}> </i> </span>
+                ?
+                <div
+                  ref={node => this.inputNode = node}
+                  className={cx(
+                    "search-input",
+                    searchInputClassname,
+                    {
+                      "disable-search": !showSearch,
+                      "disabled-dropdown": disabled
+                    }
+                  )}
+                  onFocus={!disabled ? this.toggleDropdown : () => { }}
+                  disabled={disabled}
+                  key="cm-select-input"
+                  {...(!disabled ? { tabIndex: "0" } : {})}
+                >
+                  {initialValue}
+                </div>
+                :
+                <input
+                  ref={node => this.inputNode = node}
+                  type="text"
+                  className={cx(
+                    "search-input",
+                    searchInputClassname,
+                    {
+                      "disable-search": !showSearch,
+                      "disabled-dropdown": disabled
+                    }
+                  )}
+                  value={showSearch ? searchText : initialValue}
+                  onChange={this.handleChange}
+                  placeholder={placeholder}
+                  autoComplete="nope"
+                  onFocus={this.toggleDropdown}
+                  disabled={disabled}
+                  key="cm-select-input"
+                  {...(!showSearch ? { readOnly: true } : {})}
+                />,
+              showSearchIcon && <span key="cm-select-showSearchIcon"> <i className={cx("cm", "cm-search", "search-icon")}> </i> </span>,
+              showArrow && <span key="cm-select-showArrow"> <i className={cx(`cm-icon-cm-icon-arrow-${showDropdown ? 'up' : 'down'}`, "arrow-icon")}> </i> </span>
             ]
           }
           {
             showDropdown &&
-              <div className="cm-select-options" ref={node => this.scrollableDiv = node}>
-                {this.getChildren()}
-              </div>
-            }
+            <div className={cx("cm-select-options")} ref={node => this.scrollableDiv = node}>
+              {this.getChildren()}
+            </div>
+          }
         </div>
       </div>
     )
@@ -275,11 +276,11 @@ class SelectNew extends React.Component{
 
 const Option = (props) => {
   let {
-    children, 
-    handleSelect, 
-    showCheckbox, 
-    selected, 
-    dataProp, 
+    children,
+    handleSelect,
+    showCheckbox,
+    selected,
+    dataProp,
     currentPosition,
     position,
     handleMouseEnter,
@@ -288,10 +289,10 @@ const Option = (props) => {
     ...rest
   } = props
   let isFocused = currentPosition === position
-  return(
-    <div 
-      className={`cm-option-item ${ isFocused ? 'hover' : ''}`} 
-      onClick={handleSelect.bind(this, dataProp || value)} 
+  return (
+    <div
+      className={cx("cm-option-item", { 'hover': isFocused })}
+      onClick={handleSelect.bind(this, dataProp || value)}
       onMouseEnter={(e) => handleMouseEnter(e, position)}
       onMouseLeave={(e) => handleMouseLeave(e, position)}
       {...rest}
@@ -308,8 +309,8 @@ export default Object.assign(SelectNew, {
 
 //Props that can be passed
 //openUntillSelect => keep the dropdown open untill an option is selected.
-// showSearch => make the dropdown searchable, 
-// placeholder, 
+// showSearch => make the dropdown searchable,
+// placeholder,
 //containerClassname
 //containerStyle
 //showArrow,

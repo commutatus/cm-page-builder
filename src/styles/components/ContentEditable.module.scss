@@ -1,19 +1,15 @@
-@import './imports';
+@import '../imports';
 
 .component-section{
   [contenteditable]:empty:focus:before {
     content: attr(placeholder);
     display: block;
   }
-  
+
   [contenteditable] {
     -webkit-tap-highlight-color: transparent;
     a{
       color: $blue;
-    }
-    *{
-      background-color: transparent !important;
-      -webkit-text-fill-color: black !important;
     }
   }
 }

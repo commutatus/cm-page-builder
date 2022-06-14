@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
-import '../styles/components/MultiSelectDropdown.css';
 import { PermissionContext } from '../contexts/permission-context';
 import { formatOptionsToMultiSelect } from '../utils/helpers';
 import { connect } from 'react-redux';
 import { removeCurrentElem } from '../redux/reducers/currentElemReducer'
+import styles from "./../styles/components/MultiSelectDropdown.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 class MultiSelectDropdown extends React.Component {
 
@@ -61,54 +63,62 @@ class MultiSelectDropdown extends React.Component {
 				{
 					value => {
 						return (
-							<div className="multi-select-dropdown-container" ref={(node) => this.elem = node}>
+							<div className={cx("multi-select-dropdown-container")} ref={(node) => this.elem = node}>
 								<CSSTransition
 									in={isDropdownOpen}
 									timeout={300}
-									classNames="dropdown-fade"
+									classNames="cm-p-builder-dropdown-fade"
 								>
 									<div>
 										<div
-											className='dropdown-value'
+											className={cx("dropdown-value")}
 											onClick={value.status === 'Edit' ? this.toggleDropdown : undefined}
 										>
 											{
 												selectedOptions && selectedOptions.length ? selectedOptions.map((item) => {
 													return (
-														<div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
-															<span><i className='cm-hashtag' /></span>
+														<div className={cx({
+															'value-text-edit': value.status === 'Edit',
+															'value-text-read': value.status !== 'Edit',
+														})}>
+															<span><i className={cx("cm-hashtag")} /></span>
 															{item.option && item.option.name}
 														</div>
 													)
 												})
 													:
-													<div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
+													<div className={cx({
+														'value-text-edit': value.status === 'Edit',
+														'value-text-read': value.status !== 'Edit',
+													})}>
 														{value.status === 'Edit' ? "Select Categories" : ''}
 													</div>
 											}
 											{
 												isDropdownOpen &&
-												<div className="multi-select-dropdown-wrapper">
-													<div className="multi-select-search-input-wrapper">
+												<div className={cx("multi-select-dropdown-wrapper")}>
+													<div className={cx("multi-select-search-input-wrapper")}>
 														<input
 															onChange={this.handleChange}
 															onClick={(e) => e.stopPropagation()}
 															data-id="cmSearchInput"
 															value={cmSearchInput}
-															className="multi-select-dropdown-search"
+															className={cx("multi-select-dropdown-search")}
 															autoFocus
 															placeholder='Search categories'
 														/>
-														{!cmSearchInput && <span className="search-icon"><i className="cm cm-icon-search" /></span>}
+														{!cmSearchInput && <span className={cx("search-icon")}>
+															<i className="cm cm-icon-search" />
+														</span>}
 													</div>
-													<div className="multi-select-dropdown-list-body">
+													<div className={cx("multi-select-dropdown-list-body")}>
 														{
 															options
 																.map((option, i) => {
 																	if (!cmSearchInput || (option.option.name.toLowerCase().includes(cmSearchInput.toLowerCase())))
 																		return (
-																			<div key={`dropdown-${option.option.id || i}`} className="dropdown-item" onClick={(e) => this.handleClick(e, i)}>
-																				<input checked={option.isSelected} type='checkbox' className="dropdown-item-checkbox" />
+																			<div key={`dropdown-${option.option.id || i}`} className={cx("dropdown-item")} onClick={(e) => this.handleClick(e, i)}>
+																				<input checked={option.isSelected} type='checkbox' className={cx("dropdown-item-checkbox")} />
 																				{option.option.name}
 																			</div>
 																		)

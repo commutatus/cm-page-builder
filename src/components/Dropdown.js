@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
-import "../styles/components/Dropdown.css";
 import { PermissionContext } from "../contexts/permission-context";
+import styles from "./../styles/components/Dropdown.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export class Dropdown extends React.Component {
   constructor(props) {
@@ -55,25 +57,26 @@ export class Dropdown extends React.Component {
       isDropdownOpen,
       cmSearchInput,
     } = this.state;
-    // console.log(this.state)
+
     return (
       <PermissionContext.Consumer>
         {(value) => {
           return (
             <div
-              className="dropdown-wrapper"
+              className={cx("dropdown-wrapper")}
               ref={(node) => (this.elem = node)}
             >
               <CSSTransition
                 in={isDropdownOpen}
                 timeout={300}
-                classNames="dropdown-fade"
+                classNames="cm-p-builder-dropdown-fade"
               >
                 <div>
                   <div
-                    className={
-                      isDropdownOpen ? "dropdown-input" : "dropdown-value"
-                    }
+                    className={cx({
+                      "dropdown-input": isDropdownOpen,
+                      "dropdown-value": !isDropdownOpen
+                    })}
                     onClick={
                       value.status === "Edit" ? this.toggleDropdown : undefined
                     }
@@ -88,19 +91,17 @@ export class Dropdown extends React.Component {
                       />
                     ) : (
                       <div
-                        className={
-                          value.status === "Edit"
-                            ? "value-text-edit"
-                            : "value-text-read"
-                        }
+                        className={cx({
+                          "value-text-edit": value.status === "Edit",
+                          "value-text-read": value.status !== "Edit"
+                        })}
                       >
                         <span>
                           <i
-                            className={
-                              this.props.component_type === "category_id"
-                                ? "cm-hashtag"
-                                : "cm-hub"
-                            }
+                            className={cx({
+                              "cm-hashtag": this.props.component_type === "category_id",
+                              "cm-hub": this.props.component_type !== "category_id",
+                            })}
                           />
                         </span>
                         {(selectedOption && selectedOption.name) ||
@@ -112,7 +113,7 @@ export class Dropdown extends React.Component {
                     )}
                   </div>
                   {isDropdownOpen && (
-                    <div className="dropdown-list-body">
+                    <div className={cx("dropdown-list-body")}>
                       {options
                         .filter(
                           (option) =>
@@ -124,7 +125,7 @@ export class Dropdown extends React.Component {
                         .map((option, i) => (
                           <div
                             key={`dropdown-${option.id || i}`}
-                            className="dropdown-item"
+                            className={cx("dropdown-item")}
                             onClick={(e) => this.handleClick(e, option)}
                           >
                             {option.name}

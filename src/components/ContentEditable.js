@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames';
 import sanitizeHtml from 'sanitize-html'
 import { connect } from 'react-redux';
 import {
@@ -12,9 +11,13 @@ import {
   addNewComponent
 } from '../redux/reducers/appDataReducers'
 import {setCursorToEnd} from '../utils/helpers'
-import { REGEX_FILTER_TAGS } from '../utils/constant' 
+import { REGEX_FILTER_TAGS } from '../utils/constant'
+import styles from "./../styles/components/ContentEditable.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
+
 class ContentEditable extends React.Component{
-  
+
   constructor(props) {
     super(props)
     this.state = {}
@@ -28,7 +31,7 @@ class ContentEditable extends React.Component{
   componentDidUpdate(oldProps, oldState){
     this.handleFocusAndBlur(oldProps, oldState)
   }
-    
+
 
   //Moves the caret to the end of the range of the current element
   moveCaretToEnd = () => {
@@ -99,9 +102,8 @@ class ContentEditable extends React.Component{
   }
 
   render() {
-    const { placeholder, className, styles, listOrder, content } = this.props
-    const {context, status} = this
-    const isEdit = status === 'Edit'
+    const { placeholder, className, styles, listOrder, content, classGetter } = this.props
+    const {context} = this
     const actions = {
       //onMouseUp: this.handleMouseUp,
       onBlur: this.emitChange,
@@ -111,12 +113,12 @@ class ContentEditable extends React.Component{
       onKeyDown: this.handleNewLine,
     }
     return(
-      <div className={classNames("component-section", context.status.toLowerCase())}>
+      <div className={cx("component-section", context.status.toLowerCase())}>
         {listOrder}
         <div
           data-root="true"
           ref={node => this.elem = node}
-          className={classNames(className, context.status.toLowerCase())}
+          className={classGetter(className, context.status.toLowerCase())}
           styles={styles}
           contentEditable={context.status === 'Edit'}
           placeholder={content || context.status === 'Edit' ? placeholder : ''}

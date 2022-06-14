@@ -6,15 +6,11 @@ import { SET_CURRENT_ELEM } from "./currentElemReducer";
 import {
   isAllowedTag,
   getComponentFromTag,
-  // isTextTag,
   isInlineElement,
   convertObjectToText,
   isTagAllowedToCreateComponent,
-  toDataURL,
-  urlify,
 } from "../../utils/helpers";
 import { TEXT_COMPONENT } from "../../utils/constant";
-// import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
 
 export const ADD_COMPONENT = "ADD_COMPONENT";
 export const BULK_ADD_COMPONENT = "BULK_ADD_COMPONENT";
@@ -175,7 +171,7 @@ const initialState = {
 };
 
 //Accepts the initial components data
-function initializeComponentsInState(state, data) {
+function initializeComponentsInState(_state, data) {
   return { componentData: data ? data : [] };
 }
 

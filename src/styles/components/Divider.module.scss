@@ -1,4 +1,4 @@
-@import '../imports';
+@import "../imports";
 
 .divider.edit {
   width: 100%;
@@ -7,14 +7,16 @@
   align-items: center;
   margin: 5px 0;
   padding: 5px;
-  transition: background-color .2s linear;
+  transition: background-color 0.2s linear;
+
   &:hover {
-    background-color:  $gray-bg;
+    background-color: $gray-bg;
   }
-  .sperator {
+
+  .separator {
     width: 100%;
-    border: 1px solid #ECECEC;
-  } 
+    border: 1px solid #ececec;
+  }
 }
 
 .divider.read {
@@ -22,11 +24,9 @@
   align-items: center;
   width: 100%;
   margin: 5px 0;
-  .sperator {
+
+  .separator {
     width: 100%;
-    border: 1px solid #ECECEC;
-  } 
+    border: 1px solid #ececec;
+  }
 }
-
-
-

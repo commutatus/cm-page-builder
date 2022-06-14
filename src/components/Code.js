@@ -1,15 +1,14 @@
 import React from 'react';
 import hljs from 'highlight.js/lib/core';
-import 'highlight.js/styles/github.css';
-import '../styles/Code.css'
 import { PermissionContext } from '../contexts/permission-context';
-import classNames from 'classnames';
-import _ from 'lodash'
 import { connect } from 'react-redux';
 import {
   updateComponent,
 } from '../redux/reducers/appDataReducers'
 import Select from './Select';
+import styles from "./../styles/Code.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 
 const SUPPORTED_LANGUAGES = [
@@ -57,35 +56,35 @@ class CodeBlock extends React.Component {
     CodeBlock.contextType = PermissionContext
   }
 
-  registerLang(lang){
-    if(lang === 'html') lang = 'xml'
+  registerLang(lang) {
+    if (lang === 'html') lang = 'xml'
     hljs.registerLanguage(
-      lang, 
+      lang,
       require(`highlight.js/lib/languages/${lang}`)
     );
   }
 
-  componentWillReceiveProps(newProps){
-    if(
-      this.props.currentElem.id !== newProps.currentElem.id && 
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.currentElem.id !== newProps.currentElem.id &&
       newProps.currentElem.elemId === newProps.id
-    ){
+    ) {
       this.highlighterNode.focus()
     }
   }
 
-  componentDidUpdate(oldProps, oldState){
-    if(
+  componentDidUpdate(_oldProps, oldState) {
+    if (
       this.state.code !== oldState.code &&
       this.state.selectedLang === oldState.selectedLang
-    ){
-      if(this.oldCaretPos)
+    ) {
+      if (this.oldCaretPos)
         this.restoreSelection(this.highlighterNode, this.oldCaretPos)
     }
   }
 
   saveSelection = (containerEl) => {
-    if(window.getSelection && document.createRange){
+    if (window.getSelection && document.createRange) {
       let range = window.getSelection().getRangeAt(0);
       let preSelectionRange = range.cloneRange();
       preSelectionRange.selectNodeContents(containerEl);
@@ -93,7 +92,7 @@ class CodeBlock extends React.Component {
       let start = preSelectionRange.toString().length
       this.oldCaretPos = start + range.toString().length
     }
-    else{
+    else {
       let doc = containerEl.ownerDocument, win = doc.defaultView || doc.parentWindow;
       let selectedTextRange = doc.selection.createRange();
       let preSelectionTextRange = doc.body.createTextRange();
@@ -106,28 +105,28 @@ class CodeBlock extends React.Component {
   }
 
   restoreSelection = (containerEl, savedPos) => {
-    if(window.getSelection && document.createRange){
+    if (window.getSelection && document.createRange) {
       let doc = containerEl.ownerDocument, win = doc.defaultView;
       let charIndex = 0, range = doc.createRange();
       range.setStart(containerEl, 0);
       range.collapse(true);
-      let nodeStack = [containerEl], node, foundStart = false, stop = false;
-      
+      let nodeStack = [containerEl], node, stop = false;
+
       while (!stop && (node = nodeStack.pop())) {
-          if (node.nodeType == 3) {
-              let nextCharIndex = charIndex + node.length;
-              if(savedPos <= nextCharIndex){
-                range.setStart(node, savedPos - charIndex)
-                range.setEnd(node, savedPos - charIndex)
-                stop = true
-              }
-              charIndex = nextCharIndex;
-          } else {
-              let i = node.childNodes.length;
-              while (i--) {
-                  nodeStack.push(node.childNodes[i]);
-              }
+        if (node.nodeType == 3) {
+          let nextCharIndex = charIndex + node.length;
+          if (savedPos <= nextCharIndex) {
+            range.setStart(node, savedPos - charIndex)
+            range.setEnd(node, savedPos - charIndex)
+            stop = true
           }
+          charIndex = nextCharIndex;
+        } else {
+          let i = node.childNodes.length;
+          while (i--) {
+            nodeStack.push(node.childNodes[i]);
+          }
+        }
       }
 
 
@@ -136,8 +135,8 @@ class CodeBlock extends React.Component {
       sel.addRange(range);
       this.oldCaretPos = null
     }
-    else{
-      let doc = containerEl.ownerDocument, win = doc.defaultView || doc.parentWindow;
+    else {
+      let doc = containerEl.ownerDocument;
       let textRange = doc.body.createTextRange();
       textRange.moveToElementText(containerEl);
       textRange.collapse(true);
@@ -149,20 +148,20 @@ class CodeBlock extends React.Component {
 
   handleLangChange = (selectedLang) => {
     this.registerLang(selectedLang)
-    this.setState({selectedLang})
+    this.setState({ selectedLang })
   }
 
 
   handleKeyUp = (e) => {
     let text = e.target.innerText
     this.saveSelection(this.highlighterNode, text)
-    this.setState(state => ({code: text}))
+    this.setState(() => ({ code: text }))
   }
 
   handleKeyDown = e => {
-    if(e.keyCode === 9){
+    if (e.keyCode === 9) {
       e.preventDefault();
-      
+
       // handleTab spaces by inserting a no break node
       //for more info https://www.fileformat.info/info/unicode/char/00a0/index.htm
       let editor = this.highlighterNode
@@ -174,15 +173,15 @@ class CodeBlock extends React.Component {
       range.insertNode(tabNode);
 
       range.setStartAfter(tabNode);
-      range.setEndAfter(tabNode); 
+      range.setEndAfter(tabNode);
       sel.removeAllRanges();
       sel.addRange(range);
     }
-    if(e.key === 'Enter'){
+    if (e.key === 'Enter') {
       //By default when you press enter the brower creates a div.
       //append newline node when enter is pressed.
       e.preventDefault()
-      
+
       let editor = this.highlighterNode
       let doc = editor.ownerDocument.defaultView;
       let sel = doc.getSelection();
@@ -192,23 +191,23 @@ class CodeBlock extends React.Component {
       range.insertNode(newlineNode);
 
       range.setStartAfter(newlineNode);
-      range.setEndAfter(newlineNode); 
+      range.setEndAfter(newlineNode);
       sel.removeAllRanges();
       sel.addRange(range);
       let text = e.target.innerText + '\n'
       this.saveSelection(this.highlighterNode, text)
-      this.setState(state => ({code: text}))
+      this.setState(() => ({ code: text }))
     }
   }
 
   handleBlur = (e) => {
     e.stopPropagation()
-    this.props.updateComponent({id: this.props.id, newState: {content: this.state.code}})
+    this.props.updateComponent({ id: this.props.id, newState: { content: this.state.code } })
   }
 
   render() {
-    const {code, selectedLang} = this.state
-    const {context} = this
+    const { code, selectedLang } = this.state
+    const { context } = this
 
     const actions = context.status === 'Edit' ? {
       onKeyDown: this.handleKeyDown,
@@ -217,44 +216,49 @@ class CodeBlock extends React.Component {
       onSelect: e => e.stopPropagation(),
       onBlur: this.handleBlur,
     } : {}
-    
+
     return (
-      <div 
-        className={classNames("cm-code-block", context.status.toLowerCase())} 
-        onClick={(e) => {
+      <div
+        className={cx("cm-code-block", context.status.toLowerCase())}
+        onClick={() => {
           this.highlighterNode.focus()
         }}
         onMouseUp={(e) => {
           e.stopPropagation()
         }}
       >
-        <pre className={classNames('hljs')}>
+        <pre className={cx('hljs')}>
           <code>
-            <div 
-              style={{width: '100%'}}
+            <div
+              style={{ width: '100%' }}
               contentEditable={context.status === 'Edit'}
               ref={node => this.highlighterNode = node}
-              dangerouslySetInnerHTML={{__html: `${hljs.highlight(selectedLang, context.status === 'Edit' ? code : this.props.content).value}`}} 
+              dangerouslySetInnerHTML={{
+                __html: `${hljs.highlight(context.status === 'Edit' ? code : this.props.content,
+                  {
+                    language: selectedLang
+                  }).value}`
+              }}
               data-gramm_editor="false"
               {...actions}
             />
           </code>
         </pre>
-        
+
         {
-          context.status === 'Edit' && 
+          context.status === 'Edit' &&
           <Select
             value={selectedLang}
             onSelect={this.handleLangChange}
-            containerClassname="language-selector"
+            containerClassname={cx("language-selector")}
             showArrow
           >
             {
               SUPPORTED_LANGUAGES.map(lang => {
                 return (
-                  <Select.Option 
+                  <Select.Option
                     key={lang}
-                    value={lang.toLowerCase()} 
+                    value={lang.toLowerCase()}
                   >
                     {lang}
                   </Select.Option>

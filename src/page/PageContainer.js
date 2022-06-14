@@ -17,9 +17,9 @@ import {
   setCurrentElem,
   removeCurrentElem,
 } from "../redux/reducers/currentElemReducer";
-import "../styles/global.css";
-import "../styles/page.css";
-import "../styles/animations.css";
+import styles from "./../styles/page-container.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 import Dropzone from "react-dropzone";
 
 class PageContainer extends React.Component {
@@ -78,11 +78,11 @@ class PageContainer extends React.Component {
     }
 
     //for formatting fix
-    if(this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)){
+    if (this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)) {
       this.handleFormatting()
-      
+
     }
-    
+
   }
 
   componentWillUnmount() {
@@ -171,7 +171,6 @@ class PageContainer extends React.Component {
         customProp = {
           ...customProp,
           progressInfo: this.props.progressInfo,
-          externalImageResponse: this.props.externalImageResponse,
           assetBaseUrl: this.props.assetBaseUrl,
         };
       }
@@ -200,10 +199,10 @@ class PageContainer extends React.Component {
 
   handleMouseUp = (e) => {
     e.persist();
-    if(e.target.dataset.action){
+    if (e.target.dataset.action) {
       this.editText(e)
-    }else{
-      this.setState({actionDomRect: null})
+    } else {
+      this.setState({ actionDomRect: null })
       let conElem = document.querySelector(`[data-container-block="true"]`);
       if (conElem.getBoundingClientRect().bottom < e.pageY) {
         let { appData } = this.props;
@@ -219,7 +218,7 @@ class PageContainer extends React.Component {
         }
       }
     }
-    
+
   };
 
   getScrollOffsets = () => {
@@ -239,9 +238,9 @@ class PageContainer extends React.Component {
   };
 
   handleSelection = (e) => {
-    
-    if(e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed){
-      return 
+
+    if (e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed) {
+      return
     }
     if (e.target.getAttribute("placeholder") !== `Title of the page`) {
       let selection = window.getSelection();
@@ -254,9 +253,9 @@ class PageContainer extends React.Component {
             top: dimensions.top + scrollOffsets.y - 30,
             left: dimensions.left + scrollOffsets.x,
           };
-          
+
           this.saveSelection()
-          
+
           this.setState({ actionDomRect, activeFormatting: this.getActiveFormatting(e), name: 'handleSelection' });
         }
       } else {
@@ -266,29 +265,29 @@ class PageContainer extends React.Component {
 
   };
 
-  getActiveFormatting(e){
+  getActiveFormatting(e) {
 
-    function getParentTilYoufindDiv(node){
-      if(node.nodeName === 'DIV'){
+    function getParentTilYoufindDiv(node) {
+      if (node.nodeName === 'DIV') {
         return [node.nodeName]
       }
       return [node.nodeName, ...(getParentTilYoufindDiv(node.parentElement))]
     }
-    
+
     const parentNodes = getParentTilYoufindDiv(this.range.commonAncestorContainer)
-    
+
     const mapping = {
       'B': 'bold',
       'I': 'italic',
       'STRIKE': 'strikeThrough',
       'A': 'createLink'
     }
-    
+
     return parentNodes.map(item => mapping[item]).filter(Boolean) || []
 
   }
 
-  saveSelection(){
+  saveSelection() {
     let selectedRange = window.getSelection().getRangeAt(0)
     this.range = new Range()
     this.range.setStart(selectedRange.startContainer, selectedRange.startOffset)
@@ -303,18 +302,18 @@ class PageContainer extends React.Component {
     let newActiveFormatting = []
 
     let action = e.target.dataset.action;
-    
-    if(activeFormatting.includes(action)){
+
+    if (activeFormatting.includes(action)) {
       newActiveFormatting = activeFormatting.filter(item => item != action)
-    }else{
+    } else {
       newActiveFormatting = [...activeFormatting, action]
-    }    
+    }
 
     this.formatting = action
     this.setState({ activeFormatting: newActiveFormatting, name: 'editText' });
   };
 
-  
+
 
   handleFormatting = () => {
     let { activeFormatting } = this.state;
@@ -322,9 +321,9 @@ class PageContainer extends React.Component {
     window.getSelection().removeAllRanges()
     window.getSelection().addRange(this.range)
 
-    
+
     let action = this.formatting;
-    switch(action){
+    switch (action) {
       case 'createLink':
         if (activeFormatting.includes(`createLink`)) {
           let link = prompt("Enter a link");
@@ -394,7 +393,7 @@ class PageContainer extends React.Component {
     const { meta, actionDomRect, activeFormatting, currentType } = this.state;
     const { appData } = this.props;
     let isEdit = this.props.status === "Edit";
-    
+
     return (
       <Dropzone
         noClick
@@ -405,11 +404,11 @@ class PageContainer extends React.Component {
       >
         {({ getRootProps, getInputProps, isDragActive }) => (
           <div
-            className="cm-page-builder"
+            className={cx("cm-page-builder")}
             style={isDragActive ? { pointerEvents: "none" } : {}}
             id="page-builder"
             {...getRootProps()}
-            style={this.props.newPage ? { marginTop: "50px" } : {}}
+            // style={this.props.newPage ? { marginTop: "50px" } : {}}
             onMouseUp={isEdit ? this.handleMouseUp : undefined}
             onSelect={isEdit ? this.handleSelection : undefined}
             onKeyDown={isEdit ? this.handleKeyDown : undefined}
@@ -446,13 +445,13 @@ class PageContainer extends React.Component {
                 currentType !== "Title of the page"
               }
               timeout={400}
-              classNames="dropdown-fade"
+              classNames="cm-p-builder-dropdown-fade"
               onEnter={this.showTooltip}
               onExited={this.hideTooltip}
               unmountOnExit
             >
               <div
-                className="text-selection-tool"
+                className={cx("text-selection-tool")}
                 id="cm-text-edit-tooltip"
                 style={
                   actionDomRect
@@ -461,11 +460,10 @@ class PageContainer extends React.Component {
                 }
               >
                 <div
-                  className={
-                    activeFormatting.includes(`bold`)
-                      ? "bold-tool-btn-active"
-                      : "bold-tool-btn"
-                  }
+                  className={cx({
+                    "bold-tool-btn-active": activeFormatting.includes(`bold`),
+                    "bold-tool-btn": !activeFormatting.includes(`bold`)
+                  })}
                   data-action="bold"
                   style={
                     ["Heading", "Subheading"].includes(currentType)
@@ -476,35 +474,32 @@ class PageContainer extends React.Component {
                   B
                 </div>
                 <div
-                  className={
-                    activeFormatting.includes(`italic`)
-                      ? "tool-btn-active"
-                      : "tool-btn"
-                  }
+                  className={cx({
+                    "tool-btn-active": activeFormatting.includes(`italic`),
+                    "tool-btn": !activeFormatting.includes(`italic`)
+                  })}
                   data-action="italic"
                 >
-                  <i className="cm-icon-italic" data-action="italic" />
+                  <i className={cx("cm-icon-italic")} data-action="italic" />
                 </div>
                 <div
-                  className={
-                    activeFormatting.includes(`strikeThrough`)
-                      ? "tool-btn-active"
-                      : "tool-btn"
-                  }
+                  className={cx({
+                    "tool-btn-active": activeFormatting.includes(`strikeThrough`),
+                    "tool-btn": !activeFormatting.includes(`strikeThrough`)
+                  })}
                   data-action="strikeThrough"
                 >
-                  <i className="cm-icon-strikethrough" data-action="strikeThrough" />
+                  <i className={cx("cm-icon-strikethrough")} data-action="strikeThrough" />
                 </div>
                 <div
-                  className={
-                    activeFormatting.includes(`createLink`)
-                      ? "tool-btn-active"
-                      : "tool-btn"
-                  }
+                  className={cx({
+                    "tool-btn-active": activeFormatting.includes(`createLink`),
+                    "tool-btn": !activeFormatting.includes(`createLink`)
+                  })}
                   data-action="createLink"
-                  
+
                 >
-                  <i className="cm-icon-link" data-action="createLink"/>
+                  <i className={cx("cm-icon-link")} data-action="createLink" />
                 </div>
                 {/* <div className="divider"></div>
 								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
@@ -562,9 +557,9 @@ PageContainer.propTypes = {
 };
 
 PageContainer.defaultProps = {
-  handleUpdate: () => {},
+  handleUpdate: () => { return },
   status: "Edit",
-  updateComponentData: (data) => {},
+  updateComponentData: (_data) => { return },
   typeMapping: TYPE_MAP_COMPONENT,
   // This method basically reverses the keys and the values of the provided type mapping constant
   REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT).reduce(

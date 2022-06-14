@@ -2,7 +2,7 @@
 
 .page-root-container {
     max-width: 710px;
-    margin: 10px auto 0; 
+    margin: 10px auto 0;
     .page-container {
         width: 100%;
         .page-info {
@@ -26,17 +26,17 @@
                     border-radius: 50%;
                 }
                 .user-name {
-                    color: $primary-color;	
+                    color: $primary-color;
                     font-size: $t4-text;
                     margin: 0 0 0 4px;
                 }
             }
             .date-updated {
-                color: $primary-color;	
+                color: $primary-color;
                 font-size: $t4-text;
             }
-            .seprator-dot {
-                width: 4px;	
+            .separator-dot {
+                width: 4px;
                 height: 4px;
                 opacity: 0.4;
                 background-color: $primary-color;

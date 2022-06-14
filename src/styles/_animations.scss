@@ -1,18 +1,18 @@
 //dropdown-animation-starts-here
 
-.dropdown-fade-enter {
+.cm-p-builder-dropdown-fade-enter {
   opacity: 0;
   transform: scale(0.9);
 }
-.dropdown-fade-enter-active {
+.cm-p-builder-dropdown-fade-enter-active {
   opacity: 1;
   transform: translateX(0);
   transition: opacity 300ms, transform 300ms;
 }
-.dropdown-fade-exit {
+.cm-p-builder-dropdown-fade-exit {
   opacity: 0.5;
 }
-.dropdown-fade-exit-active {
+.cm-p-builder-dropdown-fade-exit-active {
   opacity: 1;
   transition: opacity 300ms;
 }
@@ -20,19 +20,19 @@
 //dropdown-animation-ends-here
 
 
-.fade-enter {
+.cm-p-builder-fade-enter {
   opacity: 0;
   transform: scale(0.9);
 }
-.fade-enter-active {
+.cm-p-builder-fade-enter-active {
   opacity: 1;
   transform: translateX(0);
   transition: opacity 300ms, transform 300ms;
 }
-.fade-exit {
+.cm-p-builder-fade-exit {
   opacity: 1;
 }
-.fade-exit-active {
+.cm-p-builder-fade-exit-active {
   opacity: 0;
   transform: scale(0.9);
   transition: opacity 300ms, transform 300ms;

@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/components/Upload.css';
 import withComponent from './withComponent';
 import { PermissionContext } from '../contexts/permission-context';
 import { connect } from 'react-redux';
@@ -9,8 +8,9 @@ import { CircularProgressbar } from 'react-circular-progressbar'; // Package for
 import 'react-circular-progressbar/dist/styles.css';
 import { bytesToSize } from '../utils/helpers'; // Stylesheet for progress bar
 import { S3_BASE_URL } from '../utils/constant';
-import Loader from './Loader';
-//const acceptedExtensions = [ 'pdf', 'xls', 'docx', 'doc', 'csv', 'zip' ]
+import styles from "./../styles/components/Upload.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 class WrappedUpload extends React.Component {
   constructor(props) {
@@ -18,7 +18,6 @@ class WrappedUpload extends React.Component {
     this.state = {
       uploaded: false,
       file: props.componentType === 'File',
-      externalImageResponse: null
     };
     WrappedUpload.contextType = PermissionContext;
   }
@@ -40,7 +39,7 @@ class WrappedUpload extends React.Component {
   }
 
   componentWillReceiveProps = nextProps => {
-    const { progressInfo, externalImageResponse, component_attachment } = nextProps;
+    const { progressInfo, component_attachment } = nextProps;
     let { fileInfo } = this.state
     if (
       progressInfo &&
@@ -58,14 +57,6 @@ class WrappedUpload extends React.Component {
           this.setState({ uploadProgress: 100, uploading: false });
         }, 2000);
       }
-    // else if (this.state.uploading && progressInfo.progress.percent === 100 && this.state.uploadProgress === 1)
-    //   this.setState({ uploading: false })
-    if (externalImageResponse &&
-        this.props.externalImageResponse !== externalImageResponse &&
-        nextProps.id === externalImageResponse.client_reference_id
-      ) {
-      this.setState({ externalImageResponse })
-    }
 
     if (fileInfo) {
       if (component_attachment && component_attachment.filesize)
@@ -167,52 +158,52 @@ class WrappedUpload extends React.Component {
 
   render() {
     let { component_attachment } = this.props;
-    const { uploadProgress, fileInfo, uploaded, file, uploading, externalImageResponse } = this.state;
+    const { uploadProgress, fileInfo, uploaded, file, uploading } = this.state;
     let { context } = this;
     let isEdit = context.status === 'Edit';
     return (
       <div
-        className={`component-section ${
-          !isEdit && !component_attachment ? '' : 'cm-uploader'
-        } ${context.status.toLowerCase()} ${
-          !component_attachment ? '' : 'hover-effect-none'
-        }`}
+        className={cx('component-section', {
+          'cm-uploader': !(!isEdit && !component_attachment),
+        }, context.status.toLowerCase(), {
+          'hover-effect-none': component_attachment,
+        })}
         onClick={() => this.fileInputElem && this.fileInputElem.click()}
       >
         {// UI to show for file uploads
-        fileInfo && file && (
-          <a
-            href={component_attachment && component_attachment.url}
-            style={{ textDecoration: 'none' }}
-            target="_blank"
-          >
-            <div className="file-data-section">
-              <div className="file-data-icon">
-                <img
-                  src={this.getFileIcon(fileInfo.ext)}
-                  alt="Alt image"
-                  className="file-data-icon-img"
-                />
-              </div>
-              <div className="file-data-information">
-                <div className="file-data-name">{fileInfo.name}</div>
-                <div className="file-data-extension">
-                  {`${fileInfo.ext.toUpperCase()} file (${fileInfo.size})`}
-                  {uploadProgress && uploadProgress < 100 && (
-                    <div className="file-data-loader">
-                      <CircularProgressbar value={uploadProgress} />
-                      <div className="file-data-loader-percent">{` ${uploadProgress}%`}</div>
-                    </div>
-                  )}
+          fileInfo && file && (
+            <a
+              href={component_attachment && component_attachment.url}
+              style={{ textDecoration: 'none' }}
+              target="_blank"
+            >
+              <div className={cx("file-data-section")}>
+                <div className={cx("file-data-icon")}>
+                  <img
+                    src={this.getFileIcon(fileInfo.ext)}
+                    alt="Alt image"
+                    className={cx("file-data-icon-img")}
+                  />
+                </div>
+                <div className={cx("file-data-information")}>
+                  <div className={cx("file-data-name")}>{fileInfo.name}</div>
+                  <div className={cx("file-data-extension")}>
+                    {`${fileInfo.ext.toUpperCase()} file (${fileInfo.size})`}
+                    {uploadProgress && uploadProgress < 100 && (
+                      <div className={cx("file-data-loader")}>
+                        <CircularProgressbar value={uploadProgress} />
+                        <div className={cx("file-data-loader-percent")}>{` ${uploadProgress}%`}</div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </a>
-        )}
+            </a>
+          )}
 
         {// UI to show for image upload
-        component_attachment && !file && (
-          <div className="image-upload">
+          component_attachment && !file && (
+            <div className={cx("image-upload")}>
               {
                 //check for external image url & blur until saved on API
                 ((component_attachment.url && (component_attachment.url.includes(this.props.assetBaseUrl) || component_attachment.url.startsWith("/"))) || component_attachment.content) ?
@@ -222,21 +213,18 @@ class WrappedUpload extends React.Component {
                     alt={component_attachment.filename}
                   />
                   :
-                  <div className='external-image'>
-                      <img
-                        src={component_attachment.url || component_attachment.content}
-                        width="100%"
-                        style={externalImageResponse ? {} : { filter: 'blur(5px)' }}
-                        alt={component_attachment.filename}
-                      />
-                      {!externalImageResponse && <div className='blur-image-loader'><Loader/></div>}
+                  <div className={cx("external-image")}>
+                    <img
+                      src={component_attachment.url || component_attachment.content}
+                      alt={component_attachment.filename}
+                    />
                   </div>
               }
-              <div className="file-data-loader-section">
+              <div className={cx("file-data-loader-section")}>
                 {uploadProgress && uploadProgress < 100 && (
-                  <div className="file-data-loader">
+                  <div className={cx("file-data-loader")}>
                     <CircularProgressbar value={uploadProgress} />
-                    <div className="file-data-loader-percent">{` ${uploadProgress}%`}</div>
+                    <div className={cx("file-data-loader-percent")}>{` ${uploadProgress}%`}</div>
                   </div>
                 )}
               </div>
@@ -245,7 +233,7 @@ class WrappedUpload extends React.Component {
         {isEdit && !uploading && !component_attachment && (
           <React.Fragment>
             <span>
-              <i className="cm-icon-upload" />
+              <i className={cx("cm-icon-upload")} />
             </span>
             Click to upload file
             {!uploaded && (

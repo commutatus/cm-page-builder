@@ -2,8 +2,10 @@ import React from 'react'
 import JSEMOJI from 'emoji-js';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
-import '../styles/components/Emoji.css';
 import { PermissionContext } from '../contexts/permission-context';
+import styles from "./../styles/components/Emoji.module.css"
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export class EmojiIconContainer extends React.Component{
 
@@ -27,8 +29,8 @@ export class EmojiIconContainer extends React.Component{
     this.elem.innerHTML = this.jsemoji.replace_colons(data.colons)
     this.props.handleUpdate(null, {...data}, 'emoji')
   }
-  
-  openEmojiPopup = (e) => {
+
+  openEmojiPopup = (_e) => {
     if(!this.state.showPopup){
       this.setState({showPopup: true})
       document.addEventListener('click', this.closeEmojiPopup)
@@ -49,9 +51,9 @@ export class EmojiIconContainer extends React.Component{
         {
           value =>{
             return(
-              <div 
-                className={`cm-emoji-container ${value.status.toLowerCase()}`} 
-                onClick={value.status === 'Edit' ? this.openEmojiPopup : undefined} 
+              <div
+                className={cx("cm-emoji-container", value.status.toLowerCase())}
+                onClick={value.status === 'Edit' ? this.openEmojiPopup : undefined}
                 ref={node => this.rootNode = node}
               >
                 <div style={{fontSize: '75px'}} ref={node => this.elem = node}></div>
