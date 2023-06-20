@@ -1,19 +1,17 @@
-import uuid from "uuid/v5";
 import moment from "moment";
 import sanitizeHtml from "sanitize-html";
+import uuid from "uuid/v5";
 
-import { SET_CURRENT_ELEM } from "./currentElemReducer";
+import { TEXT_COMPONENT } from "../../utils/constant";
 import {
-  isAllowedTag,
+  convertObjectToText,
   getComponentFromTag,
+  isAllowedTag,
   // isTextTag,
   isInlineElement,
-  convertObjectToText,
-  isTagAllowedToCreateComponent,
-  toDataURL,
-  urlify,
+  isTagAllowedToCreateComponent
 } from "../../utils/helpers";
-import { TEXT_COMPONENT } from "../../utils/constant";
+import { SET_CURRENT_ELEM } from "./currentElemReducer";
 // import { TAGS_TO_COMPONENT_MAP, IS_INLINE_COMPONENT } from '../../utils/constant';
 
 export const ADD_COMPONENT = "ADD_COMPONENT";
@@ -29,8 +27,7 @@ export const RESET = "RESET";
 const CUSTOM_NAMESPACE = "1c57b4cd-4040-463f-9179-84e9ba9b66fa";
 function createID() {
   return uuid(
-    `${moment().format("DDMMYYYY")}-${window.performance.now()}-${
-      window.cmPageBuilder.pid
+    `${moment().format("DDMMYYYY")}-${window.performance.now()}-${window.cmPageBuilder.pid
     }`,
     CUSTOM_NAMESPACE
   );
@@ -332,6 +329,7 @@ function emitUpdate(data, type) {
       break;
     case "remove":
       window.cmPageBuilder.handleUpdate(data.id, null, "deleteComponent");
+      break;
     default:
       console.error("invalid mutation type.");
   }

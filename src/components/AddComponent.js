@@ -1,26 +1,25 @@
-import React from 'react'
+import React from 'react';
 // import ReactDOM from 'react-dom'
-import { CSSTransition } from 'react-transition-group'
-import '../styles/components/AddComponent.css'
+import { parse } from 'node-html-parser';
 import { connect } from 'react-redux';
+import { CSSTransition } from 'react-transition-group';
+import { PermissionContext } from '../contexts/permission-context';
 import {
   addNewComponent,
-  updateComponentType,
-  updateComponent,
-  removeComponent,
   bulkCreate,
-} from '../redux/reducers/appDataReducers'
+  removeComponent,
+  updateComponent,
+  updateComponentType,
+} from '../redux/reducers/appDataReducers';
 import {
-  setCurrentElem,
-  removeCurrentElem,
   moveCaretToEnd,
-} from '../redux/reducers/currentElemReducer'
-import { TEXT_INPUT_COMPONENT, DEFAULT_COMPONENT_TYPES } from '../utils/constant';
+  removeCurrentElem,
+  setCurrentElem,
+} from '../redux/reducers/currentElemReducer';
+import '../styles/components/AddComponent.css';
+import { DEFAULT_COMPONENT_TYPES, TEXT_INPUT_COMPONENT } from '../utils/constant';
+import { setCursorToEnd } from '../utils/helpers';
 import DragHandle from './DragHandle';
-import { PermissionContext } from '../contexts/permission-context';
-import {setCursorToEnd} from '../utils/helpers'
-import {parse} from 'node-html-parser'
-import _ from 'lodash'
 // const split = require('split-string');
 
 //A higher order component for the generic components to handle there functionalily.
@@ -44,14 +43,6 @@ class AddComponent extends React.Component{
     this.checkAndFocus(nextProps)
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    return (
-      (this.props.id !== nextProps.id) ||
-      (this.state.showHandle !== nextState.showHandle) ||
-      (this.state.showActionBtn !== nextState.showActionBtn) ||
-      (this.state.isFocused !== nextState.isFocused)
-    )
-  }
 
   // For newly created component to change the focus
   checkAndFocus = (props) => {
@@ -83,27 +74,27 @@ class AddComponent extends React.Component{
 
   // handle key action and navigation
   handleKeyDown = (e) => {
-    e.stopPropagation()
-    let {appData, currentElem, data} = this.props 
+    let {appData, currentElem, data} = this.props
 
     //Code component only need navigation so other key actions are disabled.
-    if(this.props.data.componentType === 'Code' && !['ArrowUp', 'ArrowDown'].includes(e.key)) return 
+    if(this.props.data.componentType === 'Code' && !['ArrowUp', 'ArrowDown'].includes(e.key)) return
 
     //Intialize all the elem
-    let currentElemPos = -1, 
-        elemRect = null, 
-        caretRect = null, 
-        computedStyles = null, 
-        elemPad = undefined, 
-        elemMar = undefined, 
-        extraHeight = undefined
-    
-    //All the key events related to the component are handled here.   
+    let currentElemPos = -1,
+      elemRect = null,
+      caretRect = null,
+      computedStyles = null,
+      elemPad = undefined,
+      elemMar = undefined,
+      extraHeight = undefined
+
+    //All the key events related to the component are handled here.
     switch (e.key) {
       case 'Enter':
         if(!e.shiftKey){
-          e.preventDefault()
-          let componentType =  ['Ulist', 'Olist'].includes(e.currentTarget.dataset.componentType) ? e.currentTarget.dataset.componentType : 'Text'
+          e.stopPropagation();
+          e.preventDefault();
+          let componentType = ['Ulist', 'Olist'].includes(e.currentTarget.dataset.componentType) ? e.currentTarget.dataset.componentType : 'Text'
           this.props.addNewComponent({id: e.currentTarget.dataset.blockId, componentType })
           break;
         }
@@ -123,15 +114,16 @@ class AddComponent extends React.Component{
         }
         break
       case 'ArrowUp':
+        e.stopPropagation();
         elemRect = e.target.getBoundingClientRect()
         caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
         computedStyles = window.getComputedStyle(e.target)
         elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
         elemMar = computedStyles.getPropertyValue('margin-top').replace('px', '')
-        extraHeight = (+elemPad) 
+        extraHeight = (+elemPad)
         if((caretRect.x === 0 && caretRect.y === 0) ||  // when no text is there
-            (elemRect.top === (caretRect.top - extraHeight)) || // is not a text component
-            (elemRect.top === (caretRect.top - extraHeight - 1)) // is a text component
+          (elemRect.top === (caretRect.top - extraHeight)) || // is not a text component
+          (elemRect.top === (caretRect.top - extraHeight - 1)) // is a text component
         ){
           e.preventDefault()
           //skip component if not a text component else navigate
@@ -146,40 +138,42 @@ class AddComponent extends React.Component{
         }
         break
       case 'ArrowDown':
-          elemRect = e.target.getBoundingClientRect()
-          caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
-          computedStyles = window.getComputedStyle(e.target)
-          elemPad = computedStyles.getPropertyValue("padding-bottom").replace('px', '')
-          elemMar = computedStyles.getPropertyValue('margin-bottom').replace('px', '')
-          extraHeight = (+elemPad)
-          if((caretRect.x === 0 && caretRect.y === 0) || 
-              (elemRect.bottom === (caretRect.bottom - extraHeight)) ||
-              (elemRect.bottom === (caretRect.bottom + extraHeight + 1))
-          ){
-            e.preventDefault()
-            currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
-            while(currentElemPos < appData.componentData.length - 1){
-              if(TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos+1].componentType)){
-                this.props.setCurrentElem(appData.componentData[currentElemPos+1].id)
-                break
-              }
-              currentElemPos++
+        e.stopPropagation()
+        elemRect = e.target.getBoundingClientRect()
+        caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect()
+        computedStyles = window.getComputedStyle(e.target)
+        elemPad = computedStyles.getPropertyValue("padding-bottom").replace('px', '')
+        elemMar = computedStyles.getPropertyValue('margin-bottom').replace('px', '')
+        extraHeight = (+elemPad)
+        if ((caretRect.x === 0 && caretRect.y === 0) ||
+          (elemRect.bottom === (caretRect.bottom - extraHeight)) ||
+          (elemRect.bottom === (caretRect.bottom + extraHeight + 1))
+        ) {
+          e.preventDefault()
+          currentElemPos = appData.componentData.findIndex(data => data.id === currentElem.elemId)
+          while (currentElemPos < appData.componentData.length - 1) {
+            if (TEXT_INPUT_COMPONENT.includes(appData.componentData[currentElemPos + 1].componentType)) {
+              this.props.setCurrentElem(appData.componentData[currentElemPos + 1].id)
+              break
             }
+            currentElemPos++
           }
-          break
+        }
+        break
       default:
         break;
     }
   }
 
   handleInput = (e) => {
-    this.setState({showActionBtn: e.target.innerHTML === '' && !e.target.value})
+    this.props.updateComponent({ id: this.props.id, newState: { content: e.target.innerHTML } })
+    setCursorToEnd(e)
   }
 
   // handles the focus and set the cursor to right position.
   handleFocus = (e) => {
     e.persist()
-    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
+    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
     let {appData, currentElem} = this.props
     let prevElemPos, currElemPos
     for(let i in appData.componentData){
@@ -224,13 +218,13 @@ class AddComponent extends React.Component{
    return styles
   }
 
-  
+
   handlePaste = (e) => {
     e.persist()
     let clipboardData = e.clipboardData || window.clipboardData
     let plainText = clipboardData.getData('text/plain')
     let {componentData} = this.props.appData
-    
+
     let items = clipboardData.items;
     let types = clipboardData.types;
     let fileIndex = types.findIndex(type => type === "Files")
@@ -243,15 +237,15 @@ class AddComponent extends React.Component{
       let reader = new FileReader();
       reader.onload = (event) =>{
         this.props.addNewComponent({
-          id: blockId, 
-          componentType: 'Upload', 
+          id: blockId,
+          componentType: 'Upload',
           component_attachment: {
-            filename: blob.name, 
+            filename: blob.name,
             content: event.target.result,
           }
         })
       }
-      reader.readAsDataURL(blob); 
+      reader.readAsDataURL(blob);
     }
 
     else if(clipboardData.getData('text/html') || plainText){
@@ -266,16 +260,15 @@ class AddComponent extends React.Component{
   }
 
 
- 
+
   render(){
     let { data, options } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
     let componentsToRender = DEFAULT_COMPONENT_TYPES
-		if (options && options.length) {
-			componentsToRender = componentsToRender.filter(item => options.includes(item.name))
-		}
+    if (options && options.length) {
+      componentsToRender = componentsToRender.filter(item => options.includes(item.name))
+    }
     const isEdit = this.context.status === 'Edit'
-    
 
     const allActions = isEdit ? {
       'onPaste': this.handlePaste,
@@ -284,11 +277,11 @@ class AddComponent extends React.Component{
       'onKeyDown': this.handleKeyDown,
       'data-component-type': data.componentType,
       'onBlur':this.handleBlur,
-      'onInput':this.handleInput,
+      'onChange':this.handleInput,
       'onFocus':this.handleFocus,
       'onMouseEnter': this.handleMouseEnter,
       'onMouseLeave': this.handleMouseLeave,
-    } : {}    
+    } : {}
 
     if(data.componentType === 'Code'){
       [
@@ -300,24 +293,24 @@ class AddComponent extends React.Component{
     }
 
     return(
-      <div 
-        ref={node => this.elem = node} 
-        className="widget-container" 
+      <div
+        ref={node => this.elem = node}
+        className="widget-container"
         data-block-id={this.props.id}
         style={this.handleInlineStyles(data.componentType)}
         {...allActions}
       >
         {isEdit && (showHandle || isFocused) && <DragHandle id={data.id} />}
-        { React.cloneElement(this.props.children, { ...this.props.children.props, ...data }) }
+        {React.cloneElement(this.props.children, { ...this.props.children.props, ...data })}
         <CSSTransition
           in={isEdit && showActionBtn}
           timeout={300}
           classNames="fade"
           unmountOnExit
         >
-          <div className="text-type-tools" 
-            data-block-type="component-select-div" 
-            style={{display: showActionBtn && !['Divider', 'Upload', 'Code'].includes(data.componentType)  ? 'flex' : 'none'}}
+          <div className="text-type-tools"
+            data-block-type="component-select-div"
+            style={{display: showActionBtn && !['Divider', 'Upload', 'Code'].includes(data.componentType) ? 'flex' : 'none'}}
           >
             {
               componentsToRender.map((type, index) => {
@@ -346,7 +339,7 @@ const mapDispatchToProps = {
   moveCaretToEnd,
 }
 
-const mapStateToProps = (state) => { 
+const mapStateToProps = (state) => {
   currentElem: state.currentElem
 }
 

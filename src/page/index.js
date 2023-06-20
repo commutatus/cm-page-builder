@@ -1,9 +1,11 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import { store } from '../redux/store'
 import Page from './PageContainer'
-import {Provider} from 'react-redux'
-import {store} from '../redux/store'
 
-export default (props) =>
+const PageBuilder = (props) =>
   <Provider store={store}>
     <Page {...props} />
   </Provider>
+
+export default PageBuilder;

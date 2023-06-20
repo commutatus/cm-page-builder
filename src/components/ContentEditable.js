@@ -1,20 +1,20 @@
-import React from 'react'
 import classNames from 'classnames';
-import sanitizeHtml from 'sanitize-html'
+import React from 'react';
 import { connect } from 'react-redux';
-import {
-  setCurrentElem,
-  removeCurrentElem,
-  resetCaretManipulation,
-} from '../redux/reducers/currentElemReducer'
+import sanitizeHtml from 'sanitize-html';
 import { PermissionContext } from '../contexts/permission-context';
 import {
   addNewComponent
-} from '../redux/reducers/appDataReducers'
-import {setCursorToEnd} from '../utils/helpers'
-import { REGEX_FILTER_TAGS } from '../utils/constant' 
-class ContentEditable extends React.Component{
-  
+} from '../redux/reducers/appDataReducers';
+import {
+  removeCurrentElem,
+  resetCaretManipulation,
+  setCurrentElem,
+} from '../redux/reducers/currentElemReducer';
+import { REGEX_FILTER_TAGS } from '../utils/constant';
+import { setCursorToEnd } from '../utils/helpers';
+class ContentEditable extends React.Component {
+
   constructor(props) {
     super(props)
     this.state = {}
@@ -28,7 +28,7 @@ class ContentEditable extends React.Component{
   componentDidUpdate(oldProps, oldState){
     this.handleFocusAndBlur(oldProps, oldState)
   }
-    
+
 
   //Moves the caret to the end of the range of the current element
   moveCaretToEnd = () => {
@@ -73,6 +73,7 @@ class ContentEditable extends React.Component{
         content = e.target.innerText.replace(REGEX_FILTER_TAGS, "")
       }
       this.context.emitUpdate(null, { content }, 'updateTitle')
+      setCursorToEnd(e)
     }                   // Block to make changes to title of the page
   }
 
@@ -87,6 +88,7 @@ class ContentEditable extends React.Component{
       e.preventDefault()
       this.emitChange(e)
     }
+    setCursorToEnd(e)
   }
 
   handleMouseDown = (e) => {

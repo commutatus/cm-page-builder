@@ -1,26 +1,26 @@
-import React from "react";
-import Sortable, { active } from "sortablejs";
 import PropTypes from "prop-types";
-import { CSSTransition } from "react-transition-group";
-import { connect } from "react-redux";
+import React from "react";
+import Dropzone from "react-dropzone";
 import Helmet from "react-helmet";
-import { PermissionContext } from "../contexts/permission-context";
-import { PageDetails } from "./PageDetails";
+import { connect } from "react-redux";
+import { CSSTransition } from "react-transition-group";
+import Sortable from "sortablejs";
 import AddComponent from "../components/AddComponent";
+import { PermissionContext } from "../contexts/permission-context";
 import {
-  initComponents,
   addNewComponent,
-  updatePosition,
+  initComponents,
   resetApp,
+  updatePosition,
 } from "../redux/reducers/appDataReducers";
 import {
-  setCurrentElem,
   removeCurrentElem,
+  setCurrentElem,
 } from "../redux/reducers/currentElemReducer";
+import "../styles/animations.css";
 import "../styles/global.css";
 import "../styles/page.css";
-import "../styles/animations.css";
-import Dropzone from "react-dropzone";
+import { PageDetails } from "./PageDetails";
 
 class PageContainer extends React.Component {
   constructor(props) {
@@ -78,11 +78,11 @@ class PageContainer extends React.Component {
     }
 
     //for formatting fix
-    if(this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)){
+    if (this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)) {
       this.handleFormatting()
-      
+
     }
-    
+
   }
 
   componentWillUnmount() {
@@ -162,7 +162,7 @@ class PageContainer extends React.Component {
     return this._getCurrentOrder.counter;
   };
 
-  getPageComponent = (data, index) => {
+  getPageComponent = async (data, index) => {
     let typeName = data.componentType;
     let dataId = data.id;
     if (typeName) {
@@ -177,33 +177,35 @@ class PageContainer extends React.Component {
       }
 
       typeName = typeName === "File" ? "Upload" : typeName;
-      let Component = require(`../components/${typeName}`)[typeName];
-      return (
-        <AddComponent
-          key={dataId}
-          id={dataId}
-          data={data}
-          options={this.props.options}
-        >
-          <Component
-            handleUpdate={this.emitUpdate}
-            order={
-              data.componentType === `Olist` && this._getCurrentOrder(index)
-            }
-            useDirectStorageUpload={this.props.useDirectStorageUpload}
-            {...customProp}
-          />
-        </AddComponent>
-      );
+      return import(`../components/${typeName}`).then((module) => {
+        const Component = module[typeName];
+        return (
+          <AddComponent
+            key={dataId}
+            id={dataId}
+            data={data}
+            options={this.props.options}
+          >
+            <Component
+              handleUpdate={this.emitUpdate}
+              order={
+                data.componentType === `Olist` && this._getCurrentOrder(index)
+              }
+              useDirectStorageUpload={this.props.useDirectStorageUpload}
+              {...customProp}
+            />
+          </AddComponent>
+        );
+      });
     }
   };
 
   handleMouseUp = (e) => {
     e.persist();
-    if(e.target.dataset.action){
+    if (e.target.dataset.action) {
       this.editText(e)
-    }else{
-      this.setState({actionDomRect: null})
+    } else {
+      this.setState({ actionDomRect: null })
       let conElem = document.querySelector(`[data-container-block="true"]`);
       if (conElem.getBoundingClientRect().bottom < e.pageY) {
         let { appData } = this.props;
@@ -219,7 +221,7 @@ class PageContainer extends React.Component {
         }
       }
     }
-    
+
   };
 
   getScrollOffsets = () => {
@@ -239,9 +241,9 @@ class PageContainer extends React.Component {
   };
 
   handleSelection = (e) => {
-    
-    if(e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed){
-      return 
+
+    if (e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed) {
+      return
     }
     if (e.target.getAttribute("placeholder") !== `Title of the page`) {
       let selection = window.getSelection();
@@ -254,9 +256,9 @@ class PageContainer extends React.Component {
             top: dimensions.top + scrollOffsets.y - 30,
             left: dimensions.left + scrollOffsets.x,
           };
-          
+
           this.saveSelection()
-          
+
           this.setState({ actionDomRect, activeFormatting: this.getActiveFormatting(e), name: 'handleSelection' });
         }
       } else {
@@ -266,29 +268,29 @@ class PageContainer extends React.Component {
 
   };
 
-  getActiveFormatting(e){
+  getActiveFormatting(e) {
 
-    function getParentTilYoufindDiv(node){
-      if(node.nodeName === 'DIV'){
+    function getParentTilYoufindDiv(node) {
+      if (node.nodeName === 'DIV') {
         return [node.nodeName]
       }
       return [node.nodeName, ...(getParentTilYoufindDiv(node.parentElement))]
     }
-    
+
     const parentNodes = getParentTilYoufindDiv(this.range.commonAncestorContainer)
-    
+
     const mapping = {
       'B': 'bold',
       'I': 'italic',
       'STRIKE': 'strikeThrough',
       'A': 'createLink'
     }
-    
+
     return parentNodes.map(item => mapping[item]).filter(Boolean) || []
 
   }
 
-  saveSelection(){
+  saveSelection() {
     let selectedRange = window.getSelection().getRangeAt(0)
     this.range = new Range()
     this.range.setStart(selectedRange.startContainer, selectedRange.startOffset)
@@ -303,18 +305,18 @@ class PageContainer extends React.Component {
     let newActiveFormatting = []
 
     let action = e.target.dataset.action;
-    
-    if(activeFormatting.includes(action)){
+
+    if (activeFormatting.includes(action)) {
       newActiveFormatting = activeFormatting.filter(item => item != action)
-    }else{
+    } else {
       newActiveFormatting = [...activeFormatting, action]
-    }    
+    }
 
     this.formatting = action
     this.setState({ activeFormatting: newActiveFormatting, name: 'editText' });
   };
 
-  
+
 
   handleFormatting = () => {
     let { activeFormatting } = this.state;
@@ -322,9 +324,9 @@ class PageContainer extends React.Component {
     window.getSelection().removeAllRanges()
     window.getSelection().addRange(this.range)
 
-    
+
     let action = this.formatting;
-    switch(action){
+    switch (action) {
       case 'createLink':
         if (activeFormatting.includes(`createLink`)) {
           let link = prompt("Enter a link");
@@ -394,7 +396,7 @@ class PageContainer extends React.Component {
     const { meta, actionDomRect, activeFormatting, currentType } = this.state;
     const { appData } = this.props;
     let isEdit = this.props.status === "Edit";
-    
+    let styles = this.props.newPage ? { marginTop: "50px" } : {};
     return (
       <Dropzone
         noClick
@@ -406,10 +408,9 @@ class PageContainer extends React.Component {
         {({ getRootProps, getInputProps, isDragActive }) => (
           <div
             className="cm-page-builder"
-            style={isDragActive ? { pointerEvents: "none" } : {}}
+            style={isDragActive ? { ...styles, pointerEvents: "none" } : {}}
             id="page-builder"
             {...getRootProps()}
-            style={this.props.newPage ? { marginTop: "50px" } : {}}
             onMouseUp={isEdit ? this.handleMouseUp : undefined}
             onSelect={isEdit ? this.handleSelection : undefined}
             onKeyDown={isEdit ? this.handleKeyDown : undefined}
@@ -502,9 +503,9 @@ class PageContainer extends React.Component {
                       : "tool-btn"
                   }
                   data-action="createLink"
-                  
+
                 >
-                  <i className="cm-icon-link" data-action="createLink"/>
+                  <i className="cm-icon-link" data-action="createLink" />
                 </div>
                 {/* <div className="divider"></div>
 								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
@@ -562,9 +563,9 @@ PageContainer.propTypes = {
 };
 
 PageContainer.defaultProps = {
-  handleUpdate: () => {},
+  handleUpdate: () => { },
   status: "Edit",
-  updateComponentData: (data) => {},
+  updateComponentData: (data) => { },
   typeMapping: TYPE_MAP_COMPONENT,
   // This method basically reverses the keys and the values of the provided type mapping constant
   REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT).reduce(

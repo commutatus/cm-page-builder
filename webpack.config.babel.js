@@ -7,8 +7,8 @@ const htmlWebpackPlugin = new HtmlWebPackPlugin({
 });
 module.exports = {
   entry: [
-     'babel-polyfill',
-     './src'
+    'babel-polyfill',
+    './src'
   ],
   resolve: {
     extensions: [".js", ".json"]
@@ -60,8 +60,8 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-                context: '../assets',
-                name: 'root[path][name].[ext]'
+              context: '../assets',
+              name: 'root[path][name].[ext]'
             }
           }
         ]
