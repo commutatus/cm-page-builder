@@ -78,11 +78,11 @@ class PageContainer extends React.Component {
     }
 
     //for formatting fix
-    if(this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)){
+    if (this.range && (prevState.activeFormatting.length !== this.state.activeFormatting.length)) {
       this.handleFormatting()
-      
+
     }
-    
+
   }
 
   componentWillUnmount() {
@@ -200,10 +200,10 @@ class PageContainer extends React.Component {
 
   handleMouseUp = (e) => {
     e.persist();
-    if(e.target.dataset.action){
+    if (e.target.dataset.action) {
       this.editText(e)
-    }else{
-      this.setState({actionDomRect: null})
+    } else {
+      this.setState({ actionDomRect: null })
       let conElem = document.querySelector(`[data-container-block="true"]`);
       if (conElem.getBoundingClientRect().bottom < e.pageY) {
         let { appData } = this.props;
@@ -219,7 +219,7 @@ class PageContainer extends React.Component {
         }
       }
     }
-    
+
   };
 
   getScrollOffsets = () => {
@@ -239,9 +239,9 @@ class PageContainer extends React.Component {
   };
 
   handleSelection = (e) => {
-    
-    if(e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed){
-      return 
+
+    if (e.nativeEvent.type === 'selectionchange' && window.getSelection().getRangeAt(0).collapsed) {
+      return
     }
     if (e.target.getAttribute("placeholder") !== `Title of the page`) {
       let selection = window.getSelection();
@@ -254,9 +254,9 @@ class PageContainer extends React.Component {
             top: dimensions.top + scrollOffsets.y - 30,
             left: dimensions.left + scrollOffsets.x,
           };
-          
+
           this.saveSelection()
-          
+
           this.setState({ actionDomRect, activeFormatting: this.getActiveFormatting(e), name: 'handleSelection' });
         }
       } else {
@@ -266,29 +266,29 @@ class PageContainer extends React.Component {
 
   };
 
-  getActiveFormatting(e){
+  getActiveFormatting(e) {
 
-    function getParentTilYoufindDiv(node){
-      if(node.nodeName === 'DIV'){
+    function getParentTilYoufindDiv(node) {
+      if (node.nodeName === 'DIV') {
         return [node.nodeName]
       }
       return [node.nodeName, ...(getParentTilYoufindDiv(node.parentElement))]
     }
-    
+
     const parentNodes = getParentTilYoufindDiv(this.range.commonAncestorContainer)
-    
+
     const mapping = {
       'B': 'bold',
       'I': 'italic',
       'STRIKE': 'strikeThrough',
       'A': 'createLink'
     }
-    
+
     return parentNodes.map(item => mapping[item]).filter(Boolean) || []
 
   }
 
-  saveSelection(){
+  saveSelection() {
     let selectedRange = window.getSelection().getRangeAt(0)
     this.range = new Range()
     this.range.setStart(selectedRange.startContainer, selectedRange.startOffset)
@@ -303,18 +303,18 @@ class PageContainer extends React.Component {
     let newActiveFormatting = []
 
     let action = e.target.dataset.action;
-    
-    if(activeFormatting.includes(action)){
+
+    if (activeFormatting.includes(action)) {
       newActiveFormatting = activeFormatting.filter(item => item != action)
-    }else{
+    } else {
       newActiveFormatting = [...activeFormatting, action]
-    }    
+    }
 
     this.formatting = action
     this.setState({ activeFormatting: newActiveFormatting, name: 'editText' });
   };
 
-  
+
 
   handleFormatting = () => {
     let { activeFormatting } = this.state;
@@ -322,9 +322,9 @@ class PageContainer extends React.Component {
     window.getSelection().removeAllRanges()
     window.getSelection().addRange(this.range)
 
-    
+
     let action = this.formatting;
-    switch(action){
+    switch (action) {
       case 'createLink':
         if (activeFormatting.includes(`createLink`)) {
           let link = prompt("Enter a link");
@@ -394,19 +394,16 @@ class PageContainer extends React.Component {
     const { meta, actionDomRect, activeFormatting, currentType } = this.state;
     const { appData } = this.props;
     let isEdit = this.props.status === "Edit";
-    
+
     return (
       <Dropzone
         noClick
         noKeyboard
-        // onDragEnter={this.handleFileDragEnter}
-        // onDragLeave={this.handleFileDragLeave}
         onDrop={this.handleFileDrop}
       >
         {({ getRootProps, getInputProps, isDragActive }) => (
           <div
             className="cm-page-builder"
-            style={isDragActive ? { pointerEvents: "none" } : {}}
             id="page-builder"
             {...getRootProps()}
             style={this.props.newPage ? { marginTop: "50px" } : {}}
@@ -415,10 +412,7 @@ class PageContainer extends React.Component {
             onKeyDown={isEdit ? this.handleKeyDown : undefined}
           >
             <Helmet>
-              <link
-                rel="stylesheet"
-                href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv"
-              />
+              <link rel="stylesheet" href="https://kit.fontawesome.com/4c31523976.css" crossorigin="anonymous" />
             </Helmet>
             <PermissionContext.Provider
               value={{ status: this.props.status, emitUpdate: this.emitUpdate }}
@@ -483,7 +477,7 @@ class PageContainer extends React.Component {
                   }
                   data-action="italic"
                 >
-                  <i className="cm-icon-italic" data-action="italic" />
+                  <i className="fa-sharp fa-solid fa-italic" data-action="italic" />
                 </div>
                 <div
                   className={
@@ -493,7 +487,7 @@ class PageContainer extends React.Component {
                   }
                   data-action="strikeThrough"
                 >
-                  <i className="cm-icon-strikethrough" data-action="strikeThrough" />
+                  <i className="fa-sharp fa-strikethrough" data-action="strikeThrough" />
                 </div>
                 <div
                   className={
@@ -502,23 +496,10 @@ class PageContainer extends React.Component {
                       : "tool-btn"
                   }
                   data-action="createLink"
-                  
+
                 >
-                  <i className="cm-icon-link" data-action="createLink"/>
+                  <i className="fa-light fa-link" data-action="createLink" />
                 </div>
-                {/* <div className="divider"></div>
-								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
-									<i className="cm-h1" />
-								</div>
-								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
-								<i className="cm-h2" />
-								</div>
-								<div className="tool-btn">
-									<i className="cm-bullets" />
-								</div>
-								<div className="tool-btn">
-									<i className="cm-numbers" />
-								</div> */}
               </div>
             </CSSTransition>
           </div>
@@ -562,9 +543,9 @@ PageContainer.propTypes = {
 };
 
 PageContainer.defaultProps = {
-  handleUpdate: () => {},
+  handleUpdate: () => { },
   status: "Edit",
-  updateComponentData: (data) => {},
+  updateComponentData: (data) => { },
   typeMapping: TYPE_MAP_COMPONENT,
   // This method basically reverses the keys and the values of the provided type mapping constant
   REVERSE_TYPE_MAP_COMPONENT: Object.keys(TYPE_MAP_COMPONENT).reduce(
