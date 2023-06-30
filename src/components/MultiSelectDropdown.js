@@ -76,7 +76,7 @@ class MultiSelectDropdown extends React.Component {
 												selectedOptions && selectedOptions.length ? selectedOptions.map((item) => {
 													return (
 														<div className={value.status === 'Edit' ? 'value-text-edit' : 'value-text-read'}>
-															<span><i className='cm-hashtag' /></span>
+															<span><i className='fa-light fa-hashtag' /></span>
 															{item.option && item.option.name}
 														</div>
 													)
@@ -99,7 +99,7 @@ class MultiSelectDropdown extends React.Component {
 															autoFocus
 															placeholder='Search categories'
 														/>
-														{!cmSearchInput && <span className="search-icon"><i className="cm cm-icon-search" /></span>}
+														{!cmSearchInput && <span className="search-icon"><i className="fa-regular fa-magnifying-glass" /></span>}
 													</div>
 													<div className="multi-select-dropdown-list-body">
 														{

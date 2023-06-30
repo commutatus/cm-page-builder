@@ -81,38 +81,38 @@ export const IS_INLINE_COMPONENT = [
 export const DEFAULT_COMPONENT_TYPES = [
   {
     name: "Header1",
-    icon: "cm-icon-h1",
+    icon: "fa-regular fa-h1",
   },
   {
     name: "Header2",
-    icon: "cm-icon-h2",
+    icon: "fa-light fa-h2",
   },
   {
     name: "Olist",
-    icon: "cm-icon-numbers",
+    icon: "fa-light fa-list-ol",
   },
   {
     name: "Ulist",
-    icon: "cm-icon-bullets",
+    icon: "fa-light fa-list-ul",
   },
   {
     name: "Code",
-    icon: "cm-icon-code-block",
+    icon: "fa-light fa-code",
   },
   {
     name: "Upload",
-    icon: "cm-icon-picture",
+    icon: "fa-light fa-image",
   },
   {
     name: "Embed",
-    icon: "cm-icon-video",
+    icon: "fa-light fa-clapperboard-play",
   },
   {
     name: "File",
-    icon: "cm-icon-upload",
+    icon: "fa-light fa-arrow-up-from-bracket",
   },
   {
     name: "Divider",
-    icon: "cm-icon-divider",
+    icon: "fa-light fa-grid-dividers",
   },
 ];

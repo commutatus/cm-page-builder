@@ -14,11 +14,6 @@ CM Page builder is a modern rich text component based page builder inspired from
 npm install -s cm-page-builder
 ```
 
-### Adding custom icon fonts
-Add your font's `link` tag in `index.html`.
-<br/>
-For example: `<link rel="stylesheet" href="https://d1azc1qln24ryf.cloudfront.net/120939/EXPAV3/style-cf.css?crxvf0">`
-
 ### Load CM Page Builder as a Module
 
 ```javascript

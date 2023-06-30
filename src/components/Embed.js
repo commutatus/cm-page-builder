@@ -19,7 +19,7 @@ class WrappedEmbed extends React.Component{
   handleEmbed = (e) => {
     this.props.updateComponent({id: this.props.id, newState: {content: getVideoUrl(e.target.value), initial: false}})
   }
-  
+
   render(){
     let {content} = this.props
     let { context } = this
@@ -27,14 +27,14 @@ class WrappedEmbed extends React.Component{
     return(
       <div className={`component-section cm-embed ${context.status.toLowerCase()} ${!content ? '' : 'hover-effect-none'}`}>
         {
-          (content) 
+          (content)
           ?
           <iframe title="video-frame" className={`${context.status.toLowerCase()}`} width="100%" height="320px" src={content} />
           :
-          isEdit && 
+          isEdit &&
           <div className="embed-input-field">
-            <span className="embed-icon"><i className="cm-video" /></span>
-            <input 
+            <span className="embed-icon"><i className="fa-light fa-clapperboard-play" /></span>
+            <input
               data-root="true"
               placeholder="Paste the URL from Vimeo or YouTube"
               className="embed-input"

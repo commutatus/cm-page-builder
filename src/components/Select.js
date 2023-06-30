@@ -12,7 +12,7 @@ class SelectNew extends React.Component{
       initialValue: ''
     }
   }
-  
+
   componentWillMount(){
     this.handleValue(this.props.children, this.props.value)
   }
@@ -84,11 +84,11 @@ class SelectNew extends React.Component{
               filterOption && filterOption(searchText, child)
               :
               showSearch &&
-              filterOptionProp && 
-              child.props[filterOptionProp] && 
+              filterOptionProp &&
+              child.props[filterOptionProp] &&
               String(!child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
             ) {
-              return 
+              return
             }
             counter++
             if(counter === Number(currentPosition)){
@@ -108,9 +108,9 @@ class SelectNew extends React.Component{
   handleChange = (e) => {
     this.setState({searchText: e.target.value, currentPosition: 0})
   }
-  
 
-  
+
+
   toggleDropdown = () => {
     this.setState(state => ({showDropdown: this.props.openUntillSelect ? true : !state.showDropdown}), () => {
       if(!this.props.shouldAlwaysOpen){
@@ -127,7 +127,7 @@ class SelectNew extends React.Component{
     this.setState({searchText: ''}, () => {
       this.toggleDropdown()
     })
-  } 
+  }
 
   handleMouseEnter = (e, currentPosition) => {
     e.preventDefault()
@@ -146,8 +146,8 @@ class SelectNew extends React.Component{
     } = this.state
 
     let {
-      children, 
-      showCheckbox, 
+      children,
+      showCheckbox,
       filterOption,
       filterOptionProp = 'value',
       showSearch
@@ -170,16 +170,16 @@ class SelectNew extends React.Component{
           filterOption && filterOption(searchText, child)
           :
           showSearch &&
-          filterOptionProp && 
-          child.props[filterOptionProp] && 
+          filterOptionProp &&
+          child.props[filterOptionProp] &&
           !String(child.props[filterOptionProp]).toLowerCase().includes(searchText.toLowerCase())
         ) {
-          return 
+          return
         }
         counter++
         return (React.cloneElement(child, {
-          ...childProps, 
-          handleMouseEnter: this.handleMouseEnter, 
+          ...childProps,
+          handleMouseEnter: this.handleMouseEnter,
           handleMouseLeave: this.handleMouseLeave,
           position: counter,
           currentPosition,
@@ -190,14 +190,14 @@ class SelectNew extends React.Component{
 
   render() {
     let {
-      showDropdown, 
+      showDropdown,
       searchText,
       initialValue
     } = this.state
 
     let {
-      showSearch, 
-      placeholder, 
+      showSearch,
+      placeholder,
       containerClassname,
       containerStyle,
       showArrow,
@@ -207,8 +207,8 @@ class SelectNew extends React.Component{
     } = this.props
 
     return(
-      <div 
-        className={classNames('cm-select-container', containerClassname)} 
+      <div
+        className={classNames('cm-select-container', containerClassname)}
         style={containerStyle}
         onKeyDownCapture={this.handleNavigation}
         ref={node => this.node = node}
@@ -217,14 +217,14 @@ class SelectNew extends React.Component{
           {
             [
               React.isValidElement(initialValue) || !showSearch
-              ? 
+              ?
               <div
                 ref={node => this.inputNode = node}
                 className={classNames(
-                  "search-input", 
-                  searchInputClassname, 
+                  "search-input",
+                  searchInputClassname,
                   {
-                    "disable-search": !showSearch, 
+                    "disable-search": !showSearch,
                     "disabled-dropdown": disabled
                   }
                 )}
@@ -236,14 +236,14 @@ class SelectNew extends React.Component{
                 {initialValue}
               </div>
               :
-              <input 
+              <input
                 ref={node => this.inputNode = node}
                 type="text"
                 className={classNames(
-                  "search-input", 
-                  searchInputClassname, 
+                  "search-input",
+                  searchInputClassname,
                   {
-                    "disable-search": !showSearch, 
+                    "disable-search": !showSearch,
                     "disabled-dropdown": disabled
                   }
                 )}
@@ -256,8 +256,8 @@ class SelectNew extends React.Component{
                 key="cm-select-input"
                 {...(!showSearch ? {readOnly: true} : {})}
               />,
-              showSearchIcon && <span key="cm-select-showSearchIcon"> <i className="cm cm-search search-icon"> </i> </span>,
-              showArrow && <span key="cm-select-showArrow"> <i className={`cm-icon-cm-icon-arrow-${showDropdown ? 'up' : 'down'} arrow-icon`}> </i> </span>
+              showSearchIcon && <span key="cm-select-showSearchIcon"> <i className="fa-regular fa-magnifying-glass search-icon"> </i> </span>,
+              showArrow && <span key="cm-select-showArrow"> <i className={`fa-regular chevron-${showDropdown ? 'up' : 'down'} arrow-icon`}> </i> </span>
             ]
           }
           {
@@ -275,11 +275,11 @@ class SelectNew extends React.Component{
 
 const Option = (props) => {
   let {
-    children, 
-    handleSelect, 
-    showCheckbox, 
-    selected, 
-    dataProp, 
+    children,
+    handleSelect,
+    showCheckbox,
+    selected,
+    dataProp,
     currentPosition,
     position,
     handleMouseEnter,
@@ -289,9 +289,9 @@ const Option = (props) => {
   } = props
   let isFocused = currentPosition === position
   return(
-    <div 
-      className={`cm-option-item ${ isFocused ? 'hover' : ''}`} 
-      onClick={handleSelect.bind(this, dataProp || value)} 
+    <div
+      className={`cm-option-item ${ isFocused ? 'hover' : ''}`}
+      onClick={handleSelect.bind(this, dataProp || value)}
       onMouseEnter={(e) => handleMouseEnter(e, position)}
       onMouseLeave={(e) => handleMouseLeave(e, position)}
       {...rest}
@@ -308,8 +308,8 @@ export default Object.assign(SelectNew, {
 
 //Props that can be passed
 //openUntillSelect => keep the dropdown open untill an option is selected.
-// showSearch => make the dropdown searchable, 
-// placeholder, 
+// showSearch => make the dropdown searchable,
+// placeholder,
 //containerClassname
 //containerStyle
 //showArrow,
