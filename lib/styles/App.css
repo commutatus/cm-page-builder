@@ -1,0 +1,10 @@
+.cm-editor {
+  display: flex; }
+  .cm-editor > div {
+    flex: 1;
+    border: 1px solid black;
+    padding: 10px 64px; }
+    .cm-editor > div > h1 {
+      opacity: 90%; }
+      .cm-editor > div > h1 > span {
+        font-size: 14px; }

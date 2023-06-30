@@ -1,0 +1,65 @@
+.dropdown-fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
+
+.dropdown-fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.dropdown-fade-exit {
+  opacity: 0.5; }
+
+.dropdown-fade-exit-active {
+  opacity: 1;
+  transition: opacity 300ms; }
+
+.fade-enter {
+  opacity: 0;
+  transform: scale(0.9); }
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms; }
+
+.fade-exit {
+  opacity: 1; }
+
+.fade-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms; }
+
+.cm-embed .embed-input-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 2px 0;
+  padding: 2px;
+  color: #A8AAAD;
+  font-size: 16px;
+  cursor: pointer; }
+  .cm-embed .embed-input-field .embed-icon {
+    margin-right: 7px; }
+  .cm-embed .embed-input-field .embed-input {
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer; }
+    .cm-embed .embed-input-field .embed-input::placeholder {
+      color: #A8AAAD;
+      font-size: 14px; }
+    .cm-embed .embed-input-field .embed-input:focus {
+      outline: none; }
+
+.cm-embed iframe {
+  border: none; }
+
+.cm-embed .edit {
+  margin: 5px 0; }
+
+.cm-embed .read {
+  width: 100%;
+  margin: 5px 0; }
