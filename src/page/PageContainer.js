@@ -414,10 +414,7 @@ class PageContainer extends React.Component {
             onKeyDown={isEdit ? this.handleKeyDown : undefined}
           >
             <Helmet>
-              <link
-                rel="stylesheet"
-                href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv"
-              />
+              <link rel="stylesheet" href="https://kit.fontawesome.com/4c31523976.css" crossorigin="anonymous" />
             </Helmet>
             <PermissionContext.Provider
               value={{ status: this.props.status, emitUpdate: this.emitUpdate }}
@@ -480,7 +477,7 @@ class PageContainer extends React.Component {
                   })}
                   data-action="italic"
                 >
-                  <i className={cx("cm-icon-italic")} data-action="italic" />
+                  <i className={cx("fa-sharp fa-solid fa-italic")} data-action="italic" />
                 </div>
                 <div
                   className={cx({
@@ -489,7 +486,7 @@ class PageContainer extends React.Component {
                   })}
                   data-action="strikeThrough"
                 >
-                  <i className={cx("cm-icon-strikethrough")} data-action="strikeThrough" />
+                  <i className={cx("fa-sharp fa-solid fa-strikethrough")} data-action="strikeThrough" />
                 </div>
                 <div
                   className={cx({
@@ -499,21 +496,8 @@ class PageContainer extends React.Component {
                   data-action="createLink"
 
                 >
-                  <i className={cx("cm-icon-link")} data-action="createLink" />
+                  <i className={cx("fa-light fa-link")} data-action="createLink" />
                 </div>
-                {/* <div className="divider"></div>
-								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header1">
-									<i className="cm-h1" />
-								</div>
-								<div className="tool-btn" onMouseDown={this.editComponent} data-type="Header2">
-								<i className="cm-h2" />
-								</div>
-								<div className="tool-btn">
-									<i className="cm-bullets" />
-								</div>
-								<div className="tool-btn">
-									<i className="cm-numbers" />
-								</div> */}
               </div>
             </CSSTransition>
           </div>

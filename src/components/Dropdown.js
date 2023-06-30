@@ -99,8 +99,8 @@ export class Dropdown extends React.Component {
                         <span>
                           <i
                             className={cx({
-                              "cm-hashtag": this.props.component_type === "category_id",
-                              "cm-hub": this.props.component_type !== "category_id",
+                              "fa-light fa-hashtag": this.props.component_type === "category_id",
+                              "fa-light fa-folder-open": this.props.component_type !== "category_id",
                             })}
                           />
                         </span>

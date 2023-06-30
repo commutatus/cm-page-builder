@@ -45,7 +45,7 @@ class WrappedEmbed extends React.Component {
             :
             isEdit &&
             <div className={cx("embed-input-field")}>
-              <span className={cx("embed-icon")}><i className={cx("cm-video")} /></span>
+              <span className={cx("embed-icon")}><i className={cx("fa-light fa-clapperboard-play")} /></span>
               <input
                 data-root="true"
                 placeholder="Paste the URL from Vimeo or YouTube"

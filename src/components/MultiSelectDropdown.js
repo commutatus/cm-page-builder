@@ -81,7 +81,7 @@ class MultiSelectDropdown extends React.Component {
 															'value-text-edit': value.status === 'Edit',
 															'value-text-read': value.status !== 'Edit',
 														})}>
-															<span><i className={cx("cm-hashtag")} /></span>
+															<span><i className={cx("fa-light fa-hashtag")} /></span>
 															{item.option && item.option.name}
 														</div>
 													)
@@ -108,7 +108,7 @@ class MultiSelectDropdown extends React.Component {
 															placeholder='Search categories'
 														/>
 														{!cmSearchInput && <span className={cx("search-icon")}>
-															<i className="cm cm-icon-search" />
+															<i className="fa-regular fa-magnifying-glass" />
 														</span>}
 													</div>
 													<div className={cx("multi-select-dropdown-list-body")}>

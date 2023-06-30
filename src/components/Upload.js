@@ -233,7 +233,7 @@ class WrappedUpload extends React.Component {
         {isEdit && !uploading && !component_attachment && (
           <React.Fragment>
             <span>
-              <i className={cx("cm-icon-upload")} />
+              <i className={cx("fa-light fa-arrow-up-from-bracket")} />
             </span>
             Click to upload file
             {!uploaded && (
