@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
 import Dropzone from "react-dropzone";
-import Helmet from "react-helmet";
 import { connect } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import Sortable from "sortablejs";
@@ -177,7 +176,7 @@ class PageContainer extends React.Component {
       }
 
       typeName = typeName === "File" ? "Upload" : typeName;
-      return import(`../components/${typeName}`).then((module) => {
+      return import(`../components/${typeName}.jsx`).then((module) => {
         const Component = module[typeName];
         return (
           <AddComponent
@@ -415,12 +414,10 @@ class PageContainer extends React.Component {
             onSelect={isEdit ? this.handleSelection : undefined}
             onKeyDown={isEdit ? this.handleKeyDown : undefined}
           >
-            <Helmet>
-              <link
-                rel="stylesheet"
-                href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv"
-              />
-            </Helmet>
+            <link
+              rel="stylesheet"
+              href="https://d1azc1qln24ryf.cloudfront.net/120939/PageBuilder/style-cf.css?fcnavv"
+            />
             <PermissionContext.Provider
               value={{ status: this.props.status, emitUpdate: this.emitUpdate }}
             >
