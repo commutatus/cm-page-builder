@@ -16,6 +16,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: |
           sed -i '15d' .gitignore
+          npm install
           npm run build:package
           npm publish --access public --non-interactive
         env:
