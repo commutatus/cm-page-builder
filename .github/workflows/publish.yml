@@ -1,0 +1,22 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          sed -i '15d' .gitignore
+          npm run build:package
+          npm publish --access public --non-interactive
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN_MKV}}
