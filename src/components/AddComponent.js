@@ -172,8 +172,18 @@ class AddComponent extends React.Component{
     }
   }
 
+  debouncedSave = _.debounce((id, e, emitOnly = false) => {
+    this.props.updateComponent({id, newState: {content: e.target.innerHTML}, emitOnly});
+  }, 300);
+
   handleInput = (e) => {
+    e.persist();
     this.setState({showActionBtn: e.target.innerHTML === '' && !e.target.value})
+
+    // Same as onBlur
+    if(this.props.data.componentType !== 'Embed') {
+      this.debouncedSave(this.props.id, e, true)
+    }
   }
 
   // handles the focus and set the cursor to right position.
@@ -202,7 +212,7 @@ class AddComponent extends React.Component{
   }
 
   handleBlur = (e) => {
-    if(this.props.data.componentType !== 'Embed')
+    if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
       this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
