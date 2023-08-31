@@ -84,21 +84,21 @@ class AddComponent extends React.Component{
   // handle key action and navigation
   handleKeyDown = (e) => {
     e.stopPropagation()
-    let {appData, currentElem, data} = this.props 
+    let {appData, currentElem, data} = this.props
 
     //Code component only need navigation so other key actions are disabled.
-    if(this.props.data.componentType === 'Code' && !['ArrowUp', 'ArrowDown'].includes(e.key)) return 
+    if(this.props.data.componentType === 'Code' && !['ArrowUp', 'ArrowDown'].includes(e.key)) return
 
     //Intialize all the elem
-    let currentElemPos = -1, 
-        elemRect = null, 
-        caretRect = null, 
-        computedStyles = null, 
-        elemPad = undefined, 
-        elemMar = undefined, 
+    let currentElemPos = -1,
+        elemRect = null,
+        caretRect = null,
+        computedStyles = null,
+        elemPad = undefined,
+        elemMar = undefined,
         extraHeight = undefined
-    
-    //All the key events related to the component are handled here.   
+
+    //All the key events related to the component are handled here.
     switch (e.key) {
       case 'Enter':
         if(!e.shiftKey){
@@ -128,7 +128,7 @@ class AddComponent extends React.Component{
         computedStyles = window.getComputedStyle(e.target)
         elemPad = computedStyles.getPropertyValue("padding-top").replace('px', '')
         elemMar = computedStyles.getPropertyValue('margin-top').replace('px', '')
-        extraHeight = (+elemPad) 
+        extraHeight = (+elemPad)
         if((caretRect.x === 0 && caretRect.y === 0) ||  // when no text is there
             (elemRect.top === (caretRect.top - extraHeight)) || // is not a text component
             (elemRect.top === (caretRect.top - extraHeight - 1)) // is a text component
@@ -152,7 +152,7 @@ class AddComponent extends React.Component{
           elemPad = computedStyles.getPropertyValue("padding-bottom").replace('px', '')
           elemMar = computedStyles.getPropertyValue('margin-bottom').replace('px', '')
           extraHeight = (+elemPad)
-          if((caretRect.x === 0 && caretRect.y === 0) || 
+          if((caretRect.x === 0 && caretRect.y === 0) ||
               (elemRect.bottom === (caretRect.bottom - extraHeight)) ||
               (elemRect.bottom === (caretRect.bottom + extraHeight + 1))
           ){
@@ -179,7 +179,7 @@ class AddComponent extends React.Component{
   // handles the focus and set the cursor to right position.
   handleFocus = (e) => {
     e.persist()
-    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})    
+    this.setState({showActionBtn: e.target.innerHTML === '', isFocused: true})
     let {appData, currentElem} = this.props
     let prevElemPos, currElemPos
     for(let i in appData.componentData){
@@ -202,7 +202,7 @@ class AddComponent extends React.Component{
   }
 
   handleBlur = (e) => {
-    if(this.props.data.componentType !== 'Embed' && this.props.id !== this.props.currentElem.elemId)
+    if(this.props.data.componentType !== 'Embed')
       this.props.updateComponent({id: this.props.id, newState: {content: e.target.innerHTML}})
   }
 
@@ -224,13 +224,13 @@ class AddComponent extends React.Component{
    return styles
   }
 
-  
+
   handlePaste = (e) => {
     e.persist()
     let clipboardData = e.clipboardData || window.clipboardData
     let plainText = clipboardData.getData('text/plain')
     let {componentData} = this.props.appData
-    
+
     let items = clipboardData.items;
     let types = clipboardData.types;
     let fileIndex = types.findIndex(type => type === "Files")
@@ -243,15 +243,15 @@ class AddComponent extends React.Component{
       let reader = new FileReader();
       reader.onload = (event) =>{
         this.props.addNewComponent({
-          id: blockId, 
-          componentType: 'Upload', 
+          id: blockId,
+          componentType: 'Upload',
           component_attachment: {
-            filename: blob.name, 
+            filename: blob.name,
             content: event.target.result,
           }
         })
       }
-      reader.readAsDataURL(blob); 
+      reader.readAsDataURL(blob);
     }
 
     else if(clipboardData.getData('text/html') || plainText){
@@ -266,7 +266,7 @@ class AddComponent extends React.Component{
   }
 
 
- 
+
   render(){
     let { data, options } = this.props
     let { showActionBtn, showHandle, isFocused } = this.state
@@ -275,7 +275,7 @@ class AddComponent extends React.Component{
 			componentsToRender = componentsToRender.filter(item => options.includes(item.name))
 		}
     const isEdit = this.context.status === 'Edit'
-    
+
 
     const allActions = isEdit ? {
       'onPaste': this.handlePaste,
@@ -288,7 +288,7 @@ class AddComponent extends React.Component{
       'onFocus':this.handleFocus,
       'onMouseEnter': this.handleMouseEnter,
       'onMouseLeave': this.handleMouseLeave,
-    } : {}    
+    } : {}
 
     if(data.componentType === 'Code'){
       [
@@ -300,9 +300,9 @@ class AddComponent extends React.Component{
     }
 
     return(
-      <div 
-        ref={node => this.elem = node} 
-        className="widget-container" 
+      <div
+        ref={node => this.elem = node}
+        className="widget-container"
         data-block-id={this.props.id}
         style={this.handleInlineStyles(data.componentType)}
         {...allActions}
@@ -315,8 +315,8 @@ class AddComponent extends React.Component{
           classNames="fade"
           unmountOnExit
         >
-          <div className="text-type-tools" 
-            data-block-type="component-select-div" 
+          <div className="text-type-tools"
+            data-block-type="component-select-div"
             style={{display: showActionBtn && !['Divider', 'Upload', 'Code'].includes(data.componentType)  ? 'flex' : 'none'}}
           >
             {
@@ -346,7 +346,7 @@ const mapDispatchToProps = {
   moveCaretToEnd,
 }
 
-const mapStateToProps = (state) => { 
+const mapStateToProps = (state) => {
   currentElem: state.currentElem
 }
 
